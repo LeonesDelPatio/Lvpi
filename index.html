@@ -203,6 +203,9 @@
     const REGISTER_PLAY_FUNCTION_URL =
       `${SUPABASE_URL}/functions/v1/register-play`;
 
+    const REGISTER_VISIT_FUNCTION_URL =
+      `${SUPABASE_URL}/functions/v1/register-visit`;
+
 
     /* =====================================================
        ELEMENTOS HTML
@@ -233,6 +236,71 @@
     let currentAlbumIndex = 0;
 
     let currentSongIndex = 0;
+
+
+    /* =====================================================
+       REGISTRAR VISITA
+       ===================================================== */
+
+    async function registerVisit() {
+
+      try {
+
+        const response =
+          await fetch(
+            REGISTER_VISIT_FUNCTION_URL,
+            {
+              method: "POST",
+
+              headers: {
+                "apikey":
+                  SUPABASE_PUBLISHABLE_KEY,
+
+                "Content-Type":
+                  "application/json"
+              },
+
+              body:
+                JSON.stringify({})
+            }
+          );
+
+
+        const result =
+          await response.json();
+
+
+        if (!response.ok) {
+
+          throw new Error(
+            result.error ||
+            "No se pudo registrar la visita."
+          );
+
+        }
+
+
+        console.log(
+          "Visita registrada."
+        );
+
+
+      } catch (error) {
+
+        /*
+          Un fallo de estadísticas
+          nunca debe impedir que
+          la web continúe cargando.
+        */
+
+        console.error(
+          "Error registrando visita:",
+          error
+        );
+
+      }
+
+    }
 
 
     /* =====================================================
@@ -857,6 +925,8 @@
     /* =====================================================
        INICIAR
        ===================================================== */
+
+    registerVisit();
 
     loadCatalog();
 
