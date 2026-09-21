@@ -2,10 +2,15 @@
 <html lang="es">
 
 <head>
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0">
 
   <title>Leones del Patio</title>
+
 
   <style>
 
@@ -13,116 +18,248 @@
       box-sizing: border-box;
     }
 
+
     body {
       margin: 0;
       min-height: 100vh;
+
       background: #111;
+
       color: #fff;
+
       font-family: Arial, sans-serif;
     }
 
+
     .player {
+
       width: min(90%, 700px);
+
       margin: 60px auto;
+
     }
+
 
     h1 {
+
       margin: 0 0 35px;
+
       text-align: center;
+
       font-size: 30px;
+
       font-weight: normal;
+
     }
 
-    /* SELECTOR DE ÁLBUM */
+
+    /* =====================================================
+       SELECTOR DE ÁLBUM
+       ===================================================== */
 
     .album-selector {
+
       width: 100%;
+
       margin-bottom: 30px;
+
     }
+
 
     .album-selector label {
+
       display: block;
+
       margin-bottom: 8px;
+
       font-size: 13px;
+
       color: #aaa;
+
     }
+
 
     select {
+
       width: 100%;
+
       padding: 12px;
+
       background: #1c1c1c;
+
       color: #fff;
+
       border: 1px solid #444;
+
       font-size: 15px;
+
       cursor: pointer;
+
     }
+
 
     select:focus {
+
       outline: none;
+
       border-color: #666;
+
     }
 
-    /* PORTADA */
+
+    /* =====================================================
+       PORTADA
+       ===================================================== */
 
     .cover {
+
       width: min(100%, 450px);
+
       margin: 0 auto 20px;
+
       aspect-ratio: 1 / 1;
+
       background: #1c1c1c;
+
       overflow: hidden;
+
     }
+
 
     .cover img {
+
       width: 100%;
+
       height: 100%;
+
       display: block;
+
       object-fit: cover;
+
     }
 
-    /* REPRODUCTOR */
+
+    /* =====================================================
+       BLOQUE DEL REPRODUCTOR
+       ===================================================== */
+
+    .player-box {
+
+      width: 100%;
+
+      margin-bottom: 25px;
+
+    }
+
+
+    /* TÍTULO DE LA CANCIÓN */
+
+    .now-playing {
+
+      margin-bottom: 8px;
+
+      font-size: 15px;
+
+      color: #ddd;
+
+      text-align: left;
+
+      white-space: nowrap;
+
+      overflow: hidden;
+
+      text-overflow: ellipsis;
+
+    }
+
+
+    .now-playing-label {
+
+      color: #777;
+
+      margin-right: 6px;
+
+    }
+
 
     audio {
+
       width: 100%;
-      margin-bottom: 25px;
+
+      display: block;
+
     }
 
-    /* NOMBRE DEL ÁLBUM */
+
+    /* =====================================================
+       NOMBRE DEL ÁLBUM
+       ===================================================== */
 
     .album-name {
+
       text-align: center;
+
       font-size: 20px;
+
       margin-bottom: 25px;
+
     }
 
-    /* LISTA DE CANCIONES */
+
+    /* =====================================================
+       LISTA DE CANCIONES
+       ===================================================== */
 
     .songs {
+
       margin-bottom: 30px;
+
     }
+
 
     .song {
+
       padding: 11px 12px;
+
       border-bottom: 1px solid #292929;
+
       cursor: pointer;
+
       font-size: 14px;
+
       transition: background 0.15s ease;
+
     }
+
 
     .song:hover {
+
       background: #1c1c1c;
+
     }
+
 
     .song.active {
+
       background: #242424;
+
     }
 
-    /* ESTADO */
+
+    /* =====================================================
+       ESTADO
+       ===================================================== */
 
     #status {
+
       margin-top: 15px;
+
       text-align: center;
+
       font-size: 13px;
+
       color: #999;
+
     }
 
   </style>
@@ -132,18 +269,25 @@
 
 <body>
 
+
   <main class="player">
 
-    <h1>Leones del Patio</h1>
+
+    <h1>
+      Leones del Patio
+    </h1>
 
 
-    <!-- SELECTOR DE ÁLBUM -->
+    <!-- ===================================================
+         SELECTOR DE ÁLBUM
+         =================================================== -->
 
     <div class="album-selector">
 
       <label for="albumSelect">
         Álbum
       </label>
+
 
       <select id="albumSelect">
 
@@ -156,7 +300,9 @@
     </div>
 
 
-    <!-- PORTADA -->
+    <!-- ===================================================
+         PORTADA
+         =================================================== -->
 
     <div class="cover">
 
@@ -168,18 +314,47 @@
     </div>
 
 
-    <!-- REPRODUCTOR -->
+    <!-- ===================================================
+         REPRODUCTOR
+         =================================================== -->
 
-    <audio
-      id="audioPlayer"
-      controls
-      preload="metadata"
-      controlslist="nodownload noremoteplayback"
-      noremoteplayback>
-    </audio>
+    <div class="player-box">
 
 
-    <!-- NOMBRE DEL ÁLBUM -->
+      <!-- TÍTULO DE LA CANCIÓN -->
+
+      <div
+        id="nowPlaying"
+        class="now-playing">
+
+        <span class="now-playing-label">
+          Reproduciendo:
+        </span>
+
+        <span id="songTitle">
+          Ninguna canción
+        </span>
+
+      </div>
+
+
+      <!-- AUDIO -->
+
+      <audio
+        id="audioPlayer"
+        controls
+        preload="metadata"
+        controlslist="nodownload noremoteplayback"
+        noremoteplayback>
+      </audio>
+
+
+    </div>
+
+
+    <!-- ===================================================
+         NOMBRE DEL ÁLBUM
+         =================================================== -->
 
     <div
       id="albumName"
@@ -187,7 +362,9 @@
     </div>
 
 
-    <!-- LISTA DE CANCIONES -->
+    <!-- ===================================================
+         LISTA DE CANCIONES
+         =================================================== -->
 
     <div
       id="songs"
@@ -195,20 +372,25 @@
     </div>
 
 
-    <!-- ESTADO -->
+    <!-- ===================================================
+         ESTADO
+         =================================================== -->
 
     <div id="status">
       Cargando catálogo...
     </div>
+
 
   </main>
 
 
   <script>
 
-    /* =========================================================
+
+    /* =====================================================
        CONFIGURACIÓN
-       ========================================================= */
+       ===================================================== */
+
 
     const SUPABASE_URL =
       "https://cavnifartuktwmchyrdl.supabase.co";
@@ -216,9 +398,12 @@
 
     /*
       IMPORTANTE:
-      Sustituye solamente el texto de abajo por tu
-      publishable key completa.
+
+      Pon aquí tu PUBLISHABLE KEY completa.
+
+      Es la misma que ya estabas utilizando.
     */
+
 
     const SUPABASE_PUBLISHABLE_KEY =
       "sb_publishable_WC_7KWhh6gq-pvL-97D3VA_78DyHmOM";
@@ -232,37 +417,57 @@
       `${SUPABASE_URL}/functions/v1/get-audio-url`;
 
 
-    /* =========================================================
+    /* =====================================================
        ELEMENTOS DE LA INTERFAZ
-       ========================================================= */
+       ===================================================== */
+
 
     const albumSelect =
-      document.getElementById("albumSelect");
+      document.getElementById(
+        "albumSelect"
+      );
 
 
     const coverImage =
-      document.getElementById("coverImage");
+      document.getElementById(
+        "coverImage"
+      );
 
 
     const albumName =
-      document.getElementById("albumName");
+      document.getElementById(
+        "albumName"
+      );
 
 
     const songsContainer =
-      document.getElementById("songs");
+      document.getElementById(
+        "songs"
+      );
 
 
     const audioPlayer =
-      document.getElementById("audioPlayer");
+      document.getElementById(
+        "audioPlayer"
+      );
+
+
+    const songTitle =
+      document.getElementById(
+        "songTitle"
+      );
 
 
     const status =
-      document.getElementById("status");
+      document.getElementById(
+        "status"
+      );
 
 
-    /* =========================================================
-       VARIABLES DEL CATÁLOGO
-       ========================================================= */
+    /* =====================================================
+       VARIABLES
+       ===================================================== */
+
 
     let catalog = null;
 
@@ -273,13 +478,16 @@
     let currentSongIndex = 0;
 
 
-    /* =========================================================
+    /* =====================================================
        CARGAR CATÁLOGO
-       ========================================================= */
+       ===================================================== */
+
 
     async function loadCatalog() {
 
+
       try {
+
 
         status.textContent =
           "Cargando catálogo...";
@@ -289,18 +497,22 @@
           await fetch(
             CATALOG_FUNCTION_URL,
             {
+
               method: "POST",
 
               headers: {
+
                 "apikey":
                   SUPABASE_PUBLISHABLE_KEY,
 
                 "Content-Type":
                   "application/json"
+
               },
 
               body:
                 JSON.stringify({})
+
             }
           );
 
@@ -332,20 +544,19 @@
         }
 
 
-        catalog = result;
+        catalog =
+          result;
 
 
         buildAlbumSelector();
 
 
         /*
-          Seleccionamos automáticamente
-          el primer álbum del catálogo.
-
-          Como get-catalog ya los entrega
-          ordenados de más reciente a más antiguo,
-          el índice 0 es el álbum más reciente.
+          El índice 0 es el álbum más reciente
+          porque get-catalog ya los entrega
+          ordenados correctamente.
         */
+
 
         selectAlbum(0);
 
@@ -354,33 +565,43 @@
           "Catálogo cargado.";
 
 
-      } catch (error) {
+      }
+      catch (error) {
+
 
         console.error(error);
 
 
         status.textContent =
-          "Error: " + error.message;
+          "Error: " +
+          error.message;
+
 
       }
 
     }
 
 
-    /* =========================================================
+    /* =====================================================
        CREAR SELECTOR DE ÁLBUMES
-       ========================================================= */
+       ===================================================== */
+
 
     function buildAlbumSelector() {
 
-      albumSelect.innerHTML = "";
+
+      albumSelect.innerHTML =
+        "";
 
 
       catalog.albums.forEach(
         (album, index) => {
 
+
           const option =
-            document.createElement("option");
+            document.createElement(
+              "option"
+            );
 
 
           option.value =
@@ -388,12 +609,12 @@
 
 
           /*
-            El nombre que devuelve get-catalog
-            ya tiene oculto solamente el último
-            (01), (02), etc.
+            Mostramos nombre + año.
 
-            El año permanece visible.
+            El último (01), (02), etc.
+            sigue oculto.
           */
+
 
           option.textContent =
             `${album.name} (${album.year})`;
@@ -403,17 +624,20 @@
             option
           );
 
+
         }
       );
 
     }
 
 
-    /* =========================================================
+    /* =====================================================
        SELECCIONAR ÁLBUM
-       ========================================================= */
+       ===================================================== */
+
 
     function selectAlbum(index) {
+
 
       currentAlbumIndex =
         index;
@@ -438,14 +662,13 @@
 
 
       /*
-        La portada todavía no se carga.
+        La portada todavía no se carga porque
+        el bucket musicpriv es privado.
 
-        Esto es intencionado porque el bucket
-        musicpriv es privado.
-
-        Más adelante generaremos una URL firmada
-        también para la portada.
+        Lo solucionaremos posteriormente
+        mediante una URL firmada.
       */
+
 
       coverImage.removeAttribute(
         "src"
@@ -456,37 +679,37 @@
 
 
       /*
-        Al cambiar manualmente de álbum,
-        dejamos el reproductor preparado
-        pero no iniciamos todavía la canción.
-
-        El comportamiento de reproducción
-        automática al seleccionar álbum lo
-        añadiremos después.
+        Reiniciamos el título.
       */
 
-      audioPlayer.pause();
+
+      songTitle.textContent =
+        "Cargando canción...";
 
 
-      audioPlayer.removeAttribute(
-        "src"
-      );
+      /*
+        IMPORTANTE:
+
+        Al cambiar manualmente de álbum,
+        cargamos automáticamente la pista 01.
+
+        playSong() intentará comenzar
+        automáticamente la reproducción.
+      */
 
 
-      audioPlayer.load();
-
-
-      status.textContent =
-        "Álbum seleccionado.";
+      playSong(0);
 
     }
 
 
-    /* =========================================================
+    /* =====================================================
        CREAR LISTA DE CANCIONES
-       ========================================================= */
+       ===================================================== */
+
 
     function buildSongList() {
+
 
       songsContainer.innerHTML =
         "";
@@ -501,8 +724,11 @@
       album.songs.forEach(
         (song, index) => {
 
+
           const element =
-            document.createElement("div");
+            document.createElement(
+              "div"
+            );
 
 
           element.className =
@@ -527,6 +753,7 @@
             element
           );
 
+
         }
       );
 
@@ -536,11 +763,13 @@
     }
 
 
-    /* =========================================================
+    /* =====================================================
        REPRODUCIR CANCIÓN
-       ========================================================= */
+       ===================================================== */
+
 
     async function playSong(index) {
+
 
       const album =
         catalog.albums[
@@ -558,6 +787,17 @@
 
       try {
 
+
+        /*
+          Actualizamos inmediatamente
+          el título visible.
+        */
+
+
+        songTitle.textContent =
+          song.name;
+
+
         status.textContent =
           "Obteniendo audio...";
 
@@ -566,20 +806,27 @@
           await fetch(
             AUDIO_FUNCTION_URL,
             {
+
               method: "POST",
 
               headers: {
+
                 "apikey":
                   SUPABASE_PUBLISHABLE_KEY,
 
                 "Content-Type":
                   "application/json"
+
               },
 
               body:
                 JSON.stringify({
-                  path: song.path
+
+                  path:
+                    song.path
+
                 })
+
             }
           );
 
@@ -608,9 +855,10 @@
 
 
         /*
-          Cargamos la URL temporal
-          del archivo privado.
+          Ponemos la URL firmada
+          en el reproductor.
         */
+
 
         audioPlayer.src =
           result.signedUrl;
@@ -624,21 +872,37 @@
 
 
         /*
-          Intentamos iniciar la reproducción.
-
-          Si el navegador lo bloquea, la
-          promesa fallará y dejamos que el
-          usuario pueda pulsar Play manualmente.
+          Intentamos comenzar
+          automáticamente.
         */
+
 
         try {
 
+
           await audioPlayer.play();
 
-        } catch (playError) {
+
+          status.textContent =
+            "Reproduciendo.";
+
+
+        }
+        catch (playError) {
+
+
+          /*
+            El navegador puede bloquear
+            una reproducción iniciada
+            mediante JavaScript.
+
+            En ese caso no consideramos
+            que sea un error del archivo.
+          */
+
 
           console.warn(
-            "La reproducción automática fue bloqueada:",
+            "Reproducción automática bloqueada:",
             playError
           );
 
@@ -649,24 +913,30 @@
         }
 
 
-      } catch (error) {
+      }
+      catch (error) {
+
 
         console.error(error);
 
 
         status.textContent =
-          "Error: " + error.message;
+          "Error: " +
+          error.message;
+
 
       }
 
     }
 
 
-    /* =========================================================
+    /* =====================================================
        MARCAR CANCIÓN ACTIVA
-       ========================================================= */
+       ===================================================== */
+
 
     function updateActiveSong() {
+
 
       const songs =
         document.querySelectorAll(
@@ -677,10 +947,12 @@
       songs.forEach(
         (element, index) => {
 
+
           element.classList.toggle(
             "active",
             index === currentSongIndex
           );
+
 
         }
       );
@@ -688,13 +960,15 @@
     }
 
 
-    /* =========================================================
+    /* =====================================================
        CAMBIO MANUAL DE ÁLBUM
-       ========================================================= */
+       ===================================================== */
+
 
     albumSelect.addEventListener(
       "change",
       () => {
+
 
         const index =
           Number(
@@ -702,23 +976,29 @@
           );
 
 
+        /*
+          selectAlbum() ahora también
+          carga y reproduce automáticamente
+          la canción 01.
+        */
+
+
         selectAlbum(index);
+
 
       }
     );
 
 
-    /* =========================================================
+    /* =====================================================
        REPRODUCCIÓN AUTOMÁTICA SECUENCIAL
-       ========================================================= */
+       ===================================================== */
+
 
     audioPlayer.addEventListener(
       "ended",
       () => {
 
-        /*
-          Obtenemos el álbum actual.
-        */
 
         const album =
           catalog.albums[
@@ -727,17 +1007,18 @@
 
 
         /*
-          -----------------------------------------------------
-          CASO 1
-          Todavía quedan canciones dentro
-          del álbum actual.
-          -----------------------------------------------------
+          ---------------------------------------------------
+          CASO 1:
+          Hay otra canción dentro del mismo álbum.
+          ---------------------------------------------------
         */
+
 
         if (
           currentSongIndex <
           album.songs.length - 1
         ) {
+
 
           playSong(
             currentSongIndex + 1
@@ -750,18 +1031,20 @@
 
 
         /*
-          -----------------------------------------------------
-          CASO 2
-          Hemos terminado el álbum actual.
+          ---------------------------------------------------
+          CASO 2:
+          Hemos terminado el álbum.
 
-          Comprobamos si existe otro álbum.
-          -----------------------------------------------------
+          Pasamos al siguiente álbum.
+          ---------------------------------------------------
         */
+
 
         if (
           currentAlbumIndex <
           catalog.albums.length - 1
         ) {
+
 
           currentAlbumIndex++;
 
@@ -776,43 +1059,27 @@
             ];
 
 
-          /*
-            Actualizamos el selector.
-          */
-
           albumSelect.value =
             currentAlbumIndex;
 
 
-          /*
-            Actualizamos el nombre.
-          */
-
           albumName.textContent =
             `${nextAlbum.name} (${nextAlbum.year})`;
 
-
-          /*
-            La portada continúa pendiente
-            de implementar.
-          */
 
           coverImage.removeAttribute(
             "src"
           );
 
 
-          /*
-            Construimos la nueva lista.
-          */
-
           buildSongList();
 
 
           /*
-            Reproducimos automáticamente
-            el primer tema del nuevo álbum.
+            El título se actualiza dentro
+            de playSong().
           */
+
 
           playSong(0);
 
@@ -823,14 +1090,14 @@
 
 
         /*
-          -----------------------------------------------------
-          CASO 3
-          Hemos terminado el último tema
-          del último álbum.
+          ---------------------------------------------------
+          CASO 3:
+          Hemos terminado el último álbum.
 
-          Volvemos al primer álbum.
-          -----------------------------------------------------
+          Volvemos al primero.
+          ---------------------------------------------------
         */
+
 
         currentAlbumIndex =
           0;
@@ -846,41 +1113,21 @@
           ];
 
 
-        /*
-          Actualizamos selector.
-        */
-
         albumSelect.value =
           currentAlbumIndex;
 
 
-        /*
-          Actualizamos nombre.
-        */
-
         albumName.textContent =
           `${firstAlbum.name} (${firstAlbum.year})`;
 
-
-        /*
-          Portada pendiente.
-        */
 
         coverImage.removeAttribute(
           "src"
         );
 
 
-        /*
-          Reconstruimos lista.
-        */
-
         buildSongList();
 
-
-        /*
-          Volvemos al primer tema.
-        */
 
         playSong(0);
 
@@ -888,13 +1135,16 @@
     );
 
 
-    /* =========================================================
+    /* =====================================================
        INICIAR
-       ========================================================= */
+       ===================================================== */
+
 
     loadCatalog();
 
+
   </script>
+
 
 </body>
 
