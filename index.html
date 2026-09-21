@@ -1,1 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prueba de reproductor</title>
 
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #111;
+            color: #fff;
+            font-family: Arial, sans-serif;
+        }
+
+        .player {
+            width: min(600px, 90%);
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: 400;
+            margin-bottom: 30px;
+        }
+
+        audio {
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+
+    <main class="player">
+
+        <h1>Prueba — canción 1</h1>
+
+        <audio controls preload="metadata">
+            <source
+                src="https://drive.google.com/uc?export=download&id=1HyoUmdpbZqK6quhmPjYADsJwtAnf4QJo"
+                type="audio/mpeg">
+            
+            Tu navegador no puede reproducir este audio.
+        </audio>
+
+    </main>
+
+</body>
+</html>
