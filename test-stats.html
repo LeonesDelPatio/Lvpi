@@ -42,10 +42,6 @@
       cursor: pointer;
     }
 
-    button:hover {
-      opacity: 0.85;
-    }
-
     pre {
       margin-top: 30px;
       padding: 20px;
@@ -67,38 +63,36 @@
       id="email"
       type="email"
       placeholder="Email"
-      autocomplete="username"
     >
 
     <input
       id="password"
       type="password"
       placeholder="Contraseña"
-      autocomplete="current-password"
     >
 
     <button
-      id="loginButton"
       type="button"
+      onclick="iniciarSesion()"
     >
       Iniciar sesión
     </button>
 
-    <pre id="result">Cargando...</pre>
+    <pre id="resultado">La página se está cargando...</pre>
 
   </div>
 
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-
   <script>
 
-    const result =
-      document.getElementById("result");
+    const resultado =
+      document.getElementById("resultado");
 
-    result.textContent =
-      "1. Página cargada.\n";
+
+    resultado.textContent =
+      "1. JavaScript cargado.\n";
 
 
     const SUPABASE_URL =
@@ -109,182 +103,184 @@
       "sb_publishable_WC_7KWhh6gq-pvL-97D3VA_78DyHmOM";
 
 
-    /*
-     * Comprobar que la biblioteca de Supabase
-     * se ha cargado correctamente.
-     */
+    resultado.textContent +=
+      "2. Configuración cargada.\n";
+
 
     if (
-      !window.supabase ||
-      !window.supabase.createClient
+      typeof window.supabase === "undefined"
     ) {
 
-      result.textContent +=
-        "\nERROR: No se ha podido cargar la biblioteca de Supabase.";
+      resultado.textContent +=
+        "\nERROR:\n" +
+        "La biblioteca de Supabase NO se ha cargado.";
 
-      throw new Error(
-        "Supabase JS no está disponible."
-      );
+    } else {
+
+      resultado.textContent +=
+        "3. Biblioteca Supabase detectada.\n";
+
     }
 
 
-    result.textContent +=
-      "2. Biblioteca de Supabase cargada.\n";
+    async function iniciarSesion() {
+
+      resultado.textContent =
+        "4. BOTÓN PULSADO.\n";
 
 
-    const supabase =
-      window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_PUBLISHABLE_KEY
-      );
+      const email =
+        document
+          .getElementById("email")
+          .value
+          .trim();
 
 
-    result.textContent +=
-      "3. Cliente Supabase creado.\n";
+      const password =
+        document
+          .getElementById("password")
+          .value;
 
 
-    const button =
-      document.getElementById(
-        "loginButton"
-      );
+      resultado.textContent +=
+        "\n5. Email recibido: " +
+        (email ? "SÍ" : "NO");
 
 
-    button.addEventListener(
-      "click",
-      async function () {
-
-        result.textContent =
-          "4. Botón pulsado.\n";
+      resultado.textContent +=
+        "\n6. Contraseña recibida: " +
+        (password ? "SÍ" : "NO");
 
 
-        const email =
-          document
-            .getElementById("email")
-            .value
-            .trim();
+      if (!email || !password) {
+
+        resultado.textContent +=
+          "\n\nFalta el email o la contraseña.";
+
+        return;
+      }
 
 
-        const password =
-          document
-            .getElementById("password")
-            .value;
+      if (
+        typeof window.supabase === "undefined"
+      ) {
+
+        resultado.textContent +=
+          "\n\nERROR: Supabase no está disponible.";
+
+        return;
+      }
 
 
-        if (!email || !password) {
+      try {
 
-          result.textContent +=
-            "\nERROR: Falta el email o la contraseña.";
+        resultado.textContent +=
+          "\n\n7. Creando cliente Supabase...";
+
+
+        const cliente =
+          window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_PUBLISHABLE_KEY
+          );
+
+
+        resultado.textContent +=
+          "\n8. Cliente creado.";
+
+
+        resultado.textContent +=
+          "\n\n9. Intentando iniciar sesión...";
+
+
+        const respuesta =
+          await cliente.auth.signInWithPassword({
+            email: email,
+            password: password
+          });
+
+
+        if (respuesta.error) {
+
+          resultado.textContent +=
+            "\n\nERROR DE LOGIN:\n" +
+            respuesta.error.message;
 
           return;
         }
 
 
-        try {
+        if (!respuesta.data.session) {
 
-          result.textContent +=
-            "\n5. Intentando iniciar sesión...\n";
+          resultado.textContent +=
+            "\n\nERROR: No se recibió ninguna sesión.";
 
-
-          const {
-            data,
-            error
-          } =
-            await supabase.auth.signInWithPassword({
-              email: email,
-              password: password
-            });
-
-
-          if (error) {
-
-            result.textContent +=
-              "\nERROR DE LOGIN:\n\n" +
-              error.message;
-
-            return;
-          }
-
-
-          if (!data || !data.session) {
-
-            result.textContent +=
-              "\nERROR: Login realizado pero no se ha obtenido una sesión.";
-
-            return;
-          }
-
-
-          result.textContent +=
-            "\n6. LOGIN CORRECTO.\n";
-
-
-          result.textContent +=
-            "\nUsuario:\n" +
-            data.user.id;
-
-
-          result.textContent +=
-            "\n\n7. Consultando get-stats...\n";
-
-
-          const {
-            data: stats,
-            error: statsError
-          } =
-            await supabase.functions.invoke(
-              "get-stats",
-              {
-                body: {}
-              }
-            );
-
-
-          if (statsError) {
-
-            result.textContent +=
-              "\nERROR DE GET-STATS:\n\n" +
-              statsError.message;
-
-            console.error(
-              "get-stats error:",
-              statsError
-            );
-
-            return;
-          }
-
-
-          result.textContent +=
-            "\n8. GET-STATS CORRECTO.\n\n";
-
-
-          result.textContent +=
-            JSON.stringify(
-              stats,
-              null,
-              2
-            );
-
-
-        } catch (error) {
-
-          result.textContent +=
-            "\nERROR INESPERADO:\n\n" +
-            (
-              error instanceof Error
-                ? error.message
-                : String(error)
-            );
-
-          console.error(error);
+          return;
         }
 
+
+        resultado.textContent +=
+          "\n\n10. LOGIN CORRECTO.";
+
+
+        resultado.textContent +=
+          "\n\nUID:\n" +
+          respuesta.data.user.id;
+
+
+        resultado.textContent +=
+          "\n\n11. Consultando get-stats...";
+
+
+        const stats =
+          await cliente.functions.invoke(
+            "get-stats",
+            {
+              body: {}
+            }
+          );
+
+
+        if (stats.error) {
+
+          resultado.textContent +=
+            "\n\nERROR DE GET-STATS:\n" +
+            stats.error.message;
+
+          console.error(
+            stats.error
+          );
+
+          return;
+        }
+
+
+        resultado.textContent +=
+          "\n\n12. GET-STATS CORRECTO.\n\n";
+
+
+        resultado.textContent +=
+          JSON.stringify(
+            stats.data,
+            null,
+            2
+          );
+
+
+      } catch (error) {
+
+        resultado.textContent +=
+          "\n\nERROR INESPERADO:\n\n" +
+          (
+            error instanceof Error
+              ? error.message
+              : String(error)
+          );
+
+        console.error(error);
       }
-    );
 
-
-    result.textContent +=
-      "4. Esperando al botón...\n";
+    }
 
   </script>
 
