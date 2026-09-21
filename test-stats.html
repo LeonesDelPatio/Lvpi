@@ -233,26 +233,61 @@
 
 
         const stats =
-          await cliente.functions.invoke(
-            "get-stats",
-            {
-              body: {}
-            }
-          );
+  await cliente.functions.invoke(
+    "get-stats",
+    {
+      body: {}
+    }
+  );
 
 
-        if (stats.error) {
+if (stats.error) {
 
-          resultado.textContent +=
-            "\n\nERROR DE GET-STATS:\n" +
-            stats.error.message;
+  let detalle =
+    stats.error.message;
 
-          console.error(
-            stats.error
-          );
 
-          return;
-        }
+  /*
+   * Intentamos leer la respuesta real
+   * que ha enviado get-stats.
+   */
+
+  if (stats.error.context) {
+
+    try {
+
+      const errorBody =
+        await stats.error.context.json();
+
+      detalle =
+        JSON.stringify(
+          errorBody,
+          null,
+          2
+        );
+
+    } catch (e) {
+
+      detalle =
+        "No se pudo leer el cuerpo del error.\n\n" +
+        stats.error.message;
+    }
+  }
+
+
+  resultado.textContent +=
+    "\n\nERROR DE GET-STATS:\n\n" +
+    detalle;
+
+
+  console.error(
+    "Error completo de get-stats:",
+    stats.error
+  );
+
+
+  return;
+}
 
 
         resultado.textContent +=
