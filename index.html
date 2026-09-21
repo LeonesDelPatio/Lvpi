@@ -3,39 +3,94 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Leones del Patio</title>
 
   <style>
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       min-height: 100vh;
       background: #111;
       color: #fff;
       font-family: Arial, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
     }
 
     .player {
-      width: min(90%, 600px);
-      text-align: center;
+      width: min(90%, 700px);
+      margin: 60px auto;
     }
 
     h1 {
-      margin-bottom: 30px;
-      font-size: 28px;
+      margin: 0 0 35px;
+      text-align: center;
+      font-size: 30px;
       font-weight: normal;
     }
 
-    button {
-      background: #fff;
-      color: #111;
-      border: none;
-      padding: 12px 20px;
-      cursor: pointer;
+    .album-selector {
+      width: 100%;
+      margin-bottom: 30px;
+    }
+
+    .album-selector label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 13px;
+      color: #aaa;
+    }
+
+    select {
+      width: 100%;
+      padding: 12px;
+      background: #1c1c1c;
+      color: #fff;
+      border: 1px solid #444;
       font-size: 15px;
+    }
+
+    .cover {
+      width: min(100%, 450px);
+      margin: 0 auto 25px;
+      aspect-ratio: 1 / 1;
+      background: #1c1c1c;
+      overflow: hidden;
+    }
+
+    .cover img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+    }
+
+    .album-name {
+      text-align: center;
+      font-size: 20px;
       margin-bottom: 25px;
+    }
+
+    .songs {
+      margin-bottom: 30px;
+    }
+
+    .song {
+      padding: 11px 12px;
+      border-bottom: 1px solid #292929;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .song:hover {
+      background: #1c1c1c;
+    }
+
+    .song.active {
+      background: #242424;
     }
 
     audio {
@@ -44,9 +99,11 @@
 
     #status {
       margin-top: 15px;
+      text-align: center;
       font-size: 13px;
-      color: #aaa;
+      color: #999;
     }
+
   </style>
 </head>
 
@@ -56,9 +113,41 @@
 
     <h1>Leones del Patio</h1>
 
-    <button id="playButton">
-      Reproducir canción de prueba
-    </button>
+    <div class="album-selector">
+
+      <label for="albumSelect">
+        Álbum
+      </label>
+
+      <select id="albumSelect">
+        <option>Cargando discos...</option>
+      </select>
+
+    </div>
+
+
+    <div class="cover">
+
+      <img
+        id="coverImage"
+        src=""
+        alt="Portada del álbum"
+      >
+
+    </div>
+
+
+    <div
+      id="albumName"
+      class="album-name">
+    </div>
+
+
+    <div
+      id="songs"
+      class="songs">
+    </div>
+
 
     <audio
       id="audioPlayer"
@@ -68,67 +157,138 @@
       noremoteplayback>
     </audio>
 
-    <div id="status"></div>
+
+    <div id="status">
+      Cargando catálogo...
+    </div>
 
   </main>
 
+
   <script>
 
-    const SUPABASE_URL = "https://cavnifartuktwmchyrdl.supabase.co";
+    // =====================================================
+    // CONFIGURACIÓN
+    // =====================================================
 
-    const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_WC_7KWhh6gq-pvL-97D3VA_78DyHmOM";
+    const SUPABASE_URL =
+      "https://cavnifartuktwmchyrdl.supabase.co";
 
-    const FUNCTION_URL =
+    const SUPABASE_PUBLISHABLE_KEY =
+      "sb_publishable_WC_7KWhh6gq-pvL-97D3VA_78DyHmOM";
+
+
+    const CATALOG_FUNCTION_URL =
+      `${SUPABASE_URL}/functions/v1/get-catalog`;
+
+    const AUDIO_FUNCTION_URL =
       `${SUPABASE_URL}/functions/v1/get-audio-url`;
 
-    const SONG_PATH =
-      "02. John'O Perdono y Edy Ventura - Las carga el diablo (inst).mp3";
+
+    // =====================================================
+    // ELEMENTOS DE LA PÁGINA
+    // =====================================================
+
+    const albumSelect =
+      document.getElementById("albumSelect");
+
+    const coverImage =
+      document.getElementById("coverImage");
+
+    const albumName =
+      document.getElementById("albumName");
+
+    const songsContainer =
+      document.getElementById("songs");
+
+    const audioPlayer =
+      document.getElementById("audioPlayer");
+
+    const status =
+      document.getElementById("status");
 
 
-    const button = document.getElementById("playButton");
-    const audio = document.getElementById("audioPlayer");
-    const status = document.getElementById("status");
+    // =====================================================
+    // ESTADO DEL REPRODUCTOR
+    // =====================================================
+
+    let catalog = null;
+
+    let currentAlbumIndex = 0;
+
+    let currentSongIndex = 0;
 
 
-    button.addEventListener("click", async () => {
+    // =====================================================
+    // CARGAR CATÁLOGO
+    // =====================================================
 
-      button.disabled = true;
-      status.textContent = "Obteniendo audio...";
+    async function loadCatalog() {
 
       try {
 
-        const response = await fetch(FUNCTION_URL, {
-          method: "POST",
-
-          headers: {
-            "apikey": SUPABASE_PUBLISHABLE_KEY,
-            "Content-Type": "application/json"
-          },
-
-          body: JSON.stringify({
-            path: SONG_PATH
-          })
-        });
+        status.textContent =
+          "Cargando catálogo...";
 
 
-        const result = await response.json();
+        const response =
+          await fetch(
+            CATALOG_FUNCTION_URL,
+            {
+              method: "POST",
+
+              headers: {
+                "apikey":
+                  SUPABASE_PUBLISHABLE_KEY,
+
+                "Content-Type":
+                  "application/json"
+              },
+
+              body: JSON.stringify({})
+            }
+          );
+
+
+        const result =
+          await response.json();
 
 
         if (!response.ok) {
-          throw new Error(result.error || "No se pudo obtener el audio.");
+
+          throw new Error(
+            result.error ||
+            "No se pudo cargar el catálogo."
+          );
+
         }
 
 
-        if (!result.signedUrl) {
-          throw new Error("Supabase no devolvió una URL firmada.");
+        if (
+          !result.albums ||
+          !Array.isArray(result.albums) ||
+          result.albums.length === 0
+        ) {
+
+          throw new Error(
+            "No se encontraron discos."
+          );
+
         }
 
 
-        audio.src = result.signedUrl;
+        catalog = result;
 
-        status.textContent = "Audio cargado.";
 
-        await audio.play();
+        buildAlbumSelector();
+
+
+        selectAlbum(0);
+
+
+        status.textContent =
+          "Catálogo cargado.";
+
 
       } catch (error) {
 
@@ -137,13 +297,293 @@
         status.textContent =
           "Error: " + error.message;
 
-      } finally {
+      }
 
-        button.disabled = false;
+    }
+
+
+    // =====================================================
+    // CREAR SELECTOR DE ÁLBUMES
+    // =====================================================
+
+    function buildAlbumSelector() {
+
+      albumSelect.innerHTML = "";
+
+
+      catalog.albums.forEach(
+        (album, index) => {
+
+          const option =
+            document.createElement("option");
+
+          option.value = index;
+
+          option.textContent =
+            album.name;
+
+          albumSelect.appendChild(
+            option
+          );
+
+        }
+      );
+
+    }
+
+
+    // =====================================================
+    // CAMBIAR DE ÁLBUM
+    // =====================================================
+
+    function selectAlbum(index) {
+
+      currentAlbumIndex = index;
+
+      currentSongIndex = 0;
+
+
+      const album =
+        catalog.albums[
+          currentAlbumIndex
+        ];
+
+
+      albumSelect.value =
+        currentAlbumIndex;
+
+
+      albumName.textContent =
+        album.name;
+
+
+      // -------------------------------
+      // PORTADA
+      // -------------------------------
+
+      if (album.cover) {
+
+        coverImage.src =
+          `${SUPABASE_URL}/storage/v1/object/sign/musicpriv/${encodeURIComponent(album.cover)}?token=`;
+
+      } else {
+
+        coverImage.removeAttribute("src");
 
       }
 
-    });
+
+      // -------------------------------
+      // CANCIONES
+      // -------------------------------
+
+      buildSongList();
+
+
+      status.textContent =
+        "Álbum seleccionado.";
+
+    }
+
+
+    // =====================================================
+    // CREAR LISTA DE CANCIONES
+    // =====================================================
+
+    function buildSongList() {
+
+      songsContainer.innerHTML = "";
+
+
+      const album =
+        catalog.albums[
+          currentAlbumIndex
+        ];
+
+
+      album.songs.forEach(
+        (song, index) => {
+
+          const element =
+            document.createElement("div");
+
+          element.className =
+            "song";
+
+
+          element.textContent =
+            song.name;
+
+
+          element.addEventListener(
+            "click",
+            () => {
+
+              playSong(index);
+
+            }
+          );
+
+
+          songsContainer.appendChild(
+            element
+          );
+
+        }
+      );
+
+    }
+
+
+    // =====================================================
+    // REPRODUCIR CANCIÓN
+    // =====================================================
+
+    async function playSong(index) {
+
+      const album =
+        catalog.albums[
+          currentAlbumIndex
+        ];
+
+      const song =
+        album.songs[index];
+
+
+      currentSongIndex = index;
+
+
+      try {
+
+        status.textContent =
+          "Obteniendo audio...";
+
+
+        const response =
+          await fetch(
+            AUDIO_FUNCTION_URL,
+            {
+              method: "POST",
+
+              headers: {
+
+                "apikey":
+                  SUPABASE_PUBLISHABLE_KEY,
+
+                "Content-Type":
+                  "application/json"
+
+              },
+
+              body: JSON.stringify({
+
+                path: song.path
+
+              })
+
+            }
+          );
+
+
+        const result =
+          await response.json();
+
+
+        if (!response.ok) {
+
+          throw new Error(
+            result.error ||
+            "No se pudo obtener el audio."
+          );
+
+        }
+
+
+        if (!result.signedUrl) {
+
+          throw new Error(
+            "Supabase no devolvió una URL firmada."
+          );
+
+        }
+
+
+        audioPlayer.src =
+          result.signedUrl;
+
+
+        updateActiveSong();
+
+
+        status.textContent =
+          "Reproduciendo.";
+
+
+        await audioPlayer.play();
+
+
+      } catch (error) {
+
+        console.error(error);
+
+        status.textContent =
+          "Error: " + error.message;
+
+      }
+
+    }
+
+
+    // =====================================================
+    // MARCAR CANCIÓN ACTIVA
+    // =====================================================
+
+    function updateActiveSong() {
+
+      const songs =
+        document.querySelectorAll(
+          ".song"
+        );
+
+
+      songs.forEach(
+        (element, index) => {
+
+          element.classList.toggle(
+            "active",
+            index === currentSongIndex
+          );
+
+        }
+      );
+
+    }
+
+
+    // =====================================================
+    // CAMBIO MANUAL DE ÁLBUM
+    // =====================================================
+
+    albumSelect.addEventListener(
+      "change",
+      () => {
+
+        const index =
+          Number(
+            albumSelect.value
+          );
+
+        selectAlbum(index);
+
+      }
+    );
+
+
+    // =====================================================
+    // INICIAR
+    // =====================================================
+
+    loadCatalog();
 
   </script>
 
