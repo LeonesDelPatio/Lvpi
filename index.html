@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -32,6 +33,8 @@
       font-weight: normal;
     }
 
+    /* SELECTOR DE ÁLBUM */
+
     .album-selector {
       width: 100%;
       margin-bottom: 30px;
@@ -51,11 +54,19 @@
       color: #fff;
       border: 1px solid #444;
       font-size: 15px;
+      cursor: pointer;
     }
+
+    select:focus {
+      outline: none;
+      border-color: #666;
+    }
+
+    /* PORTADA */
 
     .cover {
       width: min(100%, 450px);
-      margin: 0 auto 25px;
+      margin: 0 auto 20px;
       aspect-ratio: 1 / 1;
       background: #1c1c1c;
       overflow: hidden;
@@ -68,11 +79,22 @@
       object-fit: cover;
     }
 
+    /* REPRODUCTOR */
+
+    audio {
+      width: 100%;
+      margin-bottom: 25px;
+    }
+
+    /* NOMBRE DEL ÁLBUM */
+
     .album-name {
       text-align: center;
       font-size: 20px;
       margin-bottom: 25px;
     }
+
+    /* LISTA DE CANCIONES */
 
     .songs {
       margin-bottom: 30px;
@@ -83,6 +105,7 @@
       border-bottom: 1px solid #292929;
       cursor: pointer;
       font-size: 14px;
+      transition: background 0.15s ease;
     }
 
     .song:hover {
@@ -93,9 +116,7 @@
       background: #242424;
     }
 
-    audio {
-      width: 100%;
-    }
+    /* ESTADO */
 
     #status {
       margin-top: 15px;
@@ -105,13 +126,18 @@
     }
 
   </style>
+
 </head>
+
 
 <body>
 
   <main class="player">
 
     <h1>Leones del Patio</h1>
+
+
+    <!-- SELECTOR DE ÁLBUM -->
 
     <div class="album-selector">
 
@@ -120,34 +146,29 @@
       </label>
 
       <select id="albumSelect">
-        <option>Cargando discos...</option>
+
+        <option>
+          Cargando discos...
+        </option>
+
       </select>
 
     </div>
 
+
+    <!-- PORTADA -->
 
     <div class="cover">
 
       <img
         id="coverImage"
         src=""
-        alt="Portada del álbum"
-      >
+        alt="Portada del álbum">
 
     </div>
 
 
-    <div
-      id="albumName"
-      class="album-name">
-    </div>
-
-
-    <div
-      id="songs"
-      class="songs">
-    </div>
-
+    <!-- REPRODUCTOR -->
 
     <audio
       id="audioPlayer"
@@ -158,6 +179,24 @@
     </audio>
 
 
+    <!-- NOMBRE DEL ÁLBUM -->
+
+    <div
+      id="albumName"
+      class="album-name">
+    </div>
+
+
+    <!-- LISTA DE CANCIONES -->
+
+    <div
+      id="songs"
+      class="songs">
+    </div>
+
+
+    <!-- ESTADO -->
+
     <div id="status">
       Cargando catálogo...
     </div>
@@ -167,12 +206,19 @@
 
   <script>
 
-    // =====================================================
-    // CONFIGURACIÓN
-    // =====================================================
+    /* =========================================================
+       CONFIGURACIÓN
+       ========================================================= */
 
     const SUPABASE_URL =
       "https://cavnifartuktwmchyrdl.supabase.co";
+
+
+    /*
+      IMPORTANTE:
+      Sustituye solamente el texto de abajo por tu
+      publishable key completa.
+    */
 
     const SUPABASE_PUBLISHABLE_KEY =
       "sb_publishable_WC_7KWhh6gq-pvL-97D3VA_78DyHmOM";
@@ -181,47 +227,55 @@
     const CATALOG_FUNCTION_URL =
       `${SUPABASE_URL}/functions/v1/get-catalog`;
 
+
     const AUDIO_FUNCTION_URL =
       `${SUPABASE_URL}/functions/v1/get-audio-url`;
 
 
-    // =====================================================
-    // ELEMENTOS DE LA PÁGINA
-    // =====================================================
+    /* =========================================================
+       ELEMENTOS DE LA INTERFAZ
+       ========================================================= */
 
     const albumSelect =
       document.getElementById("albumSelect");
 
+
     const coverImage =
       document.getElementById("coverImage");
+
 
     const albumName =
       document.getElementById("albumName");
 
+
     const songsContainer =
       document.getElementById("songs");
 
+
     const audioPlayer =
       document.getElementById("audioPlayer");
+
 
     const status =
       document.getElementById("status");
 
 
-    // =====================================================
-    // ESTADO DEL REPRODUCTOR
-    // =====================================================
+    /* =========================================================
+       VARIABLES DEL CATÁLOGO
+       ========================================================= */
 
     let catalog = null;
 
+
     let currentAlbumIndex = 0;
+
 
     let currentSongIndex = 0;
 
 
-    // =====================================================
-    // CARGAR CATÁLOGO
-    // =====================================================
+    /* =========================================================
+       CARGAR CATÁLOGO
+       ========================================================= */
 
     async function loadCatalog() {
 
@@ -245,7 +299,8 @@
                   "application/json"
               },
 
-              body: JSON.stringify({})
+              body:
+                JSON.stringify({})
             }
           );
 
@@ -283,6 +338,15 @@
         buildAlbumSelector();
 
 
+        /*
+          Seleccionamos automáticamente
+          el primer álbum del catálogo.
+
+          Como get-catalog ya los entrega
+          ordenados de más reciente a más antiguo,
+          el índice 0 es el álbum más reciente.
+        */
+
         selectAlbum(0);
 
 
@@ -294,6 +358,7 @@
 
         console.error(error);
 
+
         status.textContent =
           "Error: " + error.message;
 
@@ -302,9 +367,9 @@
     }
 
 
-    // =====================================================
-    // CREAR SELECTOR DE ÁLBUMES
-    // =====================================================
+    /* =========================================================
+       CREAR SELECTOR DE ÁLBUMES
+       ========================================================= */
 
     function buildAlbumSelector() {
 
@@ -317,10 +382,22 @@
           const option =
             document.createElement("option");
 
-          option.value = index;
+
+          option.value =
+            index;
+
+
+          /*
+            El nombre que devuelve get-catalog
+            ya tiene oculto solamente el último
+            (01), (02), etc.
+
+            El año permanece visible.
+          */
 
           option.textContent =
-            album.name;
+            `${album.name} (${album.year})`;
+
 
           albumSelect.appendChild(
             option
@@ -332,15 +409,18 @@
     }
 
 
-    // =====================================================
-    // CAMBIAR DE ÁLBUM
-    // =====================================================
+    /* =========================================================
+       SELECCIONAR ÁLBUM
+       ========================================================= */
 
     function selectAlbum(index) {
 
-      currentAlbumIndex = index;
+      currentAlbumIndex =
+        index;
 
-      currentSongIndex = 0;
+
+      currentSongIndex =
+        0;
 
 
       const album =
@@ -354,21 +434,46 @@
 
 
       albumName.textContent =
-        album.name;
+        `${album.name} (${album.year})`;
 
 
-      // -------------------------------
-      // PORTADA
-      // -------------------------------
+      /*
+        La portada todavía no se carga.
 
-    coverImage.removeAttribute("src");
+        Esto es intencionado porque el bucket
+        musicpriv es privado.
 
+        Más adelante generaremos una URL firmada
+        también para la portada.
+      */
 
-      // -------------------------------
-      // CANCIONES
-      // -------------------------------
+      coverImage.removeAttribute(
+        "src"
+      );
+
 
       buildSongList();
+
+
+      /*
+        Al cambiar manualmente de álbum,
+        dejamos el reproductor preparado
+        pero no iniciamos todavía la canción.
+
+        El comportamiento de reproducción
+        automática al seleccionar álbum lo
+        añadiremos después.
+      */
+
+      audioPlayer.pause();
+
+
+      audioPlayer.removeAttribute(
+        "src"
+      );
+
+
+      audioPlayer.load();
 
 
       status.textContent =
@@ -377,13 +482,14 @@
     }
 
 
-    // =====================================================
-    // CREAR LISTA DE CANCIONES
-    // =====================================================
+    /* =========================================================
+       CREAR LISTA DE CANCIONES
+       ========================================================= */
 
     function buildSongList() {
 
-      songsContainer.innerHTML = "";
+      songsContainer.innerHTML =
+        "";
 
 
       const album =
@@ -397,6 +503,7 @@
 
           const element =
             document.createElement("div");
+
 
           element.className =
             "song";
@@ -423,12 +530,15 @@
         }
       );
 
+
+      updateActiveSong();
+
     }
 
 
-    // =====================================================
-    // REPRODUCIR CANCIÓN
-    // =====================================================
+    /* =========================================================
+       REPRODUCIR CANCIÓN
+       ========================================================= */
 
     async function playSong(index) {
 
@@ -437,11 +547,13 @@
           currentAlbumIndex
         ];
 
+
       const song =
         album.songs[index];
 
 
-      currentSongIndex = index;
+      currentSongIndex =
+        index;
 
 
       try {
@@ -457,21 +569,17 @@
               method: "POST",
 
               headers: {
-
                 "apikey":
                   SUPABASE_PUBLISHABLE_KEY,
 
                 "Content-Type":
                   "application/json"
-
               },
 
-              body: JSON.stringify({
-
-                path: song.path
-
-              })
-
+              body:
+                JSON.stringify({
+                  path: song.path
+                })
             }
           );
 
@@ -499,6 +607,11 @@
         }
 
 
+        /*
+          Cargamos la URL temporal
+          del archivo privado.
+        */
+
         audioPlayer.src =
           result.signedUrl;
 
@@ -510,12 +623,36 @@
           "Reproduciendo.";
 
 
-        await audioPlayer.play();
+        /*
+          Intentamos iniciar la reproducción.
+
+          Si el navegador lo bloquea, la
+          promesa fallará y dejamos que el
+          usuario pueda pulsar Play manualmente.
+        */
+
+        try {
+
+          await audioPlayer.play();
+
+        } catch (playError) {
+
+          console.warn(
+            "La reproducción automática fue bloqueada:",
+            playError
+          );
+
+
+          status.textContent =
+            "Pulsa Play para reproducir.";
+
+        }
 
 
       } catch (error) {
 
         console.error(error);
+
 
         status.textContent =
           "Error: " + error.message;
@@ -525,9 +662,9 @@
     }
 
 
-    // =====================================================
-    // MARCAR CANCIÓN ACTIVA
-    // =====================================================
+    /* =========================================================
+       MARCAR CANCIÓN ACTIVA
+       ========================================================= */
 
     function updateActiveSong() {
 
@@ -551,9 +688,9 @@
     }
 
 
-    // =====================================================
-    // CAMBIO MANUAL DE ÁLBUM
-    // =====================================================
+    /* =========================================================
+       CAMBIO MANUAL DE ÁLBUM
+       ========================================================= */
 
     albumSelect.addEventListener(
       "change",
@@ -564,19 +701,201 @@
             albumSelect.value
           );
 
+
         selectAlbum(index);
 
       }
     );
 
 
-    // =====================================================
-    // INICIAR
-    // =====================================================
+    /* =========================================================
+       REPRODUCCIÓN AUTOMÁTICA SECUENCIAL
+       ========================================================= */
+
+    audioPlayer.addEventListener(
+      "ended",
+      () => {
+
+        /*
+          Obtenemos el álbum actual.
+        */
+
+        const album =
+          catalog.albums[
+            currentAlbumIndex
+          ];
+
+
+        /*
+          -----------------------------------------------------
+          CASO 1
+          Todavía quedan canciones dentro
+          del álbum actual.
+          -----------------------------------------------------
+        */
+
+        if (
+          currentSongIndex <
+          album.songs.length - 1
+        ) {
+
+          playSong(
+            currentSongIndex + 1
+          );
+
+
+          return;
+
+        }
+
+
+        /*
+          -----------------------------------------------------
+          CASO 2
+          Hemos terminado el álbum actual.
+
+          Comprobamos si existe otro álbum.
+          -----------------------------------------------------
+        */
+
+        if (
+          currentAlbumIndex <
+          catalog.albums.length - 1
+        ) {
+
+          currentAlbumIndex++;
+
+
+          currentSongIndex =
+            0;
+
+
+          const nextAlbum =
+            catalog.albums[
+              currentAlbumIndex
+            ];
+
+
+          /*
+            Actualizamos el selector.
+          */
+
+          albumSelect.value =
+            currentAlbumIndex;
+
+
+          /*
+            Actualizamos el nombre.
+          */
+
+          albumName.textContent =
+            `${nextAlbum.name} (${nextAlbum.year})`;
+
+
+          /*
+            La portada continúa pendiente
+            de implementar.
+          */
+
+          coverImage.removeAttribute(
+            "src"
+          );
+
+
+          /*
+            Construimos la nueva lista.
+          */
+
+          buildSongList();
+
+
+          /*
+            Reproducimos automáticamente
+            el primer tema del nuevo álbum.
+          */
+
+          playSong(0);
+
+
+          return;
+
+        }
+
+
+        /*
+          -----------------------------------------------------
+          CASO 3
+          Hemos terminado el último tema
+          del último álbum.
+
+          Volvemos al primer álbum.
+          -----------------------------------------------------
+        */
+
+        currentAlbumIndex =
+          0;
+
+
+        currentSongIndex =
+          0;
+
+
+        const firstAlbum =
+          catalog.albums[
+            currentAlbumIndex
+          ];
+
+
+        /*
+          Actualizamos selector.
+        */
+
+        albumSelect.value =
+          currentAlbumIndex;
+
+
+        /*
+          Actualizamos nombre.
+        */
+
+        albumName.textContent =
+          `${firstAlbum.name} (${firstAlbum.year})`;
+
+
+        /*
+          Portada pendiente.
+        */
+
+        coverImage.removeAttribute(
+          "src"
+        );
+
+
+        /*
+          Reconstruimos lista.
+        */
+
+        buildSongList();
+
+
+        /*
+          Volvemos al primer tema.
+        */
+
+        playSong(0);
+
+      }
+    );
+
+
+    /* =========================================================
+       INICIAR
+       ========================================================= */
 
     loadCatalog();
 
   </script>
 
 </body>
+
 </html>
