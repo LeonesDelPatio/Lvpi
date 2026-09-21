@@ -1,21 +1,151 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prueba de audio</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Leones del Patio</title>
+
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: #111;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .player {
+      width: min(90%, 600px);
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 30px;
+      font-size: 28px;
+      font-weight: normal;
+    }
+
+    button {
+      background: #fff;
+      color: #111;
+      border: none;
+      padding: 12px 20px;
+      cursor: pointer;
+      font-size: 15px;
+      margin-bottom: 25px;
+    }
+
+    audio {
+      width: 100%;
+    }
+
+    #status {
+      margin-top: 15px;
+      font-size: 13px;
+      color: #aaa;
+    }
+  </style>
 </head>
 
 <body>
 
-    <h1>Prueba de audio</h1>
+  <main class="player">
 
-    <p>John'O Perdono y Edy Ventura - Aunque digan (inst).</p>
+    <h1>Leones del Patio</h1>
 
-<audio controls controlslist="nodownload" preload="metadata">
-        <source src="https://xieqrsokzwgkkkwsgpsd.supabase.co/storage/v1/object/public/music/01.%20John'O%20Perdono%20y%20Edy%20Ventura%20-%20Aunque%20digan%20(inst).mp3" type="audio/mpeg">
-        Tu navegador no puede reproducir este audio.
+    <button id="playButton">
+      Reproducir canción de prueba
+    </button>
+
+    <audio
+      id="audioPlayer"
+      controls
+      preload="metadata"
+      controlslist="nodownload noremoteplayback"
+      noremoteplayback>
     </audio>
+
+    <div id="status"></div>
+
+  </main>
+
+  <script>
+
+    const SUPABASE_URL = "https://cavnifartuktwmchyrdl.supabase.co";
+
+    const SUPABASE_PUBLISHABLE_KEY = "PON_AQUI_TU_PUBLISHABLE_KEY_COMPLETA";
+
+    const FUNCTION_URL =
+      `${SUPABASE_URL}/functions/v1/get-audio-url`;
+
+    const SONG_PATH =
+      "02. John'O Perdono y Edy Ventura - Las carga el diablo (inst).mp3";
+
+
+    const button = document.getElementById("playButton");
+    const audio = document.getElementById("audioPlayer");
+    const status = document.getElementById("status");
+
+
+    button.addEventListener("click", async () => {
+
+      button.disabled = true;
+      status.textContent = "Obteniendo audio...";
+
+      try {
+
+        const response = await fetch(FUNCTION_URL, {
+          method: "POST",
+
+          headers: {
+            "apikey": SUPABASE_PUBLISHABLE_KEY,
+            "Content-Type": "application/json"
+          },
+
+          body: JSON.stringify({
+            path: SONG_PATH
+          })
+        });
+
+
+        const result = await response.json();
+
+
+        if (!response.ok) {
+          throw new Error(result.error || "No se pudo obtener el audio.");
+        }
+
+
+        if (!result.signedUrl) {
+          throw new Error("Supabase no devolvió una URL firmada.");
+        }
+
+
+        audio.src = result.signedUrl;
+
+        status.textContent = "Audio cargado.";
+
+        await audio.play();
+
+      } catch (error) {
+
+        console.error(error);
+
+        status.textContent =
+          "Error: " + error.message;
+
+      } finally {
+
+        button.disabled = false;
+
+      }
+
+    });
+
+  </script>
 
 </body>
 </html>
