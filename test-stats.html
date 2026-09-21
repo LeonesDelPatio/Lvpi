@@ -82,6 +82,10 @@
   </div>
 
 
+  <!-- Cliente oficial de Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
   <script>
 
     const SUPABASE_URL =
@@ -90,8 +94,12 @@
     const SUPABASE_PUBLISHABLE_KEY =
       "sb_publishable_WC_7KWhh6gq-pvL-97D3VA_78DyHmOM";
 
-    const GET_STATS_URL =
-      `${SUPABASE_URL}/functions/v1/get-stats`;
+
+    const supabase =
+      window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_PUBLISHABLE_KEY
+      );
 
 
     const result =
@@ -136,54 +144,28 @@
       try {
 
         /*
-         * 1. Iniciar sesión en Supabase Auth
+         * 1. Iniciar sesión con Supabase Auth
          */
 
-        const loginResponse =
-          await fetch(
-            `${SUPABASE_URL}/auth/v1/token?grant_type=password`,
-            {
-              method: "POST",
-
-              headers: {
-                "apikey":
-                  SUPABASE_PUBLISHABLE_KEY,
-
-                "Content-Type":
-                  "application/json"
-              },
-
-              body:
-                JSON.stringify({
-                  email,
-                  password
-                })
-            }
-          );
+        const {
+          data: loginData,
+          error: loginError
+        } =
+          await supabase.auth.signInWithPassword({
+            email,
+            password
+          });
 
 
-        const loginData =
-          await loginResponse.json();
-
-
-        if (!loginResponse.ok) {
-
-          throw new Error(
-            loginData.error_description ||
-            loginData.msg ||
-            "No se pudo iniciar sesión."
-          );
+        if (loginError) {
+          throw loginError;
         }
 
 
-        const accessToken =
-          loginData.access_token;
-
-
-        if (!accessToken) {
+        if (!loginData.session) {
 
           throw new Error(
-            "Supabase no devolvió un access token."
+            "Supabase no ha creado una sesión."
           );
         }
 
@@ -194,40 +176,32 @@
 
 
         /*
-         * 2. Consultar get-stats utilizando
-         *    el JWT del usuario
+         * 2. Llamar a get-stats
+         *
+         * supabase.functions.invoke()
+         * utiliza automáticamente la sesión
+         * autenticada para enviar el JWT.
          */
 
-        const statsResponse =
-          await fetch(
-            GET_STATS_URL,
+        const {
+          data: statsData,
+          error: statsError
+        } =
+          await supabase.functions.invoke(
+            "get-stats",
             {
-              method: "POST",
-
-              headers: {
-
-                "apikey":
-                  SUPABASE_PUBLISHABLE_KEY,
-
-                "Authorization":
-                  `Bearer ${accessToken}`,
-
-                "Content-Type":
-                  "application/json"
-              },
-
-              body:
-                JSON.stringify({})
+              body: {}
             }
           );
 
 
-        const statsData =
-          await statsResponse.json();
+        if (statsError) {
+          throw statsError;
+        }
 
 
         /*
-         * 3. Mostrar resultado
+         * 3. Mostrar las estadísticas
          */
 
         result.textContent =
@@ -247,7 +221,11 @@
           (
             error instanceof Error
               ? error.message
-              : String(error)
+              : JSON.stringify(
+                  error,
+                  null,
+                  2
+                )
           );
       }
     }
