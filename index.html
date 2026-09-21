@@ -152,17 +152,23 @@
     }
 
 
-    /* TÍTULO DE LA CANCIÓN */
+    /* =====================================================
+       TÍTULO DE LA CANCIÓN
+       ===================================================== */
 
     .now-playing {
 
-      margin-bottom: 8px;
+      margin-bottom: 10px;
+
+      padding: 0 10px;
+
+      text-align: center;
 
       font-size: 15px;
 
-      color: #ddd;
+      line-height: 1.4;
 
-      text-align: left;
+      color: #ddd;
 
       white-space: nowrap;
 
@@ -177,7 +183,7 @@
 
       color: #777;
 
-      margin-right: 6px;
+      margin-right: 5px;
 
     }
 
@@ -227,7 +233,8 @@
 
       font-size: 14px;
 
-      transition: background 0.15s ease;
+      transition:
+        background 0.15s ease;
 
     }
 
@@ -242,23 +249,6 @@
     .song.active {
 
       background: #242424;
-
-    }
-
-
-    /* =====================================================
-       ESTADO
-       ===================================================== */
-
-    #status {
-
-      margin-top: 15px;
-
-      text-align: center;
-
-      font-size: 13px;
-
-      color: #999;
 
     }
 
@@ -327,8 +317,9 @@
         id="nowPlaying"
         class="now-playing">
 
-        <span class="now-playing-label">
-          Reproduciendo:
+        <span
+          class="now-playing-label">
+          Reproduciendo
         </span>
 
         <span id="songTitle">
@@ -372,15 +363,6 @@
     </div>
 
 
-    <!-- ===================================================
-         ESTADO
-         =================================================== -->
-
-    <div id="status">
-      Cargando catálogo...
-    </div>
-
-
   </main>
 
 
@@ -399,9 +381,8 @@
     /*
       IMPORTANTE:
 
-      Pon aquí tu PUBLISHABLE KEY completa.
-
-      Es la misma que ya estabas utilizando.
+      Introduce aquí exactamente la misma
+      PUBLISHABLE KEY que ya estabas utilizando.
     */
 
 
@@ -458,12 +439,6 @@
       );
 
 
-    const status =
-      document.getElementById(
-        "status"
-      );
-
-
     /* =====================================================
        VARIABLES
        ===================================================== */
@@ -487,10 +462,6 @@
 
 
       try {
-
-
-        status.textContent =
-          "Cargando catálogo...";
 
 
         const response =
@@ -552,30 +523,25 @@
 
 
         /*
-          El índice 0 es el álbum más reciente
-          porque get-catalog ya los entrega
-          ordenados correctamente.
+          El catálogo ya viene ordenado por
+          año y orden desde get-catalog.
+
+          Por tanto, 0 = álbum más reciente.
         */
 
 
         selectAlbum(0);
 
-
-        status.textContent =
-          "Catálogo cargado.";
-
-
       }
+
+
       catch (error) {
 
 
-        console.error(error);
-
-
-        status.textContent =
-          "Error: " +
-          error.message;
-
+        console.error(
+          "Error cargando catálogo:",
+          error
+        );
 
       }
 
@@ -609,10 +575,10 @@
 
 
           /*
-            Mostramos nombre + año.
+            El nombre recibido por get-catalog
+            ya tiene oculto el último (01), (02), etc.
 
-            El último (01), (02), etc.
-            sigue oculto.
+            El año sí permanece visible.
           */
 
 
@@ -623,7 +589,6 @@
           albumSelect.appendChild(
             option
           );
-
 
         }
       );
@@ -662,43 +627,155 @@
 
 
       /*
-        La portada todavía no se carga porque
-        el bucket musicpriv es privado.
-
-        Lo solucionaremos posteriormente
-        mediante una URL firmada.
+        Cargamos la portada privada.
       */
 
 
-      coverImage.removeAttribute(
-        "src"
+      loadCover(
+        album.cover
       );
+
+
+      /*
+        Construimos la lista.
+      */
 
 
       buildSongList();
 
 
       /*
-        Reiniciamos el título.
-      */
-
-
-      songTitle.textContent =
-        "Cargando canción...";
-
-
-      /*
-        IMPORTANTE:
-
-        Al cambiar manualmente de álbum,
-        cargamos automáticamente la pista 01.
-
-        playSong() intentará comenzar
-        automáticamente la reproducción.
+        Al seleccionar un álbum,
+        comenzamos automáticamente
+        por la pista 01.
       */
 
 
       playSong(0);
+
+    }
+
+
+    /* =====================================================
+       CARGAR PORTADA PRIVADA
+       ===================================================== */
+
+
+    async function loadCover(
+      coverPath
+    ) {
+
+
+      /*
+        Si por alguna razón el álbum no
+        tiene portada, dejamos el espacio
+        vacío.
+      */
+
+
+      if (!coverPath) {
+
+        coverImage.removeAttribute(
+          "src"
+        );
+
+        return;
+
+      }
+
+
+      try {
+
+
+        /*
+          Utilizamos la misma Edge Function
+          que utilizamos para el audio.
+
+          La función genera una URL firmada
+          temporal para cualquier archivo
+          existente en musicpriv.
+        */
+
+
+        const response =
+          await fetch(
+            AUDIO_FUNCTION_URL,
+            {
+
+              method: "POST",
+
+              headers: {
+
+                "apikey":
+                  SUPABASE_PUBLISHABLE_KEY,
+
+                "Content-Type":
+                  "application/json"
+
+              },
+
+              body:
+                JSON.stringify({
+
+                  path:
+                    coverPath
+
+                })
+
+            }
+          );
+
+
+        const result =
+          await response.json();
+
+
+        if (!response.ok) {
+
+          throw new Error(
+            result.error ||
+            "No se pudo obtener la portada."
+          );
+
+        }
+
+
+        if (!result.signedUrl) {
+
+          throw new Error(
+            "Supabase no devolvió una URL firmada para la portada."
+          );
+
+        }
+
+
+        /*
+          La URL firmada se coloca
+          directamente en la imagen.
+        */
+
+
+        coverImage.src =
+          result.signedUrl;
+
+
+      }
+
+
+      catch (error) {
+
+
+        console.error(
+          "Error cargando portada:",
+          error
+        );
+
+
+        coverImage.removeAttribute(
+          "src"
+        );
+
+      }
 
     }
 
@@ -753,7 +830,6 @@
             element
           );
 
-
         }
       );
 
@@ -798,8 +874,10 @@
           song.name;
 
 
-        status.textContent =
-          "Obteniendo audio...";
+        /*
+          Pedimos a Supabase una URL
+          firmada temporalmente.
+        */
 
 
         const response =
@@ -855,7 +933,7 @@
 
 
         /*
-          Ponemos la URL firmada
+          Ponemos la URL temporal
           en el reproductor.
         */
 
@@ -865,10 +943,6 @@
 
 
         updateActiveSong();
-
-
-        status.textContent =
-          "Reproduciendo.";
 
 
         /*
@@ -883,21 +957,19 @@
           await audioPlayer.play();
 
 
-          status.textContent =
-            "Reproduciendo.";
-
-
         }
+
+
         catch (playError) {
 
 
           /*
             El navegador puede bloquear
-            una reproducción iniciada
-            mediante JavaScript.
+            la reproducción iniciada por
+            JavaScript.
 
-            En ese caso no consideramos
-            que sea un error del archivo.
+            No mostramos ningún mensaje
+            adicional en la página.
           */
 
 
@@ -906,24 +978,19 @@
             playError
           );
 
-
-          status.textContent =
-            "Pulsa Play para reproducir.";
-
         }
 
 
       }
+
+
       catch (error) {
 
 
-        console.error(error);
-
-
-        status.textContent =
-          "Error: " +
-          error.message;
-
+        console.error(
+          "Error reproduciendo canción:",
+          error
+        );
 
       }
 
@@ -976,15 +1043,7 @@
           );
 
 
-        /*
-          selectAlbum() ahora también
-          carga y reproduce automáticamente
-          la canción 01.
-        */
-
-
         selectAlbum(index);
-
 
       }
     );
@@ -1009,7 +1068,7 @@
         /*
           ---------------------------------------------------
           CASO 1:
-          Hay otra canción dentro del mismo álbum.
+          Hay otra canción en el álbum.
           ---------------------------------------------------
         */
 
@@ -1033,7 +1092,7 @@
         /*
           ---------------------------------------------------
           CASO 2:
-          Hemos terminado el álbum.
+          Última canción del álbum.
 
           Pasamos al siguiente álbum.
           ---------------------------------------------------
@@ -1067,18 +1126,12 @@
             `${nextAlbum.name} (${nextAlbum.year})`;
 
 
-          coverImage.removeAttribute(
-            "src"
+          loadCover(
+            nextAlbum.cover
           );
 
 
           buildSongList();
-
-
-          /*
-            El título se actualiza dentro
-            de playSong().
-          */
 
 
           playSong(0);
@@ -1092,9 +1145,9 @@
         /*
           ---------------------------------------------------
           CASO 3:
-          Hemos terminado el último álbum.
+          Última canción del último álbum.
 
-          Volvemos al primero.
+          Volvemos al álbum más reciente.
           ---------------------------------------------------
         */
 
@@ -1121,8 +1174,8 @@
           `${firstAlbum.name} (${firstAlbum.year})`;
 
 
-        coverImage.removeAttribute(
-          "src"
+        loadCover(
+          firstAlbum.cover
         );
 
 
