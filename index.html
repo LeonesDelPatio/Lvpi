@@ -361,16 +361,7 @@
       // PORTADA
       // -------------------------------
 
-      if (album.cover) {
-
-        coverImage.src =
-          `${SUPABASE_URL}/storage/v1/object/sign/musicpriv/${encodeURIComponent(album.cover)}?token=`;
-
-      } else {
-
-        coverImage.removeAttribute("src");
-
-      }
+     
 
 
       // -------------------------------
