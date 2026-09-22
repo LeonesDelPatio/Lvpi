@@ -1,427 +1,433 @@
-```html
 <!DOCTYPE html>
+
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>Lvpi</title>
 
   <style>
-
     * {
       box-sizing: border-box;
     }
 
+    html,
     body {
       margin: 0;
-      background: #111;
+      padding: 0;
+      min-height: 100%;
+      background: #000;
       color: #fff;
       font-family: Arial, Helvetica, sans-serif;
     }
 
-    .container {
-      width: min(900px, 92%);
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    main {
+      width: 100%;
+      max-width: 1100px;
       margin: 0 auto;
-      padding: 40px 0 60px;
-      text-align: center;
+      padding: 42px 24px 0;
+      flex: 1;
     }
 
     h1 {
-      margin: 0 0 30px;
-      font-size: 28px;
+      margin: 0 0 38px;
+      text-align: center;
+      font-size: 32px;
       font-weight: 500;
+      letter-spacing: 0.08em;
     }
 
     .album-selector {
-      margin-bottom: 30px;
+      display: flex;
+      justify-content: center;
+      margin-bottom: 34px;
     }
 
-    select {
-      width: 100%;
-      max-width: 600px;
-      padding: 12px 14px;
-      background: #1d1d1d;
-      color: #fff;
-      border: 1px solid #444;
-      border-radius: 6px;
-      font-size: 15px;
-      cursor: pointer;
-    }
-
-    .cover-container {
-      width: min(500px, 90%);
-      margin: 0 auto 25px;
-    }
-
-    .cover-container img {
-      display: block;
-      width: 100%;
-      height: auto;
+    #albumSelect {
+      width: min(100%, 520px);
+      padding: 12px 16px;
+      border: 1px solid #333;
       border-radius: 4px;
+      background: #0b0b0b;
+      color: #fff;
+      font-size: 14px;
+      outline: none;
+    }
+
+    #albumSelect:focus {
+      border-color: #666;
+    }
+
+    .album-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    #cover {
+      display: block;
+      width: min(100%, 420px);
+      height: auto;
+      max-height: 420px;
+      object-fit: contain;
+      margin: 0 auto 30px;
       user-select: none;
-      -webkit-user-select: none;
       -webkit-user-drag: none;
+      border-radius: 2px;
+    }
+
+    .player {
+      width: min(100%, 760px);
+      margin: 0 auto;
     }
 
     audio {
-      width: min(700px, 100%);
-      margin: 0 auto 25px;
       display: block;
-    }
-
-    .now-playing {
-      margin: 10px auto 30px;
-      text-align: center;
-      max-width: 750px;
-    }
-
-    .now-playing-label {
-      display: block;
-      margin-bottom: 7px;
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      color: #888;
-    }
-
-    #songTitle {
-      display: block;
-      font-size: 17px;
-      line-height: 1.5;
-      color: #fff;
-    }
-
-    .songs {
-      width: min(750px, 100%);
-      margin: 0 auto;
-      text-align: left;
-    }
-
-    .song {
-      padding: 12px 14px;
-      border-bottom: 1px solid #2a2a2a;
-      cursor: pointer;
-      transition: background 0.15s ease;
-    }
-
-    .song:hover {
-      background: #1b1b1b;
-    }
-
-    .song.active {
-      background: #222;
-    }
-
-
-    /* =====================================================
-       FOOTER
-       ===================================================== */
-
-    .site-footer {
       width: 100%;
-      margin-top: 20px;
-      padding: 65px 20px 22px;
-      border-top: 1px solid #242424;
-      text-align: center;
+      margin-bottom: 28px;
     }
 
-    .footer-content {
-      width: min(760px, 100%);
+    #songList {
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    #songList li {
+      padding: 11px 14px;
+      border-bottom: 1px solid #1d1d1d;
+      color: #bbb;
+      font-size: 14px;
+      cursor: pointer;
+      transition:
+        color 0.15s ease,
+        background 0.15s ease;
+    }
+
+    #songList li:first-child {
+      border-top: 1px solid #1d1d1d;
+    }
+
+    #songList li:hover {
+      color: #fff;
+      background: #0b0b0b;
+    }
+
+    #songList li.active {
+      color: #fff;
+      background: #111;
+    }
+
+    /* =========================================================
+       FOOTER
+       ========================================================= */
+
+    footer {
+      width: 100%;
+      margin-top: 92px;
+      padding: 0 24px 26px;
+    }
+
+    .footer-inner {
+      width: min(100%, 1100px);
       margin: 0 auto;
     }
 
-    .footer-logos {
+    .footer-identity {
       display: flex;
-      align-items: center;
       justify-content: center;
-      gap: 75px;
-      min-height: 80px;
-      margin-bottom: 42px;
+      align-items: center;
+      gap: 72px;
+      min-height: 105px;
     }
 
     .footer-logo {
       display: block;
       width: auto;
-      height: 58px;
-      max-width: 230px;
+      height: 88px;
+      max-width: 300px;
       object-fit: contain;
-
-      /*
-        Ligera transparencia para integrar
-        mejor los logos con el fondo.
-      */
-
-      opacity: 0.82;
-
+      opacity: 0.76;
       user-select: none;
-      -webkit-user-select: none;
       -webkit-user-drag: none;
-      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .footer-logo:hover {
+      opacity: 0.95;
+    }
+
+    .footer-social {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-top: 42px;
     }
 
     .footer-qr-link {
       display: block;
-      width: fit-content;
-      margin: 0 auto;
+      line-height: 0;
       text-decoration: none;
     }
 
     .footer-qr {
       display: block;
-      width: 135px;
-      height: 135px;
-      margin: 0 auto;
+      width: 155px;
+      height: 155px;
       object-fit: contain;
-
       user-select: none;
-      -webkit-user-select: none;
       -webkit-user-drag: none;
+      opacity: 0.9;
+      transition: opacity 0.2s ease;
     }
 
-    .footer-social-link {
+    .footer-qr-link:hover .footer-qr {
+      opacity: 1;
+    }
+
+    .footer-link {
       display: inline-block;
-      margin-top: 16px;
-      color: #999;
-      font-size: 12px;
-      letter-spacing: 1.4px;
+      margin-top: 17px;
+      color: #aaa;
       text-decoration: none;
-      transition:
-        color 0.2s ease;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      transition: color 0.2s ease;
     }
 
-    .footer-social-link:hover {
+    .footer-link:hover {
       color: #fff;
     }
 
+    .footer-bottom {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 50px;
+    }
+
     .footer-copyright {
-      width: min(900px, 100%);
-      margin: 50px auto 0;
+      margin: 0;
       color: #555;
       font-size: 10px;
-      line-height: 1.4;
+      line-height: 1.5;
+      letter-spacing: 0.02em;
       text-align: right;
     }
 
-
-    /* =====================================================
-       RESPONSIVE
-       ===================================================== */
-
-    @media (max-width: 600px) {
-
-      .container {
-        padding-top: 25px;
+    @media (max-width: 700px) {
+      main {
+        padding: 30px 16px 0;
       }
 
       h1 {
-        font-size: 24px;
+        margin-bottom: 30px;
+        font-size: 28px;
       }
 
-      #songTitle {
-        font-size: 15px;
+      #cover {
+        margin-bottom: 24px;
       }
 
-      .song {
-        padding: 11px 10px;
+      footer {
+        margin-top: 70px;
+        padding: 0 16px 22px;
       }
 
-      .site-footer {
-        padding-top: 50px;
-        padding-bottom: 18px;
-      }
-
-      .footer-logos {
-        gap: 35px;
-        min-height: 60px;
-        margin-bottom: 34px;
+      .footer-identity {
+        gap: 34px;
+        min-height: 75px;
       }
 
       .footer-logo {
-        height: 44px;
-        max-width: 160px;
+        height: 62px;
+        max-width: 42%;
+      }
+
+      .footer-social {
+        margin-top: 34px;
+      }
+
+      .footer-qr {
+        width: 125px;
+        height: 125px;
+      }
+
+      .footer-bottom {
+        justify-content: center;
+        margin-top: 38px;
+      }
+
+      .footer-copyright {
+        text-align: center;
+        font-size: 9px;
+      }
+    }
+
+    @media (max-width: 430px) {
+      .footer-identity {
+        gap: 24px;
+      }
+
+      .footer-logo {
+        height: 54px;
       }
 
       .footer-qr {
         width: 115px;
         height: 115px;
       }
-
-      .footer-social-link {
-        margin-top: 14px;
-      }
-
-      .footer-copyright {
-        margin-top: 40px;
-        text-align: center;
-        font-size: 9px;
-      }
-
     }
-
   </style>
+
 </head>
 
 <body>
 
-  <div class="container">
+  <main>
 
-    <h1>Lvpi</h1>
+```
+<h1>Lvpi</h1>
 
-    <div class="album-selector">
-      <select id="albumSelect"></select>
-    </div>
+<div class="album-selector">
+  <select id="albumSelect">
+    <option value="">Selecciona un álbum</option>
+  </select>
+</div>
 
-    <div class="cover-container">
-      <img
-        id="coverImage"
-        alt="Portada del álbum"
-        draggable="false"
-      >
-    </div>
+<div class="album-container">
+
+  <img
+    id="cover"
+    src=""
+    alt=""
+    draggable="false"
+  >
+
+  <div class="player">
 
     <audio
       id="audioPlayer"
       controls
-      controlslist="nodownload noremoteplayback"
-      noremoteplayback
-      preload="metadata"
+      preload="none"
     ></audio>
 
-    <div class="now-playing">
-
-      <span class="now-playing-label">
-        Reproduciendo
-      </span>
-
-      <span id="songTitle">
-        Ninguna canción
-      </span>
-
-    </div>
-
-    <div
-      id="songList"
-      class="songs"
-    ></div>
+    <ul id="songList"></ul>
 
   </div>
 
+</div>
+```
 
-  <!-- =====================================================
-       FOOTER
-       ===================================================== -->
+  </main>
 
-  <footer class="site-footer">
+  <footer>
 
-    <div class="footer-content">
+```
+<div class="footer-inner">
 
-      <div class="footer-logos">
+  <div class="footer-identity">
 
-        <img
-          id="lnsLogo"
-          class="footer-logo"
-          alt="Leones del Patio"
-          draggable="false"
-        >
+    <img
+      id="lnsLogo"
+      class="footer-logo"
+      src=""
+      alt="Leones del Patio"
+      draggable="false"
+    >
 
-        <img
-          id="baalLogo"
-          class="footer-logo"
-          alt="Baal"
-          draggable="false"
-        >
+    <img
+      id="baalLogo"
+      class="footer-logo"
+      src=""
+      alt="Baal"
+      draggable="false"
+    >
 
-      </div>
+  </div>
 
+  <div class="footer-social">
 
-      <a
-        id="footerQrLink"
-        class="footer-qr-link"
-        href="https://linktr.ee/LvpiAKAJohnOPerdono"
-        target="_blank"
-        rel="noopener noreferrer"
+    <a
+      id="qrLink"
+      class="footer-qr-link"
+      href="#"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <img
+        id="qrImage"
+        class="footer-qr"
+        src=""
+        alt="QR de redes sociales"
+        draggable="false"
       >
+    </a>
 
-        <img
-          id="footerQr"
-          class="footer-qr"
-          alt="QR para redes sociales"
-          draggable="false"
-        >
+    <a
+      id="rrssLink"
+      class="footer-link"
+      href="#"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      Click para RRSS
+    </a>
 
-      </a>
+  </div>
 
+  <div class="footer-bottom">
 
-      <a
-        id="footerSocialLink"
-        class="footer-social-link"
-        href="https://linktr.ee/LvpiAKAJohnOPerdono"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Click para RRSS
-      </a>
-
-
-    </div>
-
-
-    <div class="footer-copyright">
+    <p class="footer-copyright">
       © Todos los derechos reservados para Lvpi y Leones del Patio
-    </div>
+    </p>
+
+  </div>
+
+</div>
+```
 
   </footer>
 
-
   <script>
-
-    /* =====================================================
-       CONFIGURACIÓN SUPABASE
-       ===================================================== */
-
     const SUPABASE_URL =
       "https://cavnifartuktwmchyrdl.supabase.co";
 
     const SUPABASE_PUBLISHABLE_KEY =
       "sb_publishable_WC_7KWhh6gq-pvL-97D3VA_78DyHmOM";
 
-
     const CATALOG_FUNCTION_URL =
-      `${SUPABASE_URL}/functions/v1/get-catalog`;
+      SUPABASE_URL + "/functions/v1/get-catalog";
 
     const AUDIO_FUNCTION_URL =
-      `${SUPABASE_URL}/functions/v1/get-audio-url`;
+      SUPABASE_URL + "/functions/v1/get-audio-url";
 
     const REGISTER_PLAY_FUNCTION_URL =
-      `${SUPABASE_URL}/functions/v1/register-play`;
+      SUPABASE_URL + "/functions/v1/register-play";
 
     const REGISTER_VISIT_FUNCTION_URL =
-      `${SUPABASE_URL}/functions/v1/register-visit`;
+      SUPABASE_URL + "/functions/v1/register-visit";
 
     const RRSS_FUNCTION_URL =
-      `${SUPABASE_URL}/functions/v1/get-rrss`;
+      SUPABASE_URL + "/functions/v1/get-rrss";
 
-
-    /* =====================================================
-       ELEMENTOS HTML
-       ===================================================== */
 
     const albumSelect =
       document.getElementById("albumSelect");
 
-    const coverImage =
-      document.getElementById("coverImage");
+    const cover =
+      document.getElementById("cover");
 
     const audioPlayer =
       document.getElementById("audioPlayer");
-
-    const songTitle =
-      document.getElementById("songTitle");
 
     const songList =
       document.getElementById("songList");
@@ -432,81 +438,39 @@
     const baalLogo =
       document.getElementById("baalLogo");
 
-    const footerQr =
-      document.getElementById("footerQr");
+    const qrImage =
+      document.getElementById("qrImage");
 
-    const footerQrLink =
-      document.getElementById("footerQrLink");
+    const qrLink =
+      document.getElementById("qrLink");
 
-    const footerSocialLink =
-      document.getElementById("footerSocialLink");
+    const rrssLink =
+      document.getElementById("rrssLink");
 
-
-    /* =====================================================
-       VARIABLES
-       ===================================================== */
 
     let albums = [];
 
-    let currentAlbumIndex = 0;
+    let currentAlbumIndex = -1;
 
-    let currentSongIndex = 0;
+    let currentSongIndex = -1;
 
-
-    /* =====================================================
-       REGISTRAR VISITA
-       ===================================================== */
 
     async function registerVisit() {
 
       try {
 
-        const response =
-          await fetch(
-            REGISTER_VISIT_FUNCTION_URL,
-            {
-              method: "POST",
-
-              headers: {
-                "apikey":
-                  SUPABASE_PUBLISHABLE_KEY,
-
-                "Content-Type":
-                  "application/json"
-              },
-
-              body:
-                JSON.stringify({})
+        await fetch(
+          REGISTER_VISIT_FUNCTION_URL,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "apikey": SUPABASE_PUBLISHABLE_KEY
             }
-          );
-
-
-        const result =
-          await response.json();
-
-
-        if (!response.ok) {
-
-          throw new Error(
-            result.error ||
-            "No se pudo registrar la visita."
-          );
-
-        }
-
-
-        console.log(
-          "Visita registrada."
+          }
         );
 
-
       } catch (error) {
-
-        /*
-          Un fallo de estadísticas
-          nunca debe impedir que
-          la web continúe cargando.
-        */
 
         console.error(
           "Error registrando visita:",
@@ -518,10 +482,6 @@
     }
 
 
-    /* =====================================================
-       OBTENER CATÁLOGO
-       ===================================================== */
-
     async function loadCatalog() {
 
       try {
@@ -530,56 +490,31 @@
           await fetch(
             CATALOG_FUNCTION_URL,
             {
-              method: "POST",
-
               headers: {
                 "apikey":
-                  SUPABASE_PUBLISHABLE_KEY,
-
-                "Content-Type":
-                  "application/json"
+                  SUPABASE_PUBLISHABLE_KEY
               }
             }
           );
 
-
-        const result =
-          await response.json();
-
-
         if (!response.ok) {
 
           throw new Error(
-            result.error ||
             "No se pudo cargar el catálogo."
           );
 
         }
 
-
         albums =
-          result.albums || [];
-
-
-        if (albums.length === 0) {
-
-          throw new Error(
-            "No se encontraron álbumes."
-          );
-
-        }
-
+          await response.json();
 
         renderAlbumSelector();
 
+        if (albums.length > 0) {
 
-        /*
-          Seleccionamos automáticamente
-          el álbum más reciente.
-        */
+          selectAlbum(0);
 
-        selectAlbum(0);
-
+        }
 
       } catch (error) {
 
@@ -593,14 +528,10 @@
     }
 
 
-    /* =====================================================
-       SELECTOR DE ÁLBUMES
-       ===================================================== */
-
     function renderAlbumSelector() {
 
-      albumSelect.innerHTML = "";
-
+      albumSelect.innerHTML =
+        '<option value="">Selecciona un álbum</option>';
 
       albums.forEach(
         (album, index) => {
@@ -608,11 +539,10 @@
           const option =
             document.createElement("option");
 
-          option.value =
-            index;
+          option.value = index;
 
           option.textContent =
-            `${album.name} (${album.year})`;
+            album.displayName;
 
           albumSelect.appendChild(
             option
@@ -624,103 +554,83 @@
     }
 
 
-    /* =====================================================
-       CAMBIAR DE ÁLBUM
-       ===================================================== */
+    async function selectAlbum(index) {
 
-    function selectAlbum(index) {
+      if (
+        index < 0 ||
+        index >= albums.length
+      ) {
 
-      currentAlbumIndex =
-        Number(index);
+        return;
 
-      currentSongIndex = 0;
+      }
 
+      currentAlbumIndex = index;
 
-      albumSelect.value =
-        currentAlbumIndex;
+      currentSongIndex = -1;
 
+      albumSelect.value = index;
 
       const album =
-        albums[currentAlbumIndex];
+        albums[index];
 
+      audioPlayer.pause();
 
-      renderSongList();
+      audioPlayer.removeAttribute("src");
 
+      audioPlayer.load();
 
-      loadCover(
-        album.cover
-      );
+      loadCover(album);
 
-
-      /*
-        Al seleccionar un álbum,
-        comenzamos automáticamente
-        por la canción 01.
-      */
-
-      playSong(0);
+      renderSongList(album);
 
     }
 
-
-    /* =====================================================
-       CAMBIO MANUAL DESDE EL SELECT
-       ===================================================== */
 
     albumSelect.addEventListener(
       "change",
       () => {
 
+        const value =
+          albumSelect.value;
+
+        if (value === "") {
+
+          return;
+
+        }
+
         selectAlbum(
-          Number(
-            albumSelect.value
-          )
+          Number(value)
         );
 
       }
     );
 
 
-    /* =====================================================
-       MOSTRAR LISTA DE CANCIONES
-       ===================================================== */
-
-    function renderSongList() {
+    function renderSongList(album) {
 
       songList.innerHTML = "";
 
+      if (
+        !album ||
+        !Array.isArray(album.songs)
+      ) {
 
-      const album =
-        albums[currentAlbumIndex];
+        return;
 
+      }
 
       album.songs.forEach(
         (song, index) => {
 
-          const element =
-            document.createElement("div");
+          const li =
+            document.createElement("li");
 
-
-          element.className =
-            "song";
-
-
-          if (
-            index === currentSongIndex
-          ) {
-
-            element.classList.add(
-              "active"
-            );
-
-          }
-
-
-          element.textContent =
+          li.textContent =
             song.name;
 
-
-          element.addEventListener(
+          li.addEventListener(
             "click",
             () => {
 
@@ -729,10 +639,7 @@
             }
           );
 
-
-          songList.appendChild(
-            element
-          );
+          songList.appendChild(li);
 
         }
       );
@@ -740,24 +647,18 @@
     }
 
 
-    /* =====================================================
-       OBTENER PORTADA
-       ===================================================== */
+    async function loadCover(album) {
 
-    async function loadCover(
-      coverPath
-    ) {
+      cover.removeAttribute("src");
 
-      if (!coverPath) {
+      cover.alt =
+        album.displayName || "";
 
-        coverImage.removeAttribute(
-          "src"
-        );
+      if (!album.cover) {
 
         return;
 
       }
-
 
       try {
 
@@ -766,180 +667,43 @@
             AUDIO_FUNCTION_URL,
             {
               method: "POST",
-
               headers: {
-                "apikey":
-                  SUPABASE_PUBLISHABLE_KEY,
-
                 "Content-Type":
-                  "application/json"
-              },
-
-              body:
-                JSON.stringify({
-                  path:
-                    coverPath
-                })
-            }
-          );
-
-
-        const result =
-          await response.json();
-
-
-        if (!response.ok) {
-
-          throw new Error(
-            result.error ||
-            "No se pudo obtener la portada."
-          );
-
-        }
-
-
-        if (!result.signedUrl) {
-
-          throw new Error(
-            "Supabase no devolvió una URL firmada para la portada."
-          );
-
-        }
-
-
-        coverImage.src =
-          result.signedUrl;
-
-
-      } catch (error) {
-
-        console.error(
-          "Error cargando portada:",
-          error
-        );
-
-
-        coverImage.removeAttribute(
-          "src"
-        );
-
-      }
-
-    }
-
-
-    /* =====================================================
-       OBTENER RECURSOS DEL FOOTER
-       ===================================================== */
-
-    async function loadRRSS() {
-
-      try {
-
-        const response =
-          await fetch(
-            RRSS_FUNCTION_URL,
-            {
-              method: "GET",
-
-              headers: {
+                  "application/json",
                 "apikey":
                   SUPABASE_PUBLISHABLE_KEY
-              }
+              },
+              body: JSON.stringify({
+                album:
+                  album.folder,
+                song:
+                  album.cover
+              })
             }
           );
-
-
-        const result =
-          await response.json();
-
 
         if (!response.ok) {
 
           throw new Error(
-            result.error ||
-            "No se pudieron obtener los recursos de RRSS."
+            "No se pudo obtener la carátula."
           );
 
         }
 
+        const data =
+          await response.json();
 
-        /*
-          Comprobamos que las tres
-          URLs necesarias existen.
-        */
+        if (data.url) {
 
-        if (!result.lnsLogo) {
-
-          throw new Error(
-            "No se recibió la URL del logo LNS."
-          );
+          cover.src =
+            data.url;
 
         }
-
-        if (!result.baalLogo) {
-
-          throw new Error(
-            "No se recibió la URL del logo Baal."
-          );
-
-        }
-
-        if (!result.qr) {
-
-          throw new Error(
-            "No se recibió la URL del QR."
-          );
-
-        }
-
-
-        /*
-          Asignamos directamente
-          las URLs firmadas a las imágenes.
-        */
-
-        lnsLogo.src =
-          result.lnsLogo;
-
-        baalLogo.src =
-          result.baalLogo;
-
-        footerQr.src =
-          result.qr;
-
-
-        /*
-          El enlace de Linktree viene
-          también desde la función.
-        */
-
-        if (result.linktree) {
-
-          footerQrLink.href =
-            result.linktree;
-
-          footerSocialLink.href =
-            result.linktree;
-
-        }
-
-
-        console.log(
-          "Recursos de RRSS cargados."
-        );
-
 
       } catch (error) {
 
-        /*
-          Un fallo en el footer nunca
-          debe afectar al catálogo,
-          las portadas ni la música.
-        */
-
         console.error(
-          "Error cargando recursos de RRSS:",
+          "Error cargando carátula:",
           error
         );
 
@@ -947,10 +711,6 @@
 
     }
 
-
-    /* =====================================================
-       REGISTRAR REPRODUCCIÓN
-       ===================================================== */
 
     async function registerPlay(
       album,
@@ -959,59 +719,24 @@
 
       try {
 
-        const response =
-          await fetch(
-            REGISTER_PLAY_FUNCTION_URL,
-            {
-              method: "POST",
-
-              headers: {
-                "apikey":
-                  SUPABASE_PUBLISHABLE_KEY,
-
-                "Content-Type":
-                  "application/json"
-              },
-
-              body:
-                JSON.stringify({
-                  album:
-                    album,
-
-                  song:
-                    song
-                })
-            }
-          );
-
-
-        const result =
-          await response.json();
-
-
-        if (!response.ok) {
-
-          throw new Error(
-            result.error ||
-            "No se pudo registrar la reproducción."
-          );
-
-        }
-
-
-        console.log(
-          "Reproducción registrada:",
-          album,
-          song
+        await fetch(
+          REGISTER_PLAY_FUNCTION_URL,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type":
+                "application/json",
+              "apikey":
+                SUPABASE_PUBLISHABLE_KEY
+            },
+            body: JSON.stringify({
+              album,
+              song
+            })
+          }
         );
 
-
       } catch (error) {
-
-        /*
-          Un fallo de estadísticas
-          nunca debe detener la música.
-        */
 
         console.error(
           "Error registrando reproducción:",
@@ -1023,122 +748,100 @@
     }
 
 
-    /* =====================================================
-       REPRODUCIR CANCIÓN
-       ===================================================== */
+    async function playSong(index) {
 
-    async function playSong(
-      index
-    ) {
-
-      const album =
-        albums[currentAlbumIndex];
-
-
-      const song =
-        album.songs[index];
-
-
-      if (!song) {
+      if (
+        currentAlbumIndex < 0 ||
+        currentAlbumIndex >= albums.length
+      ) {
 
         return;
 
       }
 
+      const album =
+        albums[currentAlbumIndex];
 
-      currentSongIndex =
-        index;
+      if (
+        !album.songs ||
+        index < 0 ||
+        index >= album.songs.length
+      ) {
 
+        return;
 
-      songTitle.textContent =
-        song.name;
+      }
 
+      const song =
+        album.songs[index];
 
-      renderSongList();
+      currentSongIndex = index;
 
+      Array.from(
+        songList.children
+      ).forEach(
+        (item, itemIndex) => {
+
+          item.classList.toggle(
+            "active",
+            itemIndex === index
+          );
+
+        }
+      );
 
       try {
-
-        /*
-          Obtener URL firmada
-          para el archivo de audio.
-        */
 
         const response =
           await fetch(
             AUDIO_FUNCTION_URL,
             {
               method: "POST",
-
               headers: {
-                "apikey":
-                  SUPABASE_PUBLISHABLE_KEY,
-
                 "Content-Type":
-                  "application/json"
+                  "application/json",
+                "apikey":
+                  SUPABASE_PUBLISHABLE_KEY
               },
-
-              body:
-                JSON.stringify({
-                  path:
-                    song.path
-                })
+              body: JSON.stringify({
+                album:
+                  album.folder,
+                song:
+                  song.name
+              })
             }
           );
-
-
-        const result =
-          await response.json();
-
 
         if (!response.ok) {
 
           throw new Error(
-            result.error ||
             "No se pudo obtener el audio."
           );
 
         }
 
+        const data =
+          await response.json();
 
-        if (!result.signedUrl) {
+        if (!data.url) {
 
           throw new Error(
-            "Supabase no devolvió una URL firmada."
+            "La función no devolvió una URL."
           );
 
         }
 
-
-        /*
-          Cargar el audio.
-        */
-
         audioPlayer.src =
-          result.signedUrl;
+          data.url;
 
-
-        /*
-          Intentar comenzar la reproducción.
-        */
+        audioPlayer.currentTime = 0;
 
         await audioPlayer.play();
 
-
-        /*
-          MUY IMPORTANTE:
-          solo llegamos aquí si play()
-          se ha iniciado correctamente.
-
-          Por tanto, aquí registramos
-          la reproducción.
-        */
-
-        await registerPlay(
-          album.name,
+        registerPlay(
+          album.folder,
           song.name
         );
-
 
       } catch (error) {
 
@@ -1152,114 +855,148 @@
     }
 
 
-    /* =====================================================
-       CUANDO TERMINA UNA CANCIÓN
-       ===================================================== */
-
     audioPlayer.addEventListener(
       "ended",
       () => {
 
+        if (
+          currentAlbumIndex < 0 ||
+          currentAlbumIndex >= albums.length
+        ) {
+
+          return;
+
+        }
+
         const album =
           albums[currentAlbumIndex];
 
-
-        /*
-          Todavía quedan canciones
-          dentro del álbum.
-        */
+        const nextSongIndex =
+          currentSongIndex + 1;
 
         if (
-          currentSongIndex <
-          album.songs.length - 1
+          nextSongIndex <
+          album.songs.length
         ) {
 
           playSong(
-            currentSongIndex + 1
+            nextSongIndex
           );
 
           return;
 
         }
 
-
-        /*
-          Última canción del álbum.
-          Pasamos al siguiente álbum.
-        */
+        const nextAlbumIndex =
+          currentAlbumIndex + 1;
 
         if (
-          currentAlbumIndex <
-          albums.length - 1
+          nextAlbumIndex <
+          albums.length
         ) {
 
-          currentAlbumIndex++;
-
-
-          currentSongIndex = 0;
-
-
-          albumSelect.value =
-            currentAlbumIndex;
-
-
-          const nextAlbum =
-            albums[currentAlbumIndex];
-
-
-          renderSongList();
-
-
-          loadCover(
-            nextAlbum.cover
+          selectAlbum(
+            nextAlbumIndex
           );
 
+          if (
+            albums[nextAlbumIndex].songs &&
+            albums[nextAlbumIndex].songs.length > 0
+          ) {
+
+            playSong(0);
+
+          }
+
+          return;
+
+        }
+
+        if (
+          albums.length > 0 &&
+          albums[0].songs &&
+          albums[0].songs.length > 0
+        ) {
+
+          selectAlbum(0);
 
           playSong(0);
 
-
-          return;
-
         }
-
-
-        /*
-          Hemos terminado el último
-          álbum del catálogo.
-
-          Volvemos al primero.
-        */
-
-        currentAlbumIndex = 0;
-
-        currentSongIndex = 0;
-
-
-        albumSelect.value =
-          currentAlbumIndex;
-
-
-        const firstAlbum =
-          albums[0];
-
-
-        renderSongList();
-
-
-        loadCover(
-          firstAlbum.cover
-        );
-
-
-        playSong(0);
 
       }
     );
 
 
-    /* =====================================================
-       BLOQUEAR MENÚ CONTEXTUAL EN IMÁGENES
-       ===================================================== */
+    async function loadRRSS() {
+
+      try {
+
+        const response =
+          await fetch(
+            RRSS_FUNCTION_URL,
+            {
+              method: "GET",
+              headers: {
+                "apikey":
+                  SUPABASE_PUBLISHABLE_KEY
+              }
+            }
+          );
+
+        if (!response.ok) {
+
+          throw new Error(
+            "No se pudieron cargar los recursos de RRSS."
+          );
+
+        }
+
+        const data =
+          await response.json();
+
+        if (data.lnsLogo) {
+
+          lnsLogo.src =
+            data.lnsLogo;
+
+        }
+
+        if (data.baalLogo) {
+
+          baalLogo.src =
+            data.baalLogo;
+
+        }
+
+        if (data.qr) {
+
+          qrImage.src =
+            data.qr;
+
+        }
+
+        if (data.linktree) {
+
+          qrLink.href =
+            data.linktree;
+
+          rrssLink.href =
+            data.linktree;
+
+        }
+
+      } catch (error) {
+
+        console.error(
+          "Error cargando RRSS:",
+          error
+        );
+
+      }
+
+    }
+
 
     document.addEventListener(
       "contextmenu",
@@ -1277,18 +1014,25 @@
     );
 
 
-    /* =====================================================
-       INICIAR
-       ===================================================== */
+    document.addEventListener(
+      "dragstart",
+      (event) => {
+
+        if (
+          event.target.tagName === "IMG"
+        ) {
+
+          event.preventDefault();
+
+        }
+
+      }
+    );
+
 
     registerVisit();
 
     loadCatalog();
-
-    /*
-      La carga de RRSS es independiente
-      de la carga del catálogo.
-    */
 
     loadRRSS();
 
@@ -1296,4 +1040,3 @@
 
 </body>
 </html>
-```
