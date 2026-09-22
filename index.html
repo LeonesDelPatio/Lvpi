@@ -1,12 +1,14 @@
 <!DOCTYPE html>
+
 <html lang="es">
 <head>
   <meta charset="UTF-8">
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+
+>
 
   <title>Lvpi</title>
 
@@ -16,81 +18,149 @@
       box-sizing: border-box;
     }
 
+    html {
+      background: #0c0c0d;
+    }
+
     body {
       margin: 0;
-      background: #111;
-      color: #fff;
+      background: #0c0c0d;
+      color: #e8e6e1;
       font-family: Arial, Helvetica, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
     }
 
     .container {
       width: min(900px, 92%);
       margin: 0 auto;
-      padding: 40px 0 60px;
+      padding: 68px 0 82px;
       text-align: center;
     }
 
+
+    /* =====================================================
+       TÍTULO
+       ===================================================== */
+
     h1 {
-      margin: 0 0 30px;
-      font-size: 28px;
-      font-weight: 500;
+      margin: 0 0 42px;
+      color: #e8e6e1;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 42px;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      line-height: 1;
     }
 
+
+    /* =====================================================
+       SELECTOR DE ÁLBUM
+       ===================================================== */
+
     .album-selector {
-      margin-bottom: 30px;
+      margin-bottom: 42px;
     }
 
     select {
       width: 100%;
       max-width: 600px;
-      padding: 12px 14px;
-      background: #1d1d1d;
-      color: #fff;
-      border: 1px solid #444;
-      border-radius: 6px;
-      font-size: 15px;
+      padding: 13px 16px;
+      background: #121214;
+      color: #d6d1c7;
+      border: 1px solid #29292b;
+      border-radius: 3px;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 13px;
+      letter-spacing: 0.04em;
       cursor: pointer;
+      outline: none;
+      transition:
+        border-color 0.25s ease,
+        background 0.25s ease,
+        color 0.25s ease;
     }
+
+    select:hover {
+      background: #171719;
+      border-color: #3b3b3d;
+    }
+
+    select:focus {
+      border-color: #505052;
+      background: #151517;
+    }
+
+
+    /* =====================================================
+       PORTADA
+       ===================================================== */
 
     .cover-container {
       width: min(500px, 90%);
-      margin: 0 auto 25px;
+      margin: 0 auto 34px;
     }
 
     .cover-container img {
       display: block;
       width: 100%;
       height: auto;
-      border-radius: 4px;
+      border-radius: 2px;
+      box-shadow:
+        0 18px 45px rgba(0, 0, 0, 0.32);
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-user-drag: none;
     }
+
+
+    /* =====================================================
+       REPRODUCTOR
+       ===================================================== */
 
     audio {
       width: min(700px, 100%);
-      margin: 0 auto 25px;
+      margin: 0 auto 34px;
       display: block;
+      opacity: 0.88;
     }
 
+
+    /* =====================================================
+       CANCIÓN ACTUAL
+       ===================================================== */
+
     .now-playing {
-      margin: 10px auto 30px;
+      margin: 0 auto 42px;
+      padding: 0 10px;
       text-align: center;
       max-width: 750px;
     }
 
     .now-playing-label {
       display: block;
-      margin-bottom: 7px;
-      font-size: 12px;
+      margin-bottom: 11px;
+      color: #666466;
+      font-size: 10px;
+      font-weight: 500;
       text-transform: uppercase;
-      letter-spacing: 2px;
-      color: #888;
+      letter-spacing: 3px;
     }
 
     #songTitle {
       display: block;
-      font-size: 17px;
+      color: #dedbd5;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 19px;
+      font-weight: 400;
       line-height: 1.5;
-      color: #fff;
+      letter-spacing: 0.015em;
     }
+
+
+    /* =====================================================
+       LISTA DE CANCIONES
+       ===================================================== */
 
     .songs {
       width: min(750px, 100%);
@@ -99,18 +169,44 @@
     }
 
     .song {
-      padding: 12px 14px;
-      border-bottom: 1px solid #2a2a2a;
+      position: relative;
+      padding: 14px 18px 14px 22px;
+      border-bottom: 1px solid #202022;
+      color: #8d8b88;
       cursor: pointer;
-      transition: background 0.15s ease;
+      font-size: 13px;
+      line-height: 1.5;
+      letter-spacing: 0.015em;
+      transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        padding-left 0.2s ease;
+    }
+
+    .song:first-child {
+      border-top: 1px solid #202022;
     }
 
     .song:hover {
-      background: #1b1b1b;
+      padding-left: 27px;
+      background: #121214;
+      color: #d2cec7;
     }
 
     .song.active {
-      background: #222;
+      padding-left: 27px;
+      background: #171719;
+      color: #e8e6e1;
+    }
+
+    .song.active::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: #aaa59d;
     }
 
 
@@ -120,9 +216,9 @@
 
     .site-footer {
       width: 100%;
-      margin-top: 55px;
-      padding: 70px 20px 24px;
-      border-top: 1px solid #242424;
+      margin-top: 0;
+      padding: 78px 20px 25px;
+      border-top: 1px solid #1e1e20;
       text-align: center;
     }
 
@@ -147,7 +243,7 @@
       height: 88px;
       max-width: 310px;
       object-fit: contain;
-      opacity: 0.58;
+      opacity: 0.52;
       user-select: none;
       -webkit-user-select: none;
       -webkit-user-drag: none;
@@ -158,7 +254,7 @@
     }
 
     .footer-logo:hover {
-      opacity: 0.95;
+      opacity: 0.92;
       transform: scale(1.035);
     }
 
@@ -168,6 +264,15 @@
       margin: 0 auto;
       line-height: 0;
       text-decoration: none;
+      opacity: 0.78;
+      transition:
+        opacity 0.25s ease,
+        transform 0.25s ease;
+    }
+
+    .footer-qr-link:hover {
+      opacity: 1;
+      transform: translateY(-2px);
     }
 
     .footer-qr {
@@ -183,26 +288,28 @@
 
     .footer-social-link {
       display: inline-block;
-      margin-top: 18px;
-      color: #999;
-      font-size: 12px;
-      letter-spacing: 1.4px;
+      margin-top: 19px;
+      color: #777572;
+      font-size: 10px;
+      letter-spacing: 2px;
       text-decoration: none;
+      text-transform: uppercase;
       transition:
         color 0.2s ease;
     }
 
     .footer-social-link:hover {
-      color: #fff;
+      color: #d4d0c9;
     }
 
     .footer-copyright {
       width: min(900px, 100%);
       margin: 52px auto 0;
-      color: #555;
-      font-size: 10px;
+      color: #4d4b49;
+      font-size: 9px;
       line-height: 1.4;
       text-align: center;
+      letter-spacing: 0.04em;
     }
 
 
@@ -213,25 +320,59 @@
     @media (max-width: 600px) {
 
       .container {
-        padding-top: 25px;
+        width: min(900px, 92%);
+        padding-top: 42px;
+        padding-bottom: 65px;
       }
 
       h1 {
-        font-size: 24px;
+        margin-bottom: 34px;
+        font-size: 34px;
+      }
+
+      .album-selector {
+        margin-bottom: 32px;
+      }
+
+      select {
+        padding: 12px 14px;
+        font-size: 12px;
+      }
+
+      .cover-container {
+        margin-bottom: 28px;
+      }
+
+      audio {
+        margin-bottom: 29px;
+      }
+
+      .now-playing {
+        margin-bottom: 34px;
+      }
+
+      .now-playing-label {
+        font-size: 9px;
+        letter-spacing: 2.5px;
       }
 
       #songTitle {
-        font-size: 15px;
+        font-size: 17px;
       }
 
       .song {
-        padding: 11px 10px;
+        padding: 13px 12px 13px 17px;
+        font-size: 12px;
+      }
+
+      .song:hover,
+      .song.active {
+        padding-left: 22px;
       }
 
       .site-footer {
-        margin-top: 40px;
-        padding-top: 55px;
-        padding-bottom: 18px;
+        padding-top: 58px;
+        padding-bottom: 20px;
       }
 
       .footer-logos {
@@ -257,18 +398,28 @@
 
       .footer-social-link {
         margin-top: 15px;
+        font-size: 9px;
+        letter-spacing: 1.7px;
       }
 
       .footer-copyright {
         margin-top: 42px;
         text-align: center;
-        font-size: 9px;
+        font-size: 8px;
       }
 
     }
 
 
     @media (max-width: 400px) {
+
+      .container {
+        padding-top: 34px;
+      }
+
+      h1 {
+        font-size: 31px;
+      }
 
       .footer-logos {
         gap: 28px;
@@ -286,6 +437,7 @@
     }
 
   </style>
+
 </head>
 
 <body>
@@ -298,102 +450,104 @@
 
   <div class="container">
 
-    <h1>Lvpi</h1>
+```
+<h1>Lvpi</h1>
 
-    <div class="album-selector">
-      <select id="albumSelect"></select>
-    </div>
+<div class="album-selector">
+  <select id="albumSelect"></select>
+</div>
 
-    <div class="cover-container">
-      <img
-        id="coverImage"
-        alt="Portada del álbum"
-      >
-    </div>
+<div class="cover-container">
+  <img
+    id="coverImage"
+    alt="Portada del álbum"
+  >
+</div>
 
-    <audio
-      id="audioPlayer"
-      controls
-      controlslist="nodownload noremoteplayback"
-      noremoteplayback
-      preload="metadata"
-    ></audio>
+<audio
+  id="audioPlayer"
+  controls
+  controlslist="nodownload noremoteplayback"
+  noremoteplayback
+  preload="metadata"
+></audio>
 
-    <div class="now-playing">
+<div class="now-playing">
 
-      <span class="now-playing-label">
-        Reproduciendo
-      </span>
+  <span class="now-playing-label">
+    Reproduciendo
+  </span>
 
-      <span id="songTitle">
-        Ninguna canción
-      </span>
+  <span id="songTitle">
+    Ninguna canción
+  </span>
 
-    </div>
+</div>
 
-    <div
-      id="songList"
-      class="songs"
-    ></div>
+<div
+  id="songList"
+  class="songs"
+></div>
+```
 
   </div>
 
-
   <footer class="site-footer">
 
-    <div class="footer-content">
+```
+<div class="footer-content">
 
-      <div class="footer-logos">
+  <div class="footer-logos">
 
-        <img
-          id="lnsLogo"
-          class="footer-logo"
-          alt="Leones del Patio"
-          draggable="false"
-        >
+    <img
+      id="lnsLogo"
+      class="footer-logo"
+      alt="Leones del Patio"
+      draggable="false"
+    >
 
-        <img
-          id="baalLogo"
-          class="footer-logo"
-          alt="Baal"
-          draggable="false"
-        >
+    <img
+      id="baalLogo"
+      class="footer-logo"
+      alt="Baal"
+      draggable="false"
+    >
 
-      </div>
+  </div>
 
-      <a
-        id="footerQrLink"
-        class="footer-qr-link"
-        href="https://linktr.ee/LvpiAKAJohnOPerdono"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <img
-          id="footerQr"
-          class="footer-qr"
-          alt="QR para redes sociales"
-          draggable="false"
-        >
-      </a>
+  <a
+    id="footerQrLink"
+    class="footer-qr-link"
+    href="https://linktr.ee/LvpiAKAJohnOPerdono"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    <img
+      id="footerQr"
+      class="footer-qr"
+      alt="QR para redes sociales"
+      draggable="false"
+    >
+  </a>
 
-      <a
-        id="footerSocialLink"
-        class="footer-social-link"
-        href="https://linktr.ee/LvpiAKAJohnOPerdono"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Click para RRSS
-      </a>
+  <a
+    id="footerSocialLink"
+    class="footer-social-link"
+    href="https://linktr.ee/LvpiAKAJohnOPerdono"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    Click para RRSS
+  </a>
 
-    </div>
+</div>
 
-    <div class="footer-copyright">
-      © Todos los derechos reservados para Lvpi y Leones del Patio
-    </div>
+<div class="footer-copyright">
+  © Todos los derechos reservados para Lvpi y Leones del Patio
+</div>
+```
 
   </footer>
-
 
   <script>
 
