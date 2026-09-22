@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -113,6 +114,103 @@
       background: #222;
     }
 
+
+    /* =====================================================
+       FOOTER
+       ===================================================== */
+
+    .site-footer {
+      width: 100%;
+      margin-top: 55px;
+      padding: 70px 20px 24px;
+      border-top: 1px solid #242424;
+      text-align: center;
+    }
+
+    .footer-content {
+      width: min(900px, 100%);
+      margin: 0 auto;
+    }
+
+    .footer-logos {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 95px;
+      min-height: 120px;
+      margin: 0 auto 55px;
+      padding: 0 20px;
+    }
+
+    .footer-logo {
+      display: block;
+      width: auto;
+      height: 88px;
+      max-width: 310px;
+      object-fit: contain;
+      opacity: 0.58;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-user-drag: none;
+      pointer-events: auto;
+      transition:
+        opacity 0.25s ease,
+        transform 0.25s ease;
+    }
+
+    .footer-logo:hover {
+      opacity: 0.95;
+      transform: scale(1.035);
+    }
+
+    .footer-qr-link {
+      display: block;
+      width: fit-content;
+      margin: 0 auto;
+      line-height: 0;
+      text-decoration: none;
+    }
+
+    .footer-qr {
+      display: block;
+      width: 155px;
+      height: 155px;
+      margin: 0 auto;
+      object-fit: contain;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-user-drag: none;
+    }
+
+    .footer-social-link {
+      display: inline-block;
+      margin-top: 18px;
+      color: #999;
+      font-size: 12px;
+      letter-spacing: 1.4px;
+      text-decoration: none;
+      transition:
+        color 0.2s ease;
+    }
+
+    .footer-social-link:hover {
+      color: #fff;
+    }
+
+    .footer-copyright {
+      width: min(900px, 100%);
+      margin: 52px auto 0;
+      color: #555;
+      font-size: 10px;
+      line-height: 1.4;
+      text-align: right;
+    }
+
+
+    /* =====================================================
+       RESPONSIVE
+       ===================================================== */
+
     @media (max-width: 600px) {
 
       .container {
@@ -129,6 +227,61 @@
 
       .song {
         padding: 11px 10px;
+      }
+
+      .site-footer {
+        margin-top: 40px;
+        padding-top: 55px;
+        padding-bottom: 18px;
+      }
+
+      .footer-logos {
+        gap: 42px;
+        min-height: 78px;
+        margin-bottom: 40px;
+        padding: 0 10px;
+      }
+
+      .footer-logo {
+        height: 62px;
+        max-width: 43%;
+      }
+
+      .footer-logo:hover {
+        transform: scale(1.025);
+      }
+
+      .footer-qr {
+        width: 125px;
+        height: 125px;
+      }
+
+      .footer-social-link {
+        margin-top: 15px;
+      }
+
+      .footer-copyright {
+        margin-top: 42px;
+        text-align: center;
+        font-size: 9px;
+      }
+
+    }
+
+
+    @media (max-width: 400px) {
+
+      .footer-logos {
+        gap: 28px;
+      }
+
+      .footer-logo {
+        height: 55px;
+      }
+
+      .footer-qr {
+        width: 115px;
+        height: 115px;
       }
 
     }
@@ -181,6 +334,62 @@
   </div>
 
 
+  <footer class="site-footer">
+
+    <div class="footer-content">
+
+      <div class="footer-logos">
+
+        <img
+          id="lnsLogo"
+          class="footer-logo"
+          alt="Leones del Patio"
+          draggable="false"
+        >
+
+        <img
+          id="baalLogo"
+          class="footer-logo"
+          alt="Baal"
+          draggable="false"
+        >
+
+      </div>
+
+      <a
+        id="footerQrLink"
+        class="footer-qr-link"
+        href="https://linktr.ee/LvpiAKAJohnOPerdono"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <img
+          id="footerQr"
+          class="footer-qr"
+          alt="QR para redes sociales"
+          draggable="false"
+        >
+      </a>
+
+      <a
+        id="footerSocialLink"
+        class="footer-social-link"
+        href="https://linktr.ee/LvpiAKAJohnOPerdono"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Click para RRSS
+      </a>
+
+    </div>
+
+    <div class="footer-copyright">
+      © Todos los derechos reservados para Lvpi y Leones del Patio
+    </div>
+
+  </footer>
+
+
   <script>
 
     /* =====================================================
@@ -206,6 +415,9 @@
     const REGISTER_VISIT_FUNCTION_URL =
       `${SUPABASE_URL}/functions/v1/register-visit`;
 
+    const RRSS_FUNCTION_URL =
+      `${SUPABASE_URL}/functions/v1/get-rrss`;
+
 
     /* =====================================================
        ELEMENTOS HTML
@@ -225,6 +437,21 @@
 
     const songList =
       document.getElementById("songList");
+
+    const lnsLogo =
+      document.getElementById("lnsLogo");
+
+    const baalLogo =
+      document.getElementById("baalLogo");
+
+    const footerQr =
+      document.getElementById("footerQr");
+
+    const footerQrLink =
+      document.getElementById("footerQrLink");
+
+    const footerSocialLink =
+      document.getElementById("footerSocialLink");
 
 
     /* =====================================================
@@ -923,6 +1150,109 @@
 
 
     /* =====================================================
+       CARGAR RECURSOS RRSS
+       ===================================================== */
+
+    async function loadRRSS() {
+
+      try {
+
+        const response =
+          await fetch(
+            RRSS_FUNCTION_URL,
+            {
+              method: "GET",
+
+              headers: {
+                "apikey":
+                  SUPABASE_PUBLISHABLE_KEY
+              }
+            }
+          );
+
+
+        const result =
+          await response.json();
+
+
+        if (!response.ok) {
+
+          throw new Error(
+            result.error ||
+            "No se pudieron obtener los recursos de RRSS."
+          );
+
+        }
+
+
+        if (!result.lnsLogo) {
+
+          throw new Error(
+            "No se recibió la URL del logo LNS."
+          );
+
+        }
+
+
+        if (!result.baalLogo) {
+
+          throw new Error(
+            "No se recibió la URL del logo Baal."
+          );
+
+        }
+
+
+        if (!result.qr) {
+
+          throw new Error(
+            "No se recibió la URL del QR."
+          );
+
+        }
+
+
+        lnsLogo.src =
+          result.lnsLogo;
+
+
+        baalLogo.src =
+          result.baalLogo;
+
+
+        footerQr.src =
+          result.qr;
+
+
+        if (result.linktree) {
+
+          footerQrLink.href =
+            result.linktree;
+
+          footerSocialLink.href =
+            result.linktree;
+
+        }
+
+
+        console.log(
+          "Recursos de RRSS cargados."
+        );
+
+
+      } catch (error) {
+
+        console.error(
+          "Error cargando recursos de RRSS:",
+          error
+        );
+
+      }
+
+    }
+
+
+    /* =====================================================
        INICIAR
        ===================================================== */
 
@@ -930,7 +1260,10 @@
 
     loadCatalog();
 
+    loadRRSS();
+
   </script>
 
 </body>
 </html>
+```
