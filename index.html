@@ -1,14 +1,12 @@
 <!DOCTYPE html>
-
 <html lang="es">
 <head>
   <meta charset="UTF-8">
 
-<meta
-name="viewport"
-content="width=device-width, initial-scale=1.0"
-
->
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
   <title>Lvpi</title>
 
@@ -18,262 +16,105 @@ content="width=device-width, initial-scale=1.0"
       box-sizing: border-box;
     }
 
-    html {
-      background: #0a0a0b;
-    }
-
     body {
       margin: 0;
-      background:
-        radial-gradient(
-          ellipse 75% 45% at 50% 0%,
-          #202023 0%,
-          #121214 42%,
-          #0a0a0b 100%
-        );
-      background-attachment: fixed;
-      color: #e7e5e0;
-      font-family:
-        "Trebuchet MS",
-        Arial,
-        Helvetica,
-        sans-serif;
-      -webkit-font-smoothing: antialiased;
-      text-rendering: optimizeLegibility;
+      background: #141416;
+      color: #fff;
+      font-family: Arial, Helvetica, sans-serif;
     }
 
     .container {
       width: min(900px, 92%);
       margin: 0 auto;
-      padding: 58px 0 75px;
+      padding: 40px 0 60px;
       text-align: center;
     }
 
-
-    /* =====================================================
-       TÍTULO
-       ===================================================== */
-
     h1 {
-      margin: 0 0 38px;
-      color: #e9e7e2;
-      font-family:
-        Georgia,
-        "Times New Roman",
-        serif;
-      font-size: 42px;
-      font-weight: 400;
-      letter-spacing: 0.12em;
-      line-height: 1;
-      text-shadow:
-        0 2px 18px rgba(0, 0, 0, 0.35);
+      margin: 0 0 30px;
+      font-size: 28px;
+      font-weight: 500;
     }
 
-
-    /* =====================================================
-       SELECTOR DE ÁLBUM
-       ===================================================== */
-
     .album-selector {
-      margin-bottom: 34px;
+      margin-bottom: 30px;
     }
 
     select {
       width: 100%;
       max-width: 600px;
-      height: 47px;
-      padding: 0 16px;
-      background: #19191b;
-      color: #d9d6d0;
+      padding: 12px 14px;
+      background: #202023;
+      color: #fff;
       border: 1px solid #3a3a3d;
       border-radius: 6px;
-      font-family:
-        "Trebuchet MS",
-        Arial,
-        Helvetica,
-        sans-serif;
-      font-size: 13px;
-      letter-spacing: 0.035em;
+      font-size: 15px;
       cursor: pointer;
-      outline: none;
-      color-scheme: dark;
-      transition:
-        background 0.2s ease,
-        border-color 0.2s ease;
     }
-
-    select:hover {
-      background: #202023;
-      border-color: #555559;
-    }
-
-    select:focus {
-      background: #202023;
-      border-color: #67676b;
-    }
-
-
-    /* =====================================================
-       PORTADA
-       ===================================================== */
 
     .cover-container {
       width: min(500px, 90%);
-      margin: 0 auto 32px;
+      margin: 0 auto 25px;
     }
 
     .cover-container img {
       display: block;
       width: 100%;
       height: auto;
-      border-radius: 6px;
-      box-shadow:
-        0 22px 55px rgba(0, 0, 0, 0.48),
-        0 0 0 1px rgba(255, 255, 255, 0.035);
-      user-select: none;
-      -webkit-user-select: none;
-      -webkit-user-drag: none;
+      border-radius: 4px;
     }
-
-
-    /* =====================================================
-       REPRODUCTOR
-       ===================================================== */
 
     audio {
       width: min(700px, 100%);
-      height: 42px;
-      margin: 0 auto 31px;
+      margin: 0 auto 25px;
       display: block;
-
-      background: #242426;
-      border: 1px solid #363638;
-      border-radius: 6px;
-
-      color-scheme: dark;
-      accent-color: #aaa7a1;
-
-      box-shadow:
-        0 7px 22px rgba(0, 0, 0, 0.22);
     }
 
-
-    /* =====================================================
-       CANCIÓN ACTUAL
-       ===================================================== */
-
     .now-playing {
-      margin: 0 auto 38px;
-      padding: 18px 20px 19px;
-      max-width: 750px;
-
-      background: #151517;
-      border: 1px solid #29292c;
-      border-radius: 6px;
-
+      margin: 10px auto 30px;
       text-align: center;
-
-      box-shadow:
-        0 10px 28px rgba(0, 0, 0, 0.16);
+      max-width: 750px;
     }
 
     .now-playing-label {
       display: block;
-      margin-bottom: 9px;
-
-      color: #777579;
-
-      font-size: 10px;
-      font-weight: 600;
+      margin-bottom: 7px;
+      font-size: 12px;
       text-transform: uppercase;
-      letter-spacing: 3px;
+      letter-spacing: 2px;
+      color: #888;
     }
 
     #songTitle {
       display: block;
-
-      color: #e3e0da;
-
-      font-family:
-        Georgia,
-        "Times New Roman",
-        serif;
-
-      font-size: 18px;
-      font-weight: 400;
+      font-size: 17px;
       line-height: 1.5;
-      letter-spacing: 0.02em;
+      color: #fff;
     }
-
-
-    /* =====================================================
-       LISTA DE CANCIONES
-       ===================================================== */
 
     .songs {
       width: min(750px, 100%);
       margin: 0 auto;
-
-      background: #151517;
-      border: 1px solid #29292c;
-      border-radius: 6px;
-
-      overflow: hidden;
       text-align: left;
-
-      box-shadow:
-        0 10px 28px rgba(0, 0, 0, 0.16);
+      background: #202023;
+      border: 1px solid #3a3a3d;
+      border-radius: 6px;
+      overflow: hidden;
     }
 
     .song {
-      position: relative;
-
-      padding: 14px 18px;
-
-      border-bottom: 1px solid #29292c;
-
-      color: #969398;
-
+      padding: 12px 14px;
+      border-bottom: 1px solid #303033;
       cursor: pointer;
-
-      font-size: 13px;
-      line-height: 1.5;
-      letter-spacing: 0.015em;
-
-      transition:
-        background 0.2s ease,
-        color 0.2s ease,
-        padding-left 0.2s ease;
-    }
-
-    .song:last-child {
-      border-bottom: none;
+      transition: background 0.15s ease;
     }
 
     .song:hover {
-      padding-left: 23px;
-      background: #1e1e21;
-      color: #d4d1cb;
+      background: #29292c;
     }
 
     .song.active {
-      padding-left: 23px;
-      background: #242427;
-      color: #eeeae3;
-    }
-
-    .song.active::before {
-      content: "";
-
-      position: absolute;
-
-      left: 0;
-      top: 0;
-      bottom: 0;
-
-      width: 3px;
-
-      background: #aaa6a0;
+      background: #2d2d30;
     }
 
 
@@ -283,18 +124,10 @@ content="width=device-width, initial-scale=1.0"
 
     .site-footer {
       width: 100%;
-      margin-top: 0;
-      padding: 72px 20px 25px;
-
-      border-top: 1px solid #242427;
-
-      background:
-        linear-gradient(
-          to bottom,
-          rgba(10, 10, 11, 0.12),
-          rgba(7, 7, 8, 0.52)
-        );
-
+      margin-top: 55px;
+      padding: 70px 20px 24px;
+      background: #111113;
+      border-top: 1px solid #242424;
       text-align: center;
     }
 
@@ -308,71 +141,46 @@ content="width=device-width, initial-scale=1.0"
       align-items: center;
       justify-content: center;
       gap: 95px;
-
       min-height: 120px;
-
       margin: 0 auto 55px;
       padding: 0 20px;
     }
 
     .footer-logo {
       display: block;
-
       width: auto;
       height: 88px;
       max-width: 310px;
-
       object-fit: contain;
-
-      opacity: 0.52;
-
+      opacity: 0.58;
       user-select: none;
       -webkit-user-select: none;
       -webkit-user-drag: none;
-
       pointer-events: auto;
-
       transition:
         opacity 0.25s ease,
         transform 0.25s ease;
     }
 
     .footer-logo:hover {
-      opacity: 0.94;
+      opacity: 0.95;
       transform: scale(1.035);
     }
 
     .footer-qr-link {
       display: block;
       width: fit-content;
-
       margin: 0 auto;
-
       line-height: 0;
       text-decoration: none;
-
-      opacity: 0.74;
-
-      transition:
-        opacity 0.25s ease,
-        transform 0.25s ease;
-    }
-
-    .footer-qr-link:hover {
-      opacity: 1;
-      transform: translateY(-2px);
     }
 
     .footer-qr {
       display: block;
-
       width: 155px;
       height: 155px;
-
       margin: 0 auto;
-
       object-fit: contain;
-
       user-select: none;
       -webkit-user-select: none;
       -webkit-user-drag: none;
@@ -380,37 +188,26 @@ content="width=device-width, initial-scale=1.0"
 
     .footer-social-link {
       display: inline-block;
-
       margin-top: 18px;
-
-      color: #777579;
-
-      font-size: 10px;
-      letter-spacing: 2px;
-
+      color: #999;
+      font-size: 12px;
+      letter-spacing: 1.4px;
       text-decoration: none;
-      text-transform: uppercase;
-
       transition:
         color 0.2s ease;
     }
 
     .footer-social-link:hover {
-      color: #e1ded8;
+      color: #fff;
     }
 
     .footer-copyright {
       width: min(900px, 100%);
-
       margin: 52px auto 0;
-
-      color: #4f4d4b;
-
-      font-size: 9px;
+      color: #555;
+      font-size: 10px;
       line-height: 1.4;
-
       text-align: center;
-      letter-spacing: 0.04em;
     }
 
 
@@ -421,61 +218,25 @@ content="width=device-width, initial-scale=1.0"
     @media (max-width: 600px) {
 
       .container {
-        width: min(900px, 92%);
-        padding-top: 38px;
-        padding-bottom: 60px;
+        padding-top: 25px;
       }
 
       h1 {
-        margin-bottom: 31px;
-        font-size: 34px;
-      }
-
-      .album-selector {
-        margin-bottom: 28px;
-      }
-
-      select {
-        height: 45px;
-        font-size: 12px;
-      }
-
-      .cover-container {
-        margin-bottom: 28px;
-      }
-
-      audio {
-        height: 42px;
-        margin-bottom: 27px;
-      }
-
-      .now-playing {
-        margin-bottom: 32px;
-        padding: 16px 15px 17px;
-      }
-
-      .now-playing-label {
-        font-size: 9px;
-        letter-spacing: 2.5px;
+        font-size: 24px;
       }
 
       #songTitle {
-        font-size: 16px;
+        font-size: 15px;
       }
 
       .song {
-        padding: 13px 13px;
-        font-size: 12px;
-      }
-
-      .song:hover,
-      .song.active {
-        padding-left: 18px;
+        padding: 11px 10px;
       }
 
       .site-footer {
+        margin-top: 40px;
         padding-top: 55px;
-        padding-bottom: 20px;
+        padding-bottom: 18px;
       }
 
       .footer-logos {
@@ -501,27 +262,18 @@ content="width=device-width, initial-scale=1.0"
 
       .footer-social-link {
         margin-top: 15px;
-        font-size: 9px;
-        letter-spacing: 1.7px;
       }
 
       .footer-copyright {
         margin-top: 42px;
-        font-size: 8px;
+        text-align: center;
+        font-size: 9px;
       }
 
     }
 
 
     @media (max-width: 400px) {
-
-      .container {
-        padding-top: 32px;
-      }
-
-      h1 {
-        font-size: 31px;
-      }
 
       .footer-logos {
         gap: 28px;
@@ -539,7 +291,6 @@ content="width=device-width, initial-scale=1.0"
     }
 
   </style>
-
 </head>
 
 <body>
@@ -552,104 +303,102 @@ content="width=device-width, initial-scale=1.0"
 
   <div class="container">
 
-```
-<h1>Lvpi</h1>
+    <h1>Lvpi</h1>
 
-<div class="album-selector">
-  <select id="albumSelect"></select>
-</div>
+    <div class="album-selector">
+      <select id="albumSelect"></select>
+    </div>
 
-<div class="cover-container">
-  <img
-    id="coverImage"
-    alt="Portada del álbum"
-  >
-</div>
+    <div class="cover-container">
+      <img
+        id="coverImage"
+        alt="Portada del álbum"
+      >
+    </div>
 
-<audio
-  id="audioPlayer"
-  controls
-  controlslist="nodownload noremoteplayback"
-  noremoteplayback
-  preload="metadata"
-></audio>
+    <audio
+      id="audioPlayer"
+      controls
+      controlslist="nodownload noremoteplayback"
+      noremoteplayback
+      preload="metadata"
+    ></audio>
 
-<div class="now-playing">
+    <div class="now-playing">
 
-  <span class="now-playing-label">
-    Reproduciendo
-  </span>
+      <span class="now-playing-label">
+        Reproduciendo
+      </span>
 
-  <span id="songTitle">
-    Ninguna canción
-  </span>
+      <span id="songTitle">
+        Ninguna canción
+      </span>
 
-</div>
+    </div>
 
-<div
-  id="songList"
-  class="songs"
-></div>
-```
+    <div
+      id="songList"
+      class="songs"
+    ></div>
 
   </div>
+
 
   <footer class="site-footer">
 
-```
-<div class="footer-content">
+    <div class="footer-content">
 
-  <div class="footer-logos">
+      <div class="footer-logos">
 
-    <img
-      id="lnsLogo"
-      class="footer-logo"
-      alt="Leones del Patio"
-      draggable="false"
-    >
+        <img
+          id="lnsLogo"
+          class="footer-logo"
+          alt="Leones del Patio"
+          draggable="false"
+        >
 
-    <img
-      id="baalLogo"
-      class="footer-logo"
-      alt="Baal"
-      draggable="false"
-    >
+        <img
+          id="baalLogo"
+          class="footer-logo"
+          alt="Baal"
+          draggable="false"
+        >
 
-  </div>
+      </div>
 
-  <a
-    id="footerQrLink"
-    class="footer-qr-link"
-    href="https://linktr.ee/LvpiAKAJohnOPerdono"
-    target="_blank"
-    rel="noopener noreferrer"
-  >
-    <img
-      id="footerQr"
-      class="footer-qr"
-      alt="QR para redes sociales"
-      draggable="false"
-    >
-  </a>
+      <a
+        id="footerQrLink"
+        class="footer-qr-link"
+        href="https://linktr.ee/LvpiAKAJohnOPerdono"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <img
+          id="footerQr"
+          class="footer-qr"
+          alt="QR para redes sociales"
+          draggable="false"
+        >
+      </a>
 
-  <a
-    id="footerSocialLink"
-    class="footer-social-link"
-    href="https://linktr.ee/LvpiAKAJohnOPerdono"
-    target="_blank"
-    rel="noopener noreferrer"
-  >
-    Click para RRSS
-  </a>
+      <a
+        id="footerSocialLink"
+        class="footer-social-link"
+        href="https://linktr.ee/LvpiAKAJohnOPerdono"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Click para RRSS
+      </a>
 
-</div>
+    </div>
 
-<div class="footer-copyright">
-  © Todos los derechos reservados para Lvpi y Leones del Patio
-</div>
-```
+    <div class="footer-copyright">
+      © Todos los derechos reservados para Lvpi y Leones del Patio
+    </div>
 
   </footer>
+
 
   <script>
 
@@ -1464,4 +1213,67 @@ content="width=device-width, initial-scale=1.0"
         }
 
 
-        if (!res
+        if (!result.qr) {
+
+          throw new Error(
+            "No se recibió la URL del QR."
+          );
+
+        }
+
+
+        lnsLogo.src =
+          result.lnsLogo;
+
+
+        baalLogo.src =
+          result.baalLogo;
+
+
+        footerQr.src =
+          result.qr;
+
+
+        if (result.linktree) {
+
+          footerQrLink.href =
+            result.linktree;
+
+          footerSocialLink.href =
+            result.linktree;
+
+        }
+
+
+        console.log(
+          "Recursos de RRSS cargados."
+        );
+
+
+      } catch (error) {
+
+        console.error(
+          "Error cargando recursos de RRSS:",
+          error
+        );
+
+      }
+
+    }
+
+
+    /* =====================================================
+       INICIAR
+       ===================================================== */
+
+    registerVisit();
+
+    loadCatalog();
+
+    loadRRSS();
+
+
+  </script>
+
+</body>
+</html>
