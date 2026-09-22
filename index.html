@@ -113,6 +113,85 @@
       background: #222;
     }
 
+
+    /* =====================================================
+       FOOTER
+       ===================================================== */
+
+    .site-footer {
+      width: 100%;
+      margin-top: 20px;
+      padding: 55px 20px 22px;
+      border-top: 1px solid #242424;
+      text-align: center;
+    }
+
+    .footer-content {
+      width: min(700px, 100%);
+      margin: 0 auto;
+    }
+
+    .footer-logos {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 55px;
+      min-height: 55px;
+      margin-bottom: 32px;
+    }
+
+    .footer-logo {
+      display: block;
+      width: auto;
+      height: 42px;
+      max-width: 180px;
+      object-fit: contain;
+    }
+
+    .footer-qr-link {
+      display: block;
+      width: fit-content;
+      margin: 0 auto;
+      text-decoration: none;
+    }
+
+    .footer-qr {
+      display: block;
+      width: 105px;
+      height: 105px;
+      margin: 0 auto;
+      object-fit: contain;
+    }
+
+    .footer-social-link {
+      display: inline-block;
+      margin-top: 13px;
+      color: #999;
+      font-size: 12px;
+      letter-spacing: 1.4px;
+      text-decoration: none;
+      transition:
+        color 0.2s ease;
+    }
+
+    .footer-social-link:hover {
+      color: #fff;
+    }
+
+    .footer-copyright {
+      width: min(900px, 100%);
+      margin: 48px auto 0;
+      color: #555;
+      font-size: 10px;
+      line-height: 1.4;
+      text-align: right;
+    }
+
+
+    /* =====================================================
+       RESPONSIVE
+       ===================================================== */
+
     @media (max-width: 600px) {
 
       .container {
@@ -131,167 +210,34 @@
         padding: 11px 10px;
       }
 
+      .site-footer {
+        padding-top: 45px;
+        padding-bottom: 18px;
+      }
+
+      .footer-logos {
+        gap: 28px;
+        margin-bottom: 28px;
+      }
+
+      .footer-logo {
+        height: 34px;
+        max-width: 135px;
+      }
+
+      .footer-qr {
+        width: 95px;
+        height: 95px;
+      }
+
+      .footer-copyright {
+        margin-top: 38px;
+        text-align: center;
+        font-size: 9px;
+      }
+
     }
 
-
-/* ============================= */
-/* FOOTER                         */
-/* ============================= */
-
-.site-footer {
-  width: min(1100px, 92%);
-  margin: 90px auto 0;
-  padding: 45px 0 22px;
-
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
-
-  text-align: center;
-}
-
-
-/* LOGOS */
-
-.footer-logos {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  gap: 45px;
-
-  margin-bottom: 45px;
-}
-
-.footer-logo {
-  display: block;
-
-  width: auto;
-  height: auto;
-
-  max-height: 58px;
-  max-width: 180px;
-
-  object-fit: contain;
-
-  opacity: 0.92;
-
-  transition:
-    opacity 0.2s ease,
-    transform 0.2s ease;
-}
-
-.footer-logo:hover {
-  opacity: 1;
-  transform: translateY(-2px);
-}
-
-
-/* RRSS */
-
-.footer-rrss {
-  display: inline-flex;
-
-  flex-direction: column;
-  align-items: center;
-
-  gap: 13px;
-
-  color: #aaa;
-
-  text-decoration: none;
-
-  transition:
-    color 0.2s ease,
-    opacity 0.2s ease;
-}
-
-.footer-rrss:hover {
-  color: #fff;
-}
-
-
-/* QR */
-
-.footer-qr {
-  display: block;
-
-  width: 120px;
-  height: 120px;
-
-  object-fit: contain;
-
-  opacity: 0.9;
-
-  transition:
-    opacity 0.2s ease,
-    transform 0.2s ease;
-}
-
-.footer-rrss:hover .footer-qr {
-  opacity: 1;
-  transform: translateY(-2px);
-}
-
-
-/* TEXTO RRSS */
-
-.footer-rrss span {
-  font-size: 13px;
-
-  letter-spacing: 0.04em;
-
-  text-transform: uppercase;
-}
-
-
-/* COPYRIGHT */
-
-.footer-copyright {
-  margin-top: 42px;
-
-  text-align: right;
-
-  color: #555;
-
-  font-size: 10px;
-
-  letter-spacing: 0.03em;
-}
-
-
-/* RESPONSIVE */
-
-@media (max-width: 600px) {
-
-  .site-footer {
-    margin-top: 65px;
-    padding-top: 35px;
-  }
-
-  .footer-logos {
-    gap: 25px;
-    margin-bottom: 38px;
-  }
-
-  .footer-logo {
-    max-width: 135px;
-    max-height: 48px;
-  }
-
-  .footer-qr {
-    width: 105px;
-    height: 105px;
-  }
-
-  .footer-copyright {
-    margin-top: 35px;
-
-    text-align: center;
-
-    font-size: 9px;
-  }
-}
-
-    
   </style>
 </head>
 
@@ -340,101 +286,75 @@
   </div>
 
 
+  <!-- =====================================================
+       FOOTER
+       ===================================================== -->
+
+  <footer class="site-footer">
+
+    <div class="footer-content">
+
+      <div class="footer-logos">
+
+        <img
+          id="lnsLogo"
+          class="footer-logo"
+          alt="Leones del Patio"
+        >
+
+        <img
+          id="baalLogo"
+          class="footer-logo"
+          alt="Baal"
+        >
+
+      </div>
+
+
+      <a
+        id="footerQrLink"
+        class="footer-qr-link"
+        href="https://linktr.ee/LvpiAKAJohnOPerdono"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+
+        <img
+          id="footerQr"
+          class="footer-qr"
+          alt="QR para redes sociales"
+        >
+
+      </a>
+
+
+      <a
+        id="footerSocialLink"
+        class="footer-social-link"
+        href="https://linktr.ee/LvpiAKAJohnOPerdono"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Click para RRSS
+      </a>
+
+
+    </div>
+
+
+    <div class="footer-copyright">
+      © Todos los derechos reservados para Lvpi y Leones del Patio
+    </div>
+
+  </footer>
+
+
   <script>
 
-
-    async function loadRRSS() {
-
-  try {
-
-    const response =
-      await fetch(
-        RRSS_FUNCTION_URL,
-        {
-          method: "GET",
-          headers: {
-            "apikey":
-              SUPABASE_PUBLISHABLE_KEY
-          }
-        }
-      );
-
-
-    if (!response.ok) {
-
-      throw new Error(
-        `Error HTTP ${response.status}`
-      );
-    }
-
-
-    const data =
-      await response.json();
-
-
-    if (
-      !data.lnsLogo ||
-      !data.baalLogo ||
-      !data.qr
-    ) {
-
-      throw new Error(
-        "get-rrss no devolvió todos los recursos."
-      );
-    }
-
-
-    document.getElementById(
-      "footer-lns-logo"
-    ).src =
-      data.lnsLogo;
-
-
-    document.getElementById(
-      "footer-baal-logo"
-    ).src =
-      data.baalLogo;
-
-
-    document.getElementById(
-      "footer-qr"
-    ).src =
-      data.qr;
-
-
-    const rrssLink =
-      document.getElementById(
-        "footer-rrss-link"
-      );
-
-
-    if (data.linktree) {
-
-      rrssLink.href =
-        data.linktree;
-    }
-
-
-  } catch (error) {
-
-    console.error(
-      "Error cargando recursos RRSS:",
-      error
-    );
-
-  }
-}
-
-    
     /* =====================================================
        CONFIGURACIÓN SUPABASE
        ===================================================== */
-    
-    
-    const RRSS_FUNCTION_URL =
-      `${SUPABASE_URL}/functions/v1/get-rrss`;
-    
-    
+
     const SUPABASE_URL =
       "https://cavnifartuktwmchyrdl.supabase.co";
 
@@ -453,6 +373,9 @@
 
     const REGISTER_VISIT_FUNCTION_URL =
       `${SUPABASE_URL}/functions/v1/register-visit`;
+
+    const RRSS_FUNCTION_URL =
+      `${SUPABASE_URL}/functions/v1/get-rrss`;
 
 
     /* =====================================================
@@ -473,6 +396,21 @@
 
     const songList =
       document.getElementById("songList");
+
+    const lnsLogo =
+      document.getElementById("lnsLogo");
+
+    const baalLogo =
+      document.getElementById("baalLogo");
+
+    const footerQr =
+      document.getElementById("footerQr");
+
+    const footerQrLink =
+      document.getElementById("footerQrLink");
+
+    const footerSocialLink =
+      document.getElementById("footerSocialLink");
 
 
     /* =====================================================
@@ -862,6 +800,127 @@
 
 
     /* =====================================================
+       OBTENER RECURSOS DEL FOOTER
+       ===================================================== */
+
+    async function loadRRSS() {
+
+      try {
+
+        const response =
+          await fetch(
+            RRSS_FUNCTION_URL,
+            {
+              method: "GET",
+
+              headers: {
+                "apikey":
+                  SUPABASE_PUBLISHABLE_KEY
+              }
+            }
+          );
+
+
+        const result =
+          await response.json();
+
+
+        if (!response.ok) {
+
+          throw new Error(
+            result.error ||
+            "No se pudieron obtener los recursos de RRSS."
+          );
+
+        }
+
+
+        /*
+          Comprobamos que las tres
+          URLs necesarias existen.
+        */
+
+        if (!result.lnsLogo) {
+
+          throw new Error(
+            "No se recibió la URL del logo LNS."
+          );
+
+        }
+
+        if (!result.baalLogo) {
+
+          throw new Error(
+            "No se recibió la URL del logo Baal."
+          );
+
+        }
+
+        if (!result.qr) {
+
+          throw new Error(
+            "No se recibió la URL del QR."
+          );
+
+        }
+
+
+        /*
+          Asignamos directamente
+          las URLs firmadas a las imágenes.
+        */
+
+        lnsLogo.src =
+          result.lnsLogo;
+
+        baalLogo.src =
+          result.baalLogo;
+
+        footerQr.src =
+          result.qr;
+
+
+        /*
+          El enlace de Linktree viene
+          también desde la función.
+        */
+
+        if (result.linktree) {
+
+          footerQrLink.href =
+            result.linktree;
+
+          footerSocialLink.href =
+            result.linktree;
+
+        }
+
+
+        console.log(
+          "Recursos de RRSS cargados."
+        );
+
+
+      } catch (error) {
+
+        /*
+          MUY IMPORTANTE:
+          un fallo en el footer nunca
+          debe afectar al catálogo,
+          las portadas ni la música.
+        */
+
+        console.error(
+          "Error cargando recursos de RRSS:",
+          error
+        );
+
+      }
+
+    }
+
+
+    /* =====================================================
        REGISTRAR REPRODUCCIÓN
        ===================================================== */
 
@@ -1178,58 +1237,14 @@
 
     loadCatalog();
 
+    /*
+      La carga de RRSS es independiente
+      de la carga del catálogo.
+    */
+
     loadRRSS();
 
   </script>
 
-
-<footer class="site-footer">
-
-  <div class="footer-logos">
-
-    <img
-      id="footer-lns-logo"
-      class="footer-logo footer-logo-lns"
-      alt="LNS"
-    >
-
-    <img
-      id="footer-baal-logo"
-      class="footer-logo footer-logo-baal"
-      alt="Baal"
-    >
-
-  </div>
-
-
-  <a
-    id="footer-rrss-link"
-    class="footer-rrss"
-    href="https://linktr.ee/LvpiAKAJohnOPerdono"
-    target="_blank"
-    rel="noopener noreferrer"
-  >
-
-    <img
-      id="footer-qr"
-      class="footer-qr"
-      alt="QR para redes sociales"
-    >
-
-    <span>
-      Click para RRSS
-    </span>
-
-  </a>
-
-
-  <div class="footer-copyright">
-    © Todos los derechos reservados para Lvpi y Leones del Patio
-  </div>
-
-</footer>
-  
-  
 </body>
 </html>
-
