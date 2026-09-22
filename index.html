@@ -19,14 +19,25 @@ content="width=device-width, initial-scale=1.0"
     }
 
     html {
-      background: #0c0c0d;
+      background: #0a0a0b;
     }
 
     body {
       margin: 0;
-      background: #0c0c0d;
-      color: #e8e6e1;
-      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(
+          ellipse 75% 45% at 50% 0%,
+          #202023 0%,
+          #121214 42%,
+          #0a0a0b 100%
+        );
+      background-attachment: fixed;
+      color: #e7e5e0;
+      font-family:
+        "Trebuchet MS",
+        Arial,
+        Helvetica,
+        sans-serif;
       -webkit-font-smoothing: antialiased;
       text-rendering: optimizeLegibility;
     }
@@ -34,7 +45,7 @@ content="width=device-width, initial-scale=1.0"
     .container {
       width: min(900px, 92%);
       margin: 0 auto;
-      padding: 68px 0 82px;
+      padding: 58px 0 75px;
       text-align: center;
     }
 
@@ -44,13 +55,18 @@ content="width=device-width, initial-scale=1.0"
        ===================================================== */
 
     h1 {
-      margin: 0 0 42px;
-      color: #e8e6e1;
-      font-family: Georgia, "Times New Roman", serif;
+      margin: 0 0 38px;
+      color: #e9e7e2;
+      font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
       font-size: 42px;
       font-weight: 400;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.12em;
       line-height: 1;
+      text-shadow:
+        0 2px 18px rgba(0, 0, 0, 0.35);
     }
 
 
@@ -59,36 +75,41 @@ content="width=device-width, initial-scale=1.0"
        ===================================================== */
 
     .album-selector {
-      margin-bottom: 42px;
+      margin-bottom: 34px;
     }
 
     select {
       width: 100%;
       max-width: 600px;
-      padding: 13px 16px;
-      background: #121214;
-      color: #d6d1c7;
-      border: 1px solid #29292b;
-      border-radius: 3px;
-      font-family: Arial, Helvetica, sans-serif;
+      height: 47px;
+      padding: 0 16px;
+      background: #19191b;
+      color: #d9d6d0;
+      border: 1px solid #3a3a3d;
+      border-radius: 6px;
+      font-family:
+        "Trebuchet MS",
+        Arial,
+        Helvetica,
+        sans-serif;
       font-size: 13px;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.035em;
       cursor: pointer;
       outline: none;
+      color-scheme: dark;
       transition:
-        border-color 0.25s ease,
-        background 0.25s ease,
-        color 0.25s ease;
+        background 0.2s ease,
+        border-color 0.2s ease;
     }
 
     select:hover {
-      background: #171719;
-      border-color: #3b3b3d;
+      background: #202023;
+      border-color: #555559;
     }
 
     select:focus {
-      border-color: #505052;
-      background: #151517;
+      background: #202023;
+      border-color: #67676b;
     }
 
 
@@ -98,16 +119,17 @@ content="width=device-width, initial-scale=1.0"
 
     .cover-container {
       width: min(500px, 90%);
-      margin: 0 auto 34px;
+      margin: 0 auto 32px;
     }
 
     .cover-container img {
       display: block;
       width: 100%;
       height: auto;
-      border-radius: 2px;
+      border-radius: 6px;
       box-shadow:
-        0 18px 45px rgba(0, 0, 0, 0.32);
+        0 22px 55px rgba(0, 0, 0, 0.48),
+        0 0 0 1px rgba(255, 255, 255, 0.035);
       user-select: none;
       -webkit-user-select: none;
       -webkit-user-drag: none;
@@ -120,9 +142,19 @@ content="width=device-width, initial-scale=1.0"
 
     audio {
       width: min(700px, 100%);
-      margin: 0 auto 34px;
+      height: 42px;
+      margin: 0 auto 31px;
       display: block;
-      opacity: 0.88;
+
+      background: #242426;
+      border: 1px solid #363638;
+      border-radius: 6px;
+
+      color-scheme: dark;
+      accent-color: #aaa7a1;
+
+      box-shadow:
+        0 7px 22px rgba(0, 0, 0, 0.22);
     }
 
 
@@ -131,30 +163,46 @@ content="width=device-width, initial-scale=1.0"
        ===================================================== */
 
     .now-playing {
-      margin: 0 auto 42px;
-      padding: 0 10px;
-      text-align: center;
+      margin: 0 auto 38px;
+      padding: 18px 20px 19px;
       max-width: 750px;
+
+      background: #151517;
+      border: 1px solid #29292c;
+      border-radius: 6px;
+
+      text-align: center;
+
+      box-shadow:
+        0 10px 28px rgba(0, 0, 0, 0.16);
     }
 
     .now-playing-label {
       display: block;
-      margin-bottom: 11px;
-      color: #666466;
+      margin-bottom: 9px;
+
+      color: #777579;
+
       font-size: 10px;
-      font-weight: 500;
+      font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 3px;
     }
 
     #songTitle {
       display: block;
-      color: #dedbd5;
-      font-family: Georgia, "Times New Roman", serif;
-      font-size: 19px;
+
+      color: #e3e0da;
+
+      font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+      font-size: 18px;
       font-weight: 400;
       line-height: 1.5;
-      letter-spacing: 0.015em;
+      letter-spacing: 0.02em;
     }
 
 
@@ -165,48 +213,67 @@ content="width=device-width, initial-scale=1.0"
     .songs {
       width: min(750px, 100%);
       margin: 0 auto;
+
+      background: #151517;
+      border: 1px solid #29292c;
+      border-radius: 6px;
+
+      overflow: hidden;
       text-align: left;
+
+      box-shadow:
+        0 10px 28px rgba(0, 0, 0, 0.16);
     }
 
     .song {
       position: relative;
-      padding: 14px 18px 14px 22px;
-      border-bottom: 1px solid #202022;
-      color: #8d8b88;
+
+      padding: 14px 18px;
+
+      border-bottom: 1px solid #29292c;
+
+      color: #969398;
+
       cursor: pointer;
+
       font-size: 13px;
       line-height: 1.5;
       letter-spacing: 0.015em;
+
       transition:
         background 0.2s ease,
         color 0.2s ease,
         padding-left 0.2s ease;
     }
 
-    .song:first-child {
-      border-top: 1px solid #202022;
+    .song:last-child {
+      border-bottom: none;
     }
 
     .song:hover {
-      padding-left: 27px;
-      background: #121214;
-      color: #d2cec7;
+      padding-left: 23px;
+      background: #1e1e21;
+      color: #d4d1cb;
     }
 
     .song.active {
-      padding-left: 27px;
-      background: #171719;
-      color: #e8e6e1;
+      padding-left: 23px;
+      background: #242427;
+      color: #eeeae3;
     }
 
     .song.active::before {
       content: "";
+
       position: absolute;
+
       left: 0;
       top: 0;
       bottom: 0;
-      width: 2px;
-      background: #aaa59d;
+
+      width: 3px;
+
+      background: #aaa6a0;
     }
 
 
@@ -217,8 +284,17 @@ content="width=device-width, initial-scale=1.0"
     .site-footer {
       width: 100%;
       margin-top: 0;
-      padding: 78px 20px 25px;
-      border-top: 1px solid #1e1e20;
+      padding: 72px 20px 25px;
+
+      border-top: 1px solid #242427;
+
+      background:
+        linear-gradient(
+          to bottom,
+          rgba(10, 10, 11, 0.12),
+          rgba(7, 7, 8, 0.52)
+        );
+
       text-align: center;
     }
 
@@ -232,39 +308,51 @@ content="width=device-width, initial-scale=1.0"
       align-items: center;
       justify-content: center;
       gap: 95px;
+
       min-height: 120px;
+
       margin: 0 auto 55px;
       padding: 0 20px;
     }
 
     .footer-logo {
       display: block;
+
       width: auto;
       height: 88px;
       max-width: 310px;
+
       object-fit: contain;
+
       opacity: 0.52;
+
       user-select: none;
       -webkit-user-select: none;
       -webkit-user-drag: none;
+
       pointer-events: auto;
+
       transition:
         opacity 0.25s ease,
         transform 0.25s ease;
     }
 
     .footer-logo:hover {
-      opacity: 0.92;
+      opacity: 0.94;
       transform: scale(1.035);
     }
 
     .footer-qr-link {
       display: block;
       width: fit-content;
+
       margin: 0 auto;
+
       line-height: 0;
       text-decoration: none;
-      opacity: 0.78;
+
+      opacity: 0.74;
+
       transition:
         opacity 0.25s ease,
         transform 0.25s ease;
@@ -277,10 +365,14 @@ content="width=device-width, initial-scale=1.0"
 
     .footer-qr {
       display: block;
+
       width: 155px;
       height: 155px;
+
       margin: 0 auto;
+
       object-fit: contain;
+
       user-select: none;
       -webkit-user-select: none;
       -webkit-user-drag: none;
@@ -288,26 +380,35 @@ content="width=device-width, initial-scale=1.0"
 
     .footer-social-link {
       display: inline-block;
-      margin-top: 19px;
-      color: #777572;
+
+      margin-top: 18px;
+
+      color: #777579;
+
       font-size: 10px;
       letter-spacing: 2px;
+
       text-decoration: none;
       text-transform: uppercase;
+
       transition:
         color 0.2s ease;
     }
 
     .footer-social-link:hover {
-      color: #d4d0c9;
+      color: #e1ded8;
     }
 
     .footer-copyright {
       width: min(900px, 100%);
+
       margin: 52px auto 0;
-      color: #4d4b49;
+
+      color: #4f4d4b;
+
       font-size: 9px;
       line-height: 1.4;
+
       text-align: center;
       letter-spacing: 0.04em;
     }
@@ -321,21 +422,21 @@ content="width=device-width, initial-scale=1.0"
 
       .container {
         width: min(900px, 92%);
-        padding-top: 42px;
-        padding-bottom: 65px;
+        padding-top: 38px;
+        padding-bottom: 60px;
       }
 
       h1 {
-        margin-bottom: 34px;
+        margin-bottom: 31px;
         font-size: 34px;
       }
 
       .album-selector {
-        margin-bottom: 32px;
+        margin-bottom: 28px;
       }
 
       select {
-        padding: 12px 14px;
+        height: 45px;
         font-size: 12px;
       }
 
@@ -344,11 +445,13 @@ content="width=device-width, initial-scale=1.0"
       }
 
       audio {
-        margin-bottom: 29px;
+        height: 42px;
+        margin-bottom: 27px;
       }
 
       .now-playing {
-        margin-bottom: 34px;
+        margin-bottom: 32px;
+        padding: 16px 15px 17px;
       }
 
       .now-playing-label {
@@ -357,21 +460,21 @@ content="width=device-width, initial-scale=1.0"
       }
 
       #songTitle {
-        font-size: 17px;
+        font-size: 16px;
       }
 
       .song {
-        padding: 13px 12px 13px 17px;
+        padding: 13px 13px;
         font-size: 12px;
       }
 
       .song:hover,
       .song.active {
-        padding-left: 22px;
+        padding-left: 18px;
       }
 
       .site-footer {
-        padding-top: 58px;
+        padding-top: 55px;
         padding-bottom: 20px;
       }
 
@@ -404,7 +507,6 @@ content="width=device-width, initial-scale=1.0"
 
       .footer-copyright {
         margin-top: 42px;
-        text-align: center;
         font-size: 8px;
       }
 
@@ -414,7 +516,7 @@ content="width=device-width, initial-scale=1.0"
     @media (max-width: 400px) {
 
       .container {
-        padding-top: 34px;
+        padding-top: 32px;
       }
 
       h1 {
@@ -1362,67 +1464,4 @@ content="width=device-width, initial-scale=1.0"
         }
 
 
-        if (!result.qr) {
-
-          throw new Error(
-            "No se recibió la URL del QR."
-          );
-
-        }
-
-
-        lnsLogo.src =
-          result.lnsLogo;
-
-
-        baalLogo.src =
-          result.baalLogo;
-
-
-        footerQr.src =
-          result.qr;
-
-
-        if (result.linktree) {
-
-          footerQrLink.href =
-            result.linktree;
-
-          footerSocialLink.href =
-            result.linktree;
-
-        }
-
-
-        console.log(
-          "Recursos de RRSS cargados."
-        );
-
-
-      } catch (error) {
-
-        console.error(
-          "Error cargando recursos de RRSS:",
-          error
-        );
-
-      }
-
-    }
-
-
-    /* =====================================================
-       INICIAR
-       ===================================================== */
-
-    registerVisit();
-
-    loadCatalog();
-
-    loadRRSS();
-
-
-  </script>
-
-</body>
-</html>
+        if (!res
