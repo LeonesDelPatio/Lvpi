@@ -1143,3 +1143,95 @@ content="width=device-width, initial-scale=1.0"
         if (
           currentAlbumIndex <
           albums.length - 1
+        ) {
+
+          currentAlbumIndex++;
+
+          currentSongIndex = 0;
+
+
+          albumSelect.value =
+            currentAlbumIndex;
+
+
+          const nextAlbum =
+            albums[currentAlbumIndex];
+
+
+          renderSongList();
+
+
+          loadCover(
+            nextAlbum.cover
+          );
+
+
+          playSong(0);
+
+
+          return;
+
+        }
+
+
+        currentAlbumIndex = 0;
+
+        currentSongIndex = 0;
+
+
+        albumSelect.value =
+          currentAlbumIndex;
+
+
+        const firstAlbum =
+          albums[0];
+
+
+        renderSongList();
+
+
+        loadCover(
+          firstAlbum.cover
+        );
+
+
+        playSong(0);
+
+      }
+    );
+
+
+    /* =====================================================
+       BLOQUEAR MENÚ CONTEXTUAL EN IMÁGENES
+       ===================================================== */
+
+    document.addEventListener(
+      "contextmenu",
+      (event) => {
+
+        if (
+          event.target.tagName === "IMG"
+        ) {
+
+          event.preventDefault();
+
+        }
+
+      }
+    );
+
+
+    /* =====================================================
+       INICIAR
+       ===================================================== */
+
+    registerVisit();
+
+    loadCatalog();
+
+    loadRRSS();
+
+  </script>
+
+</body>
+</html>
