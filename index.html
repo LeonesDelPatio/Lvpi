@@ -136,13 +136,6 @@ content="width=device-width, initial-scale=1.0"
       margin: 0 auto;
     }
 
-    /*
-      BLOQUE DE IDENTIDAD
-
-      Los logos tienen ahora mayor presencia y quedan
-      separados del QR como dos niveles visuales distintos.
-    */
-
     .footer-logos {
       display: flex;
       align-items: center;
@@ -160,17 +153,23 @@ content="width=device-width, initial-scale=1.0"
       max-width: 310px;
       object-fit: contain;
 
-      opacity: 0.78;
+      opacity: 0.58;
 
       user-select: none;
       -webkit-user-select: none;
       -webkit-user-drag: none;
-      pointer-events: none;
+
+      pointer-events: auto;
+
+      transition:
+        opacity 0.25s ease,
+        transform 0.25s ease;
     }
 
-    /*
-      QR como segundo elemento de identidad.
-    */
+    .footer-logo:hover {
+      opacity: 0.95;
+      transform: scale(1.035);
+    }
 
     .footer-qr-link {
       display: block;
@@ -255,6 +254,10 @@ content="width=device-width, initial-scale=1.0"
       .footer-logo {
         height: 62px;
         max-width: 43%;
+      }
+
+      .footer-logo:hover {
+        transform: scale(1.025);
       }
 
       .footer-qr {
@@ -342,10 +345,6 @@ content="width=device-width, initial-scale=1.0"
 
   </div>
 
-  <!-- =====================================================
-       FOOTER
-       ===================================================== -->
-
   <footer class="site-footer">
 
 ```
@@ -397,7 +396,6 @@ content="width=device-width, initial-scale=1.0"
   >
     Click para RRSS
   </a>
-
 
 </div>
 
@@ -533,12 +531,6 @@ content="width=device-width, initial-scale=1.0"
 
       } catch (error) {
 
-        /*
-          Un fallo de estadísticas
-          nunca debe impedir que
-          la web continúe cargando.
-        */
-
         console.error(
           "Error registrando visita:",
           error
@@ -603,14 +595,7 @@ content="width=device-width, initial-scale=1.0"
 
         renderAlbumSelector();
 
-
-        /*
-          Seleccionamos automáticamente
-          el álbum más reciente.
-        */
-
         selectAlbum(0);
-
 
       } catch (error) {
 
@@ -682,12 +667,6 @@ content="width=device-width, initial-scale=1.0"
         album.cover
       );
 
-
-      /*
-        Al seleccionar un álbum,
-        comenzamos automáticamente
-        por la canción 01.
-      */
 
       playSong(0);
 
@@ -895,11 +874,6 @@ content="width=device-width, initial-scale=1.0"
         }
 
 
-        /*
-          Comprobamos que las tres
-          URLs necesarias existen.
-        */
-
         if (!result.lnsLogo) {
 
           throw new Error(
@@ -925,11 +899,6 @@ content="width=device-width, initial-scale=1.0"
         }
 
 
-        /*
-          Asignamos directamente
-          las URLs firmadas a las imágenes.
-        */
-
         lnsLogo.src =
           result.lnsLogo;
 
@@ -939,11 +908,6 @@ content="width=device-width, initial-scale=1.0"
         footerQr.src =
           result.qr;
 
-
-        /*
-          El enlace de Linktree viene
-          también desde la función.
-        */
 
         if (result.linktree) {
 
@@ -962,12 +926,6 @@ content="width=device-width, initial-scale=1.0"
 
 
       } catch (error) {
-
-        /*
-          Un fallo en el footer nunca
-          debe afectar al catálogo,
-          las portadas ni la música.
-        */
 
         console.error(
           "Error cargando recursos de RRSS:",
@@ -1039,11 +997,6 @@ content="width=device-width, initial-scale=1.0"
 
       } catch (error) {
 
-        /*
-          Un fallo de estadísticas
-          nunca debe detener la música.
-        */
-
         console.error(
           "Error registrando reproducción:",
           error
@@ -1089,11 +1042,6 @@ content="width=device-width, initial-scale=1.0"
 
 
       try {
-
-        /*
-          Obtener URL firmada
-          para el archivo de audio.
-        */
 
         const response =
           await fetch(
@@ -1141,29 +1089,12 @@ content="width=device-width, initial-scale=1.0"
         }
 
 
-        /*
-          Cargar el audio.
-        */
-
         audioPlayer.src =
           result.signedUrl;
 
 
-        /*
-          Intentar comenzar la reproducción.
-        */
-
         await audioPlayer.play();
 
-
-        /*
-          MUY IMPORTANTE:
-          solo llegamos aquí si play()
-          se ha iniciado correctamente.
-
-          Por tanto, aquí registramos
-          la reproducción.
-        */
 
         await registerPlay(
           album.name,
@@ -1195,11 +1126,6 @@ content="width=device-width, initial-scale=1.0"
           albums[currentAlbumIndex];
 
 
-        /*
-          Todavía quedan canciones
-          dentro del álbum.
-        */
-
         if (
           currentSongIndex <
           album.songs.length - 1
@@ -1214,116 +1140,6 @@ content="width=device-width, initial-scale=1.0"
         }
 
 
-        /*
-          Última canción del álbum.
-          Pasamos al siguiente álbum.
-        */
-
         if (
           currentAlbumIndex <
           albums.length - 1
-        ) {
-
-          currentAlbumIndex++;
-
-
-          currentSongIndex = 0;
-
-
-          albumSelect.value =
-            currentAlbumIndex;
-
-
-          const nextAlbum =
-            albums[currentAlbumIndex];
-
-
-          renderSongList();
-
-
-          loadCover(
-            nextAlbum.cover
-          );
-
-
-          playSong(0);
-
-
-          return;
-
-        }
-
-
-        /*
-          Hemos terminado el último
-          álbum del catálogo.
-
-          Volvemos al primero.
-        */
-
-        currentAlbumIndex = 0;
-
-        currentSongIndex = 0;
-
-
-        albumSelect.value =
-          currentAlbumIndex;
-
-
-        const firstAlbum =
-          albums[0];
-
-
-        renderSongList();
-
-
-        loadCover(
-          firstAlbum.cover
-        );
-
-
-        playSong(0);
-
-      }
-    );
-
-
-    /* =====================================================
-       BLOQUEAR MENÚ CONTEXTUAL EN IMÁGENES
-       ===================================================== */
-
-    document.addEventListener(
-      "contextmenu",
-      (event) => {
-
-        if (
-          event.target.tagName === "IMG"
-        ) {
-
-          event.preventDefault();
-
-        }
-
-      }
-    );
-
-
-    /* =====================================================
-       INICIAR
-       ===================================================== */
-
-    registerVisit();
-
-    loadCatalog();
-
-    /*
-      La carga de RRSS es independiente
-      de la carga del catálogo.
-    */
-
-    loadRRSS();
-
-  </script>
-
-</body>
-</html>
