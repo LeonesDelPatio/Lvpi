@@ -60,6 +60,34 @@
       color: #eee9e3;
     }
 
+    /* Scrollbars integradas con la paleta de la interfaz */
+    html {
+      scrollbar-color: #4a4d4f #151719;
+      scrollbar-width: thin;
+    }
+
+    body::-webkit-scrollbar,
+    .custom-select-menu::-webkit-scrollbar {
+      width: 9px;
+    }
+
+    body::-webkit-scrollbar-track,
+    .custom-select-menu::-webkit-scrollbar-track {
+      background: #151719;
+    }
+
+    body::-webkit-scrollbar-thumb,
+    .custom-select-menu::-webkit-scrollbar-thumb {
+      background: #4a4d4f;
+      border: 2px solid #151719;
+      border-radius: 999px;
+    }
+
+    body::-webkit-scrollbar-thumb:hover,
+    .custom-select-menu::-webkit-scrollbar-thumb:hover {
+      background: #5b5e60;
+    }
+
     .album-selector {
       margin-bottom: 34px;
     }
@@ -97,15 +125,17 @@
     }
 
     .custom-select-button::after {
-      content: "⌄";
+      content: "";
       position: absolute;
-      right: 15px;
+      right: 17px;
       top: 50%;
-      transform: translateY(-53%);
-      color: #aaa5a0;
-      font-size: 16px;
-      line-height: 1;
+      width: 7px;
+      height: 7px;
+      border-right: 1px solid #aaa5a0;
+      border-bottom: 1px solid #aaa5a0;
+      transform: translateY(-70%) rotate(45deg);
       pointer-events: none;
+      transition: transform 0.18s ease;
     }
 
     .custom-select.open .custom-select-button,
@@ -115,7 +145,7 @@
     }
 
     .custom-select.open .custom-select-button::after {
-      transform: translateY(-47%) rotate(180deg);
+      transform: translateY(-25%) rotate(225deg);
     }
 
     .custom-select-menu {
