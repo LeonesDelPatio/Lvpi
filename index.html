@@ -64,10 +64,22 @@
       margin-bottom: 34px;
     }
 
-    select {
+    .album-select-native {
+      display: none;
+    }
+
+    .custom-select {
+      position: relative;
       width: 100%;
       max-width: 600px;
-      padding: 13px 15px;
+      margin: 0 auto;
+      text-align: left;
+    }
+
+    .custom-select-button {
+      width: 100%;
+      min-height: 46px;
+      padding: 13px 44px 13px 15px;
       background: #1b1d1f;
       color: #e8e1da;
       border: 1px solid #393b3d;
@@ -75,12 +87,78 @@
       font-family: Arial, Helvetica, sans-serif;
       font-size: 14px;
       letter-spacing: 0.015em;
+      text-align: left;
       cursor: pointer;
       outline: none;
+      position: relative;
+      transition:
+        background 0.18s ease,
+        border-color 0.18s ease;
     }
 
-    select:focus {
+    .custom-select-button::after {
+      content: "⌄";
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-53%);
+      color: #aaa5a0;
+      font-size: 16px;
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    .custom-select.open .custom-select-button,
+    .custom-select-button:focus {
       border-color: #5a5c5e;
+      background: #202224;
+    }
+
+    .custom-select.open .custom-select-button::after {
+      transform: translateY(-47%) rotate(180deg);
+    }
+
+    .custom-select-menu {
+      position: absolute;
+      z-index: 20;
+      top: calc(100% + 7px);
+      left: 0;
+      width: 100%;
+      max-height: 300px;
+      overflow-y: auto;
+      padding: 5px;
+      background: #1b1d1f;
+      border: 1px solid #393b3d;
+      border-radius: 7px;
+      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.28);
+      display: none;
+    }
+
+    .custom-select.open .custom-select-menu {
+      display: block;
+    }
+
+    .custom-select-option {
+      width: 100%;
+      padding: 11px 12px;
+      border: 0;
+      border-radius: 5px;
+      background: transparent;
+      color: #d8d2cc;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 14px;
+      letter-spacing: 0.01em;
+      text-align: left;
+      cursor: pointer;
+      transition:
+        background 0.15s ease,
+        color 0.15s ease;
+    }
+
+    .custom-select-option:hover,
+    .custom-select-option.active {
+      background: #292c2e;
+      color: #f0ebe5;
     }
 
     .cover-container {
@@ -98,38 +176,31 @@
     }
 
     audio {
+      display: none;
+    }
+
+    .custom-player {
       width: min(700px, 100%);
       margin: 0 auto 27px;
-      display: block;
-      color-scheme: dark;
-      accent-color: #8a8986;
-    }
-
-    audio::-webkit-media-controls-enclosure {
-      background-color: #2a2724;
-      border-radius: 6px;
-    }
-
-    audio::-webkit-media-controls-panel {
-      background-color: #292c2e;
-    }
-
-    .player-navigation {
-      width: min(700px, 100%);
-      margin: -9px auto 27px;
+      padding: 11px 13px;
       display: grid;
-      grid-template-columns: 44px 1fr 44px;
-      gap: 10px;
+      grid-template-columns: 40px 40px minmax(0, 1fr) 76px 40px;
+      grid-template-rows: 30px 22px;
+      column-gap: 8px;
+      row-gap: 4px;
       align-items: center;
+      background: #1b1d1f;
+      border: 1px solid #393b3d;
+      border-radius: 7px;
     }
 
-    .player-nav-button {
-      width: 44px;
-      height: 36px;
+    .player-button {
+      width: 40px;
+      height: 30px;
       padding: 0;
       border: 1px solid #3b3e40;
-      border-radius: 6px;
-      background: #1b1d1f;
+      border-radius: 5px;
+      background: transparent;
       color: #c8c8c5;
       font-family: Arial, Helvetica, sans-serif;
       font-size: 17px;
@@ -141,18 +212,101 @@
         border-color 0.18s ease;
     }
 
-    .player-nav-button:hover {
-      background: #282b2d;
+    .player-button:hover {
+      background: #292c2e;
       color: #f0efec;
       border-color: #55585a;
     }
 
-    .player-nav-button:active {
+    .player-button:active {
       background: #303335;
     }
 
-    .player-nav-spacer {
-      height: 1px;
+    .player-progress {
+      width: 100%;
+      height: 4px;
+      margin: 0;
+      appearance: none;
+      -webkit-appearance: none;
+      border-radius: 999px;
+      background: #3a3d3f;
+      cursor: pointer;
+      outline: none;
+    }
+
+    .player-progress::-webkit-slider-thumb,
+    .player-volume::-webkit-slider-thumb {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 10px;
+      height: 10px;
+      border: 0;
+      border-radius: 50%;
+      background: #c8c3bd;
+      cursor: pointer;
+    }
+
+    .player-progress::-moz-range-thumb,
+    .player-volume::-moz-range-thumb {
+      width: 10px;
+      height: 10px;
+      border: 0;
+      border-radius: 50%;
+      background: #c8c3bd;
+      cursor: pointer;
+    }
+
+    .player-time {
+      grid-column: 3;
+      color: #817b75;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 9px;
+      letter-spacing: 0.04em;
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    .player-volume-wrap {
+      grid-column: 4;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    .player-volume-icon {
+      color: #89847f;
+      font-size: 11px;
+      line-height: 1;
+      user-select: none;
+    }
+
+    .player-volume {
+      width: 55px;
+      height: 4px;
+      margin: 0;
+      appearance: none;
+      -webkit-appearance: none;
+      border-radius: 999px;
+      background: #3a3d3f;
+      cursor: pointer;
+      outline: none;
+    }
+
+    .player-next {
+      grid-column: 5;
+      grid-row: 1;
+    }
+
+    .player-previous {
+      grid-column: 1;
+      grid-row: 1;
+    }
+
+    .player-play {
+      grid-column: 2;
+      grid-row: 1;
+      font-size: 15px;
     }
 
     .now-playing {
@@ -330,14 +484,19 @@
         opacity: 0.12;
       }
 
-      .player-navigation {
-        grid-template-columns: 40px 1fr 40px;
-        gap: 8px;
+      .custom-player {
+        grid-template-columns: 34px 34px minmax(0, 1fr) 65px 34px;
+        column-gap: 6px;
+        padding: 10px 8px;
       }
 
-      .player-nav-button {
-        width: 40px;
-        height: 34px;
+      .player-button {
+        width: 34px;
+        height: 30px;
+      }
+
+      .player-volume {
+        width: 44px;
       }
 
       .song {
@@ -425,7 +584,37 @@
     <h1>Lvpi</h1>
 
     <div class="album-selector">
-      <select id="albumSelect"></select>
+
+      <select
+        id="albumSelect"
+        class="album-select-native"
+        aria-hidden="true"
+        tabindex="-1"
+      ></select>
+
+      <div
+        id="customAlbumSelect"
+        class="custom-select"
+      >
+
+        <button
+          id="customAlbumSelectButton"
+          class="custom-select-button"
+          type="button"
+          aria-haspopup="listbox"
+          aria-expanded="false"
+        >
+          Seleccionar álbum
+        </button>
+
+        <div
+          id="customAlbumSelectMenu"
+          class="custom-select-menu"
+          role="listbox"
+        ></div>
+
+      </div>
+
     </div>
 
     <div class="cover-container">
@@ -437,35 +626,73 @@
 
     <audio
       id="audioPlayer"
-      controls
-      controlslist="nodownload noremoteplayback"
-      noremoteplayback
       preload="metadata"
     ></audio>
 
-    <div class="player-navigation">
+    <div
+      class="custom-player"
+      aria-label="Reproductor de audio"
+    >
 
       <button
         id="previousSongButton"
-        class="player-nav-button"
+        class="player-button player-previous"
         type="button"
         aria-label="Canción anterior"
         title="Canción anterior"
-      >
-        ‹
-      </button>
+      >‹</button>
 
-      <div class="player-nav-spacer"></div>
+      <button
+        id="playPauseButton"
+        class="player-button player-play"
+        type="button"
+        aria-label="Reproducir"
+        title="Reproducir"
+      >▶</button>
 
       <button
         id="nextSongButton"
-        class="player-nav-button"
+        class="player-button player-next"
         type="button"
         aria-label="Siguiente canción"
         title="Siguiente canción"
+      >›</button>
+
+      <input
+        id="playerProgress"
+        class="player-progress"
+        type="range"
+        min="0"
+        max="100"
+        value="0"
+        step="0.1"
+        aria-label="Progreso de la canción"
       >
-        ›
-      </button>
+
+      <div class="player-volume-wrap">
+
+        <span
+          class="player-volume-icon"
+          aria-hidden="true"
+        >◖</span>
+
+        <input
+          id="playerVolume"
+          class="player-volume"
+          type="range"
+          min="0"
+          max="1"
+          value="1"
+          step="0.01"
+          aria-label="Volumen"
+        >
+
+      </div>
+
+      <div
+        id="playerTime"
+        class="player-time"
+      >0:00 / 0:00</div>
 
     </div>
 
@@ -581,6 +808,15 @@
     const albumSelect =
       document.getElementById("albumSelect");
 
+    const customAlbumSelect =
+      document.getElementById("customAlbumSelect");
+
+    const customAlbumSelectButton =
+      document.getElementById("customAlbumSelectButton");
+
+    const customAlbumSelectMenu =
+      document.getElementById("customAlbumSelectMenu");
+
     const coverImage =
       document.getElementById("coverImage");
 
@@ -592,6 +828,18 @@
 
     const nextSongButton =
       document.getElementById("nextSongButton");
+
+    const playPauseButton =
+      document.getElementById("playPauseButton");
+
+    const playerProgress =
+      document.getElementById("playerProgress");
+
+    const playerVolume =
+      document.getElementById("playerVolume");
+
+    const playerTime =
+      document.getElementById("playerTime");
 
     const lionBackground =
       document.getElementById("lionBackground");
@@ -776,6 +1024,7 @@
     function renderAlbumSelector() {
 
       albumSelect.innerHTML = "";
+      customAlbumSelectMenu.innerHTML = "";
 
 
       albums.forEach(
@@ -794,10 +1043,158 @@
             option
           );
 
+
+          const item =
+            document.createElement("button");
+
+          item.type =
+            "button";
+
+          item.className =
+            "custom-select-option";
+
+          item.textContent =
+            `${album.name} (${album.year})`;
+
+          item.dataset.index =
+            index;
+
+          item.setAttribute(
+            "role",
+            "option"
+          );
+
+          item.addEventListener(
+            "click",
+            () => {
+
+              selectAlbum(index);
+              closeAlbumSelector();
+
+            }
+          );
+
+          customAlbumSelectMenu.appendChild(
+            item
+          );
+
         }
       );
 
+
+      updateCustomAlbumSelector();
+
     }
+
+
+    function updateCustomAlbumSelector() {
+
+      const album =
+        albums[currentAlbumIndex];
+
+      if (!album) {
+        return;
+      }
+
+
+      customAlbumSelectButton.textContent =
+        `${album.name} (${album.year})`;
+
+
+      customAlbumSelectMenu
+        .querySelectorAll(".custom-select-option")
+        .forEach(
+          (item) => {
+
+            const active =
+              Number(item.dataset.index) ===
+              currentAlbumIndex;
+
+            item.classList.toggle(
+              "active",
+              active
+            );
+
+            item.setAttribute(
+              "aria-selected",
+              active ? "true" : "false"
+            );
+
+          }
+        );
+
+    }
+
+
+    function openAlbumSelector() {
+
+      customAlbumSelect.classList.add(
+        "open"
+      );
+
+      customAlbumSelectButton.setAttribute(
+        "aria-expanded",
+        "true"
+      );
+
+    }
+
+
+    function closeAlbumSelector() {
+
+      customAlbumSelect.classList.remove(
+        "open"
+      );
+
+      customAlbumSelectButton.setAttribute(
+        "aria-expanded",
+        "false"
+      );
+
+    }
+
+
+    customAlbumSelectButton.addEventListener(
+      "click",
+      (event) => {
+
+        event.stopPropagation();
+
+        if (
+          customAlbumSelect.classList.contains(
+            "open"
+          )
+        ) {
+
+          closeAlbumSelector();
+
+        } else {
+
+          openAlbumSelector();
+
+        }
+
+      }
+    );
+
+
+    document.addEventListener(
+      "click",
+      (event) => {
+
+        if (
+          !customAlbumSelect.contains(
+            event.target
+          )
+        ) {
+
+          closeAlbumSelector();
+
+        }
+
+      }
+    );
+
 
 
     /* =====================================================
@@ -814,6 +1211,8 @@
 
       albumSelect.value =
         currentAlbumIndex;
+
+      updateCustomAlbumSelector();
 
 
       const album =
@@ -1206,6 +1605,185 @@
       }
 
     }
+
+
+    /* =====================================================
+       CONTROLES DEL REPRODUCTOR
+       ===================================================== */
+
+    function formatPlayerTime(seconds) {
+
+      if (
+        !Number.isFinite(seconds) ||
+        seconds < 0
+      ) {
+
+        return "0:00";
+
+      }
+
+
+      const minutes =
+        Math.floor(seconds / 60);
+
+      const remainingSeconds =
+        Math.floor(seconds % 60)
+          .toString()
+          .padStart(2, "0");
+
+      return `${minutes}:${remainingSeconds}`;
+
+    }
+
+
+    function updatePlayerTime() {
+
+      const current =
+        audioPlayer.currentTime || 0;
+
+      const duration =
+        Number.isFinite(audioPlayer.duration)
+          ? audioPlayer.duration
+          : 0;
+
+
+      playerProgress.value =
+        duration
+          ? (current / duration) * 100
+          : 0;
+
+
+      playerTime.textContent =
+        `${formatPlayerTime(current)} / ${formatPlayerTime(duration)}`;
+
+    }
+
+
+    function updatePlayPauseButton() {
+
+      const playing =
+        !audioPlayer.paused &&
+        !audioPlayer.ended;
+
+      playPauseButton.textContent =
+        playing ? "Ⅱ" : "▶";
+
+      playPauseButton.setAttribute(
+        "aria-label",
+        playing ? "Pausar" : "Reproducir"
+      );
+
+      playPauseButton.setAttribute(
+        "title",
+        playing ? "Pausar" : "Reproducir"
+      );
+
+    }
+
+
+    playPauseButton.addEventListener(
+      "click",
+      async () => {
+
+        if (!audioPlayer.src) {
+          return;
+        }
+
+
+        try {
+
+          if (audioPlayer.paused) {
+
+            await audioPlayer.play();
+
+          } else {
+
+            audioPlayer.pause();
+
+          }
+
+        } catch (error) {
+
+          console.error(
+            "Error controlando la reproducción:",
+            error
+          );
+
+        }
+
+      }
+    );
+
+
+    playerProgress.addEventListener(
+      "input",
+      () => {
+
+        if (
+          Number.isFinite(
+            audioPlayer.duration
+          )
+        ) {
+
+          audioPlayer.currentTime =
+            (
+              Number(playerProgress.value) /
+              100
+            ) *
+            audioPlayer.duration;
+
+        }
+
+      }
+    );
+
+
+    playerVolume.addEventListener(
+      "input",
+      () => {
+
+        audioPlayer.volume =
+          Number(playerVolume.value);
+
+      }
+    );
+
+
+    audioPlayer.addEventListener(
+      "timeupdate",
+      updatePlayerTime
+    );
+
+
+    audioPlayer.addEventListener(
+      "loadedmetadata",
+      updatePlayerTime
+    );
+
+
+    audioPlayer.addEventListener(
+      "play",
+      updatePlayPauseButton
+    );
+
+
+    audioPlayer.addEventListener(
+      "pause",
+      updatePlayPauseButton
+    );
+
+
+    audioPlayer.addEventListener(
+      "ended",
+      updatePlayPauseButton
+    );
+
+
+    audioPlayer.volume =
+      Number(playerVolume.value);
+
+    updatePlayerTime();
+    updatePlayPauseButton();
 
 
     /* =====================================================
