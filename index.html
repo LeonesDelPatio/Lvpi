@@ -18,10 +18,30 @@
 
     body {
       margin: 0;
-      background: #171411;
+      background: #151719;
       color: #eeeae5;
       font-family: Arial, Helvetica, sans-serif;
-      box-shadow: inset 0 0 180px rgba(0, 0, 0, 0.28);
+    }
+
+    .lion-background {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      width: min(1180px, 100vw);
+      height: auto;
+      transform: translate(-50%, -50%);
+      opacity: 0.12;
+      z-index: 0;
+      pointer-events: none;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-user-drag: none;
+    }
+
+    .container,
+    .site-footer {
+      position: relative;
+      z-index: 1;
     }
 
     .container {
@@ -48,9 +68,9 @@
       width: 100%;
       max-width: 600px;
       padding: 13px 15px;
-      background: #211e1b;
+      background: #1b1d1f;
       color: #e8e1da;
-      border: 1px solid #3b3631;
+      border: 1px solid #393b3d;
       border-radius: 7px;
       font-family: Arial, Helvetica, sans-serif;
       font-size: 14px;
@@ -60,7 +80,7 @@
     }
 
     select:focus {
-      border-color: #5a5149;
+      border-color: #5a5c5e;
     }
 
     .cover-container {
@@ -72,7 +92,7 @@
       display: block;
       width: 100%;
       height: auto;
-      border: 1px solid #39332e;
+      border: 1px solid #36393b;
       border-radius: 6px;
       box-shadow: 0 12px 32px rgba(0, 0, 0, 0.22);
     }
@@ -82,7 +102,7 @@
       margin: 0 auto 27px;
       display: block;
       color-scheme: dark;
-      accent-color: #8d8074;
+      accent-color: #8a8986;
     }
 
     audio::-webkit-media-controls-enclosure {
@@ -91,7 +111,48 @@
     }
 
     audio::-webkit-media-controls-panel {
-      background-color: #2a2724;
+      background-color: #292c2e;
+    }
+
+    .player-navigation {
+      width: min(700px, 100%);
+      margin: -9px auto 27px;
+      display: grid;
+      grid-template-columns: 44px 1fr 44px;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .player-nav-button {
+      width: 44px;
+      height: 36px;
+      padding: 0;
+      border: 1px solid #3b3e40;
+      border-radius: 6px;
+      background: #1b1d1f;
+      color: #c8c8c5;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 17px;
+      line-height: 1;
+      cursor: pointer;
+      transition:
+        background 0.18s ease,
+        color 0.18s ease,
+        border-color 0.18s ease;
+    }
+
+    .player-nav-button:hover {
+      background: #282b2d;
+      color: #f0efec;
+      border-color: #55585a;
+    }
+
+    .player-nav-button:active {
+      background: #303335;
+    }
+
+    .player-nav-spacer {
+      height: 1px;
     }
 
     .now-playing {
@@ -122,8 +183,8 @@
       width: min(750px, 100%);
       margin: 0 auto;
       text-align: left;
-      background: #211e1b;
-      border: 1px solid #3b3631;
+      background: #1b1d1f;
+      border: 1px solid #393b3d;
       border-radius: 7px;
       overflow: hidden;
       box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12);
@@ -131,7 +192,7 @@
 
     .song {
       padding: 13px 15px;
-      border-bottom: 1px solid #332f2b;
+      border-bottom: 1px solid #303336;
       cursor: pointer;
       transition: background 0.15s ease, color 0.15s ease;
       color: #d5cec7;
@@ -143,12 +204,12 @@
     }
 
     .song:hover {
-      background: #292521;
+      background: #25282a;
       color: #f0ebe5;
     }
 
     .song.active {
-      background: #302b27;
+      background: #2b2e30;
       color: #f2ece5;
     }
 
@@ -161,7 +222,7 @@
       width: 100%;
       margin-top: 62px;
       padding: 72px 20px 25px;
-      border-top: 1px solid #302b27;
+      border-top: 1px solid #2b2e30;
       text-align: center;
     }
 
@@ -264,6 +325,21 @@
         font-size: 16px;
       }
 
+      .lion-background {
+        width: 135vw;
+        opacity: 0.12;
+      }
+
+      .player-navigation {
+        grid-template-columns: 40px 1fr 40px;
+        gap: 8px;
+      }
+
+      .player-nav-button {
+        width: 40px;
+        height: 34px;
+      }
+
       .song {
         padding: 12px 11px;
       }
@@ -330,6 +406,14 @@
 
 <body>
 
+  <img
+    id="lionBackground"
+    class="lion-background"
+    alt=""
+    aria-hidden="true"
+    draggable="false"
+  >
+
   <script>
     document.addEventListener("contextmenu", (event) => {
       event.preventDefault();
@@ -358,6 +442,32 @@
       noremoteplayback
       preload="metadata"
     ></audio>
+
+    <div class="player-navigation">
+
+      <button
+        id="previousSongButton"
+        class="player-nav-button"
+        type="button"
+        aria-label="Canción anterior"
+        title="Canción anterior"
+      >
+        ‹
+      </button>
+
+      <div class="player-nav-spacer"></div>
+
+      <button
+        id="nextSongButton"
+        class="player-nav-button"
+        type="button"
+        aria-label="Siguiente canción"
+        title="Siguiente canción"
+      >
+        ›
+      </button>
+
+    </div>
 
     <div class="now-playing">
 
@@ -476,6 +586,15 @@
 
     const audioPlayer =
       document.getElementById("audioPlayer");
+
+    const previousSongButton =
+      document.getElementById("previousSongButton");
+
+    const nextSongButton =
+      document.getElementById("nextSongButton");
+
+    const lionBackground =
+      document.getElementById("lionBackground");
 
     const songTitle =
       document.getElementById("songTitle");
@@ -1090,6 +1209,123 @@
 
 
     /* =====================================================
+       NAVEGACIÓN ANTERIOR / SIGUIENTE
+       ===================================================== */
+
+    function playPreviousSong() {
+
+      if (!albums.length) {
+        return;
+      }
+
+      if (currentSongIndex > 0) {
+
+        playSong(
+          currentSongIndex - 1
+        );
+
+        return;
+
+      }
+
+      if (currentAlbumIndex > 0) {
+
+        currentAlbumIndex--;
+
+      } else {
+
+        currentAlbumIndex =
+          albums.length - 1;
+
+      }
+
+      const album =
+        albums[currentAlbumIndex];
+
+      currentSongIndex =
+        album.songs.length - 1;
+
+      albumSelect.value =
+        currentAlbumIndex;
+
+      renderSongList();
+
+      loadCover(
+        album.cover
+      );
+
+      playSong(
+        currentSongIndex
+      );
+
+    }
+
+
+    function playNextSong() {
+
+      if (!albums.length) {
+        return;
+      }
+
+      const album =
+        albums[currentAlbumIndex];
+
+      if (
+        currentSongIndex <
+        album.songs.length - 1
+      ) {
+
+        playSong(
+          currentSongIndex + 1
+        );
+
+        return;
+
+      }
+
+      if (currentAlbumIndex <
+          albums.length - 1) {
+
+        currentAlbumIndex++;
+
+      } else {
+
+        currentAlbumIndex = 0;
+
+      }
+
+      currentSongIndex = 0;
+
+      albumSelect.value =
+        currentAlbumIndex;
+
+      const nextAlbum =
+        albums[currentAlbumIndex];
+
+      renderSongList();
+
+      loadCover(
+        nextAlbum.cover
+      );
+
+      playSong(0);
+
+    }
+
+
+    previousSongButton.addEventListener(
+      "click",
+      playPreviousSong
+    );
+
+
+    nextSongButton.addEventListener(
+      "click",
+      playNextSong
+    );
+
+
+    /* =====================================================
        CUANDO TERMINA UNA CANCIÓN
        ===================================================== */
 
@@ -1101,94 +1337,7 @@
           albums[currentAlbumIndex];
 
 
-        /*
-          Todavía quedan canciones
-          dentro del álbum.
-        */
-
-        if (
-          currentSongIndex <
-          album.songs.length - 1
-        ) {
-
-          playSong(
-            currentSongIndex + 1
-          );
-
-          return;
-
-        }
-
-
-        /*
-          Última canción del álbum.
-          Pasamos al siguiente álbum.
-        */
-
-        if (
-          currentAlbumIndex <
-          albums.length - 1
-        ) {
-
-          currentAlbumIndex++;
-
-
-          currentSongIndex = 0;
-
-
-          albumSelect.value =
-            currentAlbumIndex;
-
-
-          const nextAlbum =
-            albums[currentAlbumIndex];
-
-
-          renderSongList();
-
-
-          loadCover(
-            nextAlbum.cover
-          );
-
-
-          playSong(0);
-
-
-          return;
-
-        }
-
-
-        /*
-          Hemos terminado el último
-          álbum del catálogo.
-
-          Volvemos al primero.
-        */
-
-        currentAlbumIndex = 0;
-
-        currentSongIndex = 0;
-
-
-        albumSelect.value =
-          currentAlbumIndex;
-
-
-        const firstAlbum =
-          albums[0];
-
-
-        renderSongList();
-
-
-        loadCover(
-          firstAlbum.cover
-        );
-
-
-        playSong(0);
+        playNextSong();
 
       }
     );
@@ -1267,6 +1416,14 @@
 
         footerQr.src =
           result.qr;
+
+
+        if (result.lionsLogo) {
+
+          lionBackground.src =
+            result.lionsLogo;
+
+        }
 
 
         if (result.linktree) {
