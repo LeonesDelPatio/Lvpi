@@ -27,7 +27,7 @@
       position: fixed;
       top: 50%;
       left: 50%;
-      width: min(1700px, 100vw);
+      width: min(1180px, 100vw);
       height: auto;
       transform: translate(-50%, -50%);
       opacity: 0.12;
@@ -48,27 +48,41 @@
       user-select: none;
       -webkit-user-select: none;
       -webkit-touch-callout: none;
+      touch-action: none;
     }
 
     .protected-image::after,
-    .protected-image-background::after {
+    .protected-image-background::after,
+    .footer-image-protection::after {
       content: "";
       position: absolute;
       inset: 0;
       z-index: 2;
+      display: block;
       background: transparent;
       user-select: none;
       -webkit-user-select: none;
       -webkit-touch-callout: none;
       -webkit-user-drag: none;
       touch-action: none;
+      pointer-events: auto;
+    }
+
+    .protected-image img,
+    .protected-image-background img,
+    .footer-image-protection img {
+      pointer-events: none;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-user-drag: none;
+      -webkit-touch-callout: none;
     }
 
     .protected-image-background {
       position: fixed;
       top: 50%;
       left: 50%;
-      width: min(1700px, 100vw);
+      width: min(1180px, 100vw);
       height: auto;
       transform: translate(-50%, -50%);
       opacity: 0.12;
@@ -99,6 +113,7 @@
       user-select: none;
       -webkit-user-select: none;
       -webkit-touch-callout: none;
+      touch-action: none;
     }
 
     .footer-image-protection::after {
@@ -318,6 +333,36 @@
         border-color 0.18s ease;
     }
 
+    /* Iconos del reproductor dibujados en CSS: evita glifos/emoji del sistema móvil. */
+    .player-play {
+      font-size: 0;
+    }
+
+    .player-play::before {
+      content: "";
+      display: inline-block;
+      width: 0;
+      height: 0;
+      margin-left: 2px;
+      border-top: 6px solid transparent;
+      border-bottom: 6px solid transparent;
+      border-left: 9px solid currentColor;
+      vertical-align: middle;
+    }
+
+    .player-play[aria-label="Pausar"]::before {
+      width: 10px;
+      height: 12px;
+      margin-left: 0;
+      border: 0;
+      background: linear-gradient(
+        to right,
+        currentColor 0 3px,
+        transparent 3px 7px,
+        currentColor 7px 10px
+      );
+    }
+
     .player-button:hover {
       background: #292c2e;
       color: #f0efec;
@@ -482,7 +527,6 @@
       width: 100%;
       margin-top: 62px;
       padding: 72px 20px 25px;
-      border-top: 1px solid #2b2e30;
       text-align: center;
     }
 
@@ -492,13 +536,22 @@
     }
 
     .footer-logos {
-      display: flex;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
       align-items: center;
-      justify-content: center;
-      gap: 95px;
+      justify-items: center;
+      gap: 32px;
+      width: min(760px, 100%);
       min-height: 120px;
       margin: 0 auto 55px;
       padding: 0 20px;
+    }
+
+    .footer-image-protection {
+      display: block;
+      width: 100%;
+      max-width: 330px;
+      text-align: center;
     }
 
     .footer-logo {
@@ -517,14 +570,16 @@
         transform 0.25s ease;
     }
 
-    .footer-logo:hover,
-    .footer-image-protection:hover .footer-logo {
+    .footer-logo:hover {
       opacity: 0.95;
       transform: scale(1.035);
     }
 
     .footer-qr-link {
       display: block;
+      -webkit-touch-callout: none;
+      user-select: none;
+      -webkit-user-select: none;
       width: fit-content;
       margin: 0 auto;
       line-height: 0;
@@ -587,7 +642,19 @@
       }
 
       .protected-image-background {
-        width: 135vw;
+        width: 100vw;
+        height: 100dvh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .protected-image-background .lion-background {
+        width: 100%;
+        max-width: 100%;
+        max-height: 100%;
+        height: auto;
+        object-fit: contain;
       }
 
       .custom-player {
@@ -616,10 +683,14 @@
       }
 
       .footer-logos {
-        gap: 42px;
+        gap: 20px;
         min-height: 78px;
         margin-bottom: 40px;
-        padding: 0 10px;
+        padding: 0 8px;
+      }
+
+      .footer-image-protection {
+        max-width: 150px;
       }
 
       .footer-logo {
@@ -652,7 +723,12 @@
     @media (max-width: 400px) {
 
       .footer-logos {
-        gap: 28px;
+        gap: 12px;
+        padding: 0 4px;
+      }
+
+      .footer-image-protection {
+        max-width: 135px;
       }
 
       .footer-logo {
