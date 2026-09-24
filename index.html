@@ -38,6 +38,82 @@
       -webkit-user-drag: none;
     }
 
+    /* Capas transparentes de protección para imágenes.
+       No modifican la apariencia; simplemente reciben
+       la interacción táctil/ratón en lugar de la imagen. */
+    .protected-image,
+    .protected-image-background {
+      position: relative;
+      display: block;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-touch-callout: none;
+    }
+
+    .protected-image::after,
+    .protected-image-background::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      background: transparent;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-touch-callout: none;
+      -webkit-user-drag: none;
+      touch-action: none;
+    }
+
+    .protected-image-background {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      width: min(1180px, 100vw);
+      height: auto;
+      transform: translate(-50%, -50%);
+      opacity: 0.12;
+      z-index: 0;
+      pointer-events: auto;
+    }
+
+    .protected-image-background .lion-background {
+      position: relative;
+      top: auto;
+      left: auto;
+      width: 100%;
+      height: auto;
+      transform: none;
+      opacity: 1;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .cover-protection {
+      width: 100%;
+    }
+
+    .footer-image-protection {
+      position: relative;
+      display: inline-block;
+      line-height: 0;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-touch-callout: none;
+    }
+
+    .footer-image-protection::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      background: transparent;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-touch-callout: none;
+      -webkit-user-drag: none;
+      touch-action: none;
+    }
+
     .container,
     .site-footer {
       position: relative;
@@ -441,7 +517,8 @@
         transform 0.25s ease;
     }
 
-    .footer-logo:hover {
+    .footer-logo:hover,
+    .footer-image-protection:hover .footer-logo {
       opacity: 0.95;
       transform: scale(1.035);
     }
@@ -509,9 +586,8 @@
         font-size: 16px;
       }
 
-      .lion-background {
+      .protected-image-background {
         width: 135vw;
-        opacity: 0.12;
       }
 
       .custom-player {
@@ -595,18 +671,38 @@
 
 <body>
 
-  <img
-    id="lionBackground"
-    class="lion-background"
-    alt=""
+  <div
+    class="protected-image-background"
     aria-hidden="true"
-    draggable="false"
   >
+    <img
+      id="lionBackground"
+      class="lion-background"
+      alt=""
+      draggable="false"
+    >
+  </div>
 
   <script>
+
     document.addEventListener("contextmenu", (event) => {
-      event.preventDefault();
+      if (event.target.closest("img, .protected-image, .protected-image-background, .footer-image-protection")) {
+        event.preventDefault();
+      }
     });
+
+    document.addEventListener("dragstart", (event) => {
+      if (event.target.closest("img, .protected-image, .protected-image-background, .footer-image-protection")) {
+        event.preventDefault();
+      }
+    });
+
+    document.addEventListener("selectstart", (event) => {
+      if (event.target.closest("img, .protected-image, .protected-image-background, .footer-image-protection")) {
+        event.preventDefault();
+      }
+    });
+
   </script>
 
   <div class="container">
@@ -648,10 +744,13 @@
     </div>
 
     <div class="cover-container">
-      <img
-        id="coverImage"
-        alt="Portada del álbum"
-      >
+      <div class="protected-image cover-protection">
+        <img
+          id="coverImage"
+          alt="Portada del álbum"
+          draggable="false"
+        >
+      </div>
     </div>
 
     <audio
@@ -684,8 +783,8 @@
         id="nextSongButton"
         class="player-button player-next"
         type="button"
-        aria-label="Canción siguiente"
-        title="Canción siguiente"
+        aria-label="Siguiente canción"
+        title="Siguiente canción"
       >›</button>
 
       <input
@@ -752,19 +851,23 @@
 
       <div class="footer-logos">
 
-        <img
-          id="lnsLogo"
-          class="footer-logo"
-          alt="Leones del Patio"
-          draggable="false"
-        >
+        <div class="footer-image-protection">
+          <img
+            id="lnsLogo"
+            class="footer-logo"
+            alt="Leones del Patio"
+            draggable="false"
+          >
+        </div>
 
-        <img
-          id="baalLogo"
-          class="footer-logo"
-          alt="Baal"
-          draggable="false"
-        >
+        <div class="footer-image-protection">
+          <img
+            id="baalLogo"
+            class="footer-logo"
+            alt="Baal"
+            draggable="false"
+          >
+        </div>
 
       </div>
 
@@ -775,12 +878,14 @@
         target="_blank"
         rel="noopener noreferrer"
       >
-        <img
-          id="footerQr"
-          class="footer-qr"
-          alt="QR para redes sociales"
-          draggable="false"
-        >
+        <span class="footer-image-protection">
+          <img
+            id="footerQr"
+            class="footer-qr"
+            alt="QR para redes sociales"
+            draggable="false"
+          >
+        </span>
       </a>
 
       <a
@@ -829,6 +934,9 @@
 
     const RRSS_FUNCTION_URL =
       `${SUPABASE_URL}/functions/v1/get-rrss`;
+
+    const FONDO_FUNCTION_URL =
+      `${SUPABASE_URL}/functions/v1/get-fondo`;
 
 
     /* =====================================================
@@ -2026,14 +2134,6 @@
           result.qr;
 
 
-        if (result.lionsLogo) {
-
-          lionBackground.src =
-            result.lionsLogo;
-
-        }
-
-
         if (result.linktree) {
 
           footerQrLink.href =
@@ -2063,6 +2163,72 @@
 
 
     /* =====================================================
+       CARGAR FONDO DE LOS LEONES
+       ===================================================== */
+
+    async function loadFondo() {
+
+      try {
+
+        const response =
+          await fetch(
+            FONDO_FUNCTION_URL,
+            {
+              method: "GET",
+
+              headers: {
+                "apikey":
+                  SUPABASE_PUBLISHABLE_KEY
+              }
+            }
+          );
+
+
+        const result =
+          await response.json();
+
+
+        if (!response.ok) {
+
+          throw new Error(
+            result.error ||
+            "No se pudo obtener el fondo."
+          );
+
+        }
+
+
+        if (!result.fondo) {
+
+          throw new Error(
+            "No se recibió la URL del fondo."
+          );
+
+        }
+
+
+        lionBackground.src =
+          result.fondo;
+
+
+        console.log(
+          "Fondo de los leones cargado."
+        );
+
+
+      } catch (error) {
+
+        console.error(
+          "Error cargando el fondo:",
+          error
+        );
+
+      }
+
+    }
+
+
+    /* =====================================================
        INICIAR
        ===================================================== */
 
@@ -2071,6 +2237,8 @@
     loadCatalog();
 
     loadRRSS();
+
+    loadFondo();
 
 
   </script>
