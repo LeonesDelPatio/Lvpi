@@ -154,6 +154,70 @@
 
 
     /* ============================= */
+    /* RESET ESTADÍSTICAS */
+    /* ============================= */
+
+    .reset-panel {
+      margin-bottom: 52px;
+      padding: 22px 24px;
+      background: #111;
+      border: 1px solid #2b2b2b;
+      border-radius: 9px;
+    }
+
+    .reset-panel-title {
+      margin-bottom: 8px;
+      color: #d0d0d0;
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .reset-panel-text {
+      margin: 0 0 18px;
+      color: #777;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .reset-button {
+      background: transparent;
+      color: #a8a8a8;
+      border: 1px solid #444;
+      padding: 10px 16px;
+    }
+
+    .reset-button:hover {
+      background: #181818;
+      color: #f0f0f0;
+      border-color: #666;
+    }
+
+    .reset-button:disabled {
+      opacity: 0.5;
+      cursor: wait;
+      transform: none;
+    }
+
+    .reset-status {
+      margin-top: 12px;
+      min-height: 20px;
+      color: #777;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .reset-status.success {
+      color: #9aa88f;
+    }
+
+    .reset-status.error {
+      color: #e87878;
+    }
+
+
+    /* ============================= */
     /* RESUMEN */
     /* ============================= */
 
@@ -470,6 +534,35 @@
 
 
       <!-- RESUMEN -->
+
+      <div class="reset-panel">
+
+        <div class="reset-panel-title">
+          Reiniciar estadísticas
+        </div>
+
+        <p class="reset-panel-text">
+          Elimina todas las visitas y reproducciones registradas.
+          Esta acción no se puede deshacer.
+        </p>
+
+        <button
+          id="reset-stats-button"
+          class="reset-button"
+          type="button"
+          onclick="resetearEstadisticas()"
+        >
+          Resetear estadísticas
+        </button>
+
+        <div
+          id="reset-status"
+          class="reset-status"
+          aria-live="polite"
+        ></div>
+
+      </div>
+
 
       <div class="summary">
 
@@ -815,6 +908,96 @@
         container.appendChild(
           albumElement
         );
+      }
+    }
+
+
+    // ==================================
+    // RESET ESTADÍSTICAS
+    // ==================================
+
+    async function resetearEstadisticas() {
+
+      const confirmar = window.confirm(
+        "¿Seguro que quieres resetear las estadísticas?\\n\\n" +
+        "Se eliminarán todas las visitas y reproducciones registradas.\\n" +
+        "Esta acción no se puede deshacer."
+      );
+
+      if (!confirmar) {
+        return;
+      }
+
+      const button =
+        document.getElementById("reset-stats-button");
+
+      const status =
+        document.getElementById("reset-status");
+
+      button.disabled = true;
+      button.textContent = "Reseteando...";
+      status.className = "reset-status";
+      status.textContent = "Eliminando estadísticas...";
+
+      try {
+
+        const {
+          data,
+          error
+        } =
+          await client.functions.invoke(
+            "reset-stats",
+            {
+              body: {}
+            }
+          );
+
+        if (error) {
+          console.error(
+            "Error reset-stats:",
+            error
+          );
+
+          throw new Error(
+            error.message ||
+            "No se pudieron resetear las estadísticas."
+          );
+        }
+
+        if (!data || !data.success) {
+          throw new Error(
+            data?.error ||
+            "La función no confirmó el reinicio."
+          );
+        }
+
+        status.className =
+          "reset-status success";
+
+        status.textContent =
+          "Estadísticas restablecidas correctamente.";
+
+        await cargarEstadisticas();
+
+      } catch (error) {
+
+        console.error(
+          "Error al resetear estadísticas:",
+          error
+        );
+
+        status.className =
+          "reset-status error";
+
+        status.textContent =
+          error.message ||
+          "No se pudieron resetear las estadísticas.";
+
+      } finally {
+
+        button.disabled = false;
+        button.textContent =
+          "Resetear estadísticas";
       }
     }
 
