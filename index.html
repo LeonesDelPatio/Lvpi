@@ -742,7 +742,7 @@
           aria-haspopup="listbox"
           aria-expanded="false"
         >
-          Seleccionar álbum
+          Cargando catálogo...
         </button>
 
         <div id="customAlbumSelectMenu" class="custom-select-menu" role="listbox"></div>
@@ -812,7 +812,7 @@
 
     <div class="now-playing">
       <span class="now-playing-label">Reproduciendo</span>
-      <span id="songTitle">Ninguna canción</span>
+      <span id="songTitle">Selecciona una canción</span>
     </div>
 
     <div id="songList" class="songs"></div>
@@ -896,57 +896,46 @@
     let currentSongIndex = 0;
 
     /* =====================================================
-       FORMATEADOR Y LIMPIADOR VISUAL DE NOMBRES
+       LIMPIEZA VISUAL SEGURA (PRESERVA PALABRAS COMPLETAS)
        ===================================================== */
     function cleanText(text) {
       if (!text) return "";
 
       let str = String(text);
 
-      // 1. Obtener nombre base sin rutas de carpeta
+      // 1. Extraer nombre del archivo (quitar subcarpetas)
       str = str.split("/").pop().split("\\").pop();
 
-      // 2. Quitar extensiones de audio (.mp3, .wav, etc.)
+      // 2. Eliminar extensiones (.mp3, .wav, etc.)
       str = str.replace(/\.[^/.]+$/, "");
 
-      // 3. Quitar únicamente la numeración secuencial final entre paréntesis ej: " (01)", " (02)"
-      // Se conserva intacto el año ej: "(2024)"
+      // 3. Eliminar sólo índices secuenciales finales ej: " (01)", " (1)", "(02)"
       str = str.replace(/\s*\(\d{1,2}\)\s*$/, "");
 
       // 4. Reemplazar guiones bajos por espacios
       str = str.replace(/_/g, " ").trim();
 
-      // 5. Diccionario de tildes y eñes
-      const autoFixes = {
-        "gelida": "Gélida",
-        "ano": "Año",
-        "anos": "Años",
-        "cancion": "Canción",
-        "canciones": "Canciones",
-        "corazon": "Corazón",
-        "sueno": "Sueño",
-        "suenos": "Sueños",
-        "mas": "Más",
-        "tu": "Tú",
-        "el": "Él",
-        "manana": "Mañana",
-        "requiem": "Réquiem"
-      };
+      // 5. Mapeo con límites de palabra exactos para evitar sustituciones parciales
+      const wordReplacements = [
+        [/\bgelida\b/gi, "Gélida"],
+        [/\bano\b/gi, "Año"],
+        [/\banos\b/gi, "Años"],
+        [/\bcancion\b/gi, "Canción"],
+        [/\bcanciones\b/gi, "Canciones"],
+        [/\bcorazon\b/gi, "Corazón"],
+        [/\bsueno\b/gi, "Sueño"],
+        [/\bsuenos\b/gi, "Sueños"],
+        [/\bmas\b/gi, "Más"],
+        [/\bmanana\b/gi, "Mañana"],
+        [/\brequiem\b/gi, "Réquiem"]
+      ];
 
-      // 6. Aplicar formateo respetando el texto completo y capitalización
-      return str.split(" ").map(word => {
-        // Extraer palabra limpia para buscar en diccionario
-        const cleanWord = word.toLowerCase().replace(/[^a-zñáéíóú]/g, "");
-        if (autoFixes[cleanWord]) {
-          return word.replace(new RegExp(cleanWord, "i"), autoFixes[cleanWord]);
-        }
-        
-        // Mantener intactas partes con paréntesis o números
-        if (word.startsWith("(") || word.endsWith(")")) return word;
+      wordReplacements.forEach(([pattern, replacement]) => {
+        str = str.replace(pattern, replacement);
+      });
 
-        // Capitalizar primera letra de cada palabra
-        return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
-      }).join(" ");
+      // 6. Capitalizar palabras respetando estructura original
+      return str.replace(/\b[a-zñáéíóú]/gi, (char) => char.toUpperCase());
     }
 
     /* =====================================================
@@ -1007,9 +996,10 @@
         if (albums.length === 0) throw new Error("No se encontraron álbumes.");
 
         renderAlbumSelector();
-        selectAlbum(0);
+        selectAlbum(0, false); // No auto-reproducir inmediatamente al cargar
       } catch (error) {
         console.error("Error cargando catálogo:", error);
+        customAlbumSelectButton.textContent = "Error al cargar catálogo";
       }
     }
 
@@ -1082,7 +1072,6 @@
        ===================================================== */
     function getAlbumDisplayText(album) {
       const cleanName = cleanText(album.name);
-      // Si el nombre formateado ya incluye el año ej. "(2024)", no duplicar
       if (album.year && !cleanName.includes(`(${album.year})`)) {
         return `${cleanName} (${album.year})`;
       }
@@ -1108,7 +1097,7 @@
         item.dataset.index = index;
         item.setAttribute("role", "option");
         item.addEventListener("click", () => {
-          selectAlbum(index);
+          selectAlbum(index, true);
           closeAlbumSelector();
         });
 
@@ -1161,7 +1150,7 @@
       if (event.key === "Escape") closeAlbumSelector();
     });
 
-    function selectAlbum(index) {
+    function selectAlbum(index, autoplay = true) {
       currentAlbumIndex = Number(index);
       currentSongIndex = 0;
 
@@ -1171,10 +1160,15 @@
       const album = albums[currentAlbumIndex];
       renderSongList();
       loadCover(album.cover);
-      playSong(0);
+      
+      if (autoplay) {
+        playSong(0);
+      } else if (album.songs && album.songs.length > 0) {
+        songTitle.textContent = cleanText(album.songs[0].name || album.songs[0].path);
+      }
     }
 
-    albumSelect.addEventListener("change", () => selectAlbum(albumSelect.value));
+    albumSelect.addEventListener("change", () => selectAlbum(albumSelect.value, true));
 
     /* =====================================================
        LISTA DE CANCIONES Y REPRODUCCIÓN
@@ -1253,7 +1247,12 @@
     }
 
     playPauseButton.addEventListener("click", async () => {
-      if (!audioPlayer.src) return;
+      if (!audioPlayer.src) {
+        if (albums.length > 0 && albums[currentAlbumIndex].songs.length > 0) {
+          playSong(0);
+        }
+        return;
+      }
       try {
         audioPlayer.paused ? await audioPlayer.play() : audioPlayer.pause();
       } catch (error) {
@@ -1323,16 +1322,19 @@
     nextSongButton.addEventListener("click", playNextSong);
 
     /* =====================================================
-       INICIALIZACIÓN PARALELA
+       INICIALIZACIÓN PARALELA (CARGA ACELERADA)
        ===================================================== */
     audioPlayer.volume = Number(playerVolume.value);
     updatePlayerTime();
     updatePlayPauseButton();
 
-    registerVisit();
-    loadCatalog();
-    loadRRSS();
-    loadFondo();
+    // Cargar todo en paralelo usando Promise.all para máxima velocidad
+    Promise.all([
+      loadCatalog(),
+      loadFondo(),
+      loadRRSS(),
+      registerVisit()
+    ]).catch(err => console.error("Error en inicialización:", err));
   </script>
 </body>
 </html>
