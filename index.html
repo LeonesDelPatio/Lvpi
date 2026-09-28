@@ -2,16 +2,10 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lvpi</title>
 
   <style>
-
     * {
       box-sizing: border-box;
     }
@@ -21,6 +15,7 @@
       background: #151719;
       color: #eeeae5;
       font-family: Arial, Helvetica, sans-serif;
+      -webkit-touch-callout: none;
     }
 
     .lion-background {
@@ -36,13 +31,6 @@
       user-select: none;
       -webkit-user-select: none;
       -webkit-user-drag: none;
-    }
-
-    /* Capas transparentes de protección para imágenes.
-       No modifican la apariencia; simplemente reciben
-       la interacción táctil/ratón en lugar de la imagen. */
-    body {
-      -webkit-touch-callout: none;
     }
 
     img {
@@ -155,7 +143,6 @@
       color: #eee9e3;
     }
 
-    /* Scrollbars integradas con la paleta de la interfaz */
     html {
       scrollbar-color: #4a4d4f #151719;
       scrollbar-width: thin;
@@ -214,9 +201,10 @@
       cursor: pointer;
       outline: none;
       position: relative;
-      transition:
-        background 0.18s ease,
-        border-color 0.18s ease;
+      transition: background 0.18s ease, border-color 0.18s ease;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .custom-select-button::after {
@@ -275,9 +263,10 @@
       letter-spacing: 0.01em;
       text-align: left;
       cursor: pointer;
-      transition:
-        background 0.15s ease,
-        color 0.15s ease;
+      transition: background 0.15s ease, color 0.15s ease;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .custom-select-option:hover,
@@ -331,10 +320,7 @@
       font-size: 17px;
       line-height: 1;
       cursor: pointer;
-      transition:
-        background 0.18s ease,
-        color 0.18s ease,
-        border-color 0.18s ease;
+      transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
     }
 
     .player-button:hover {
@@ -505,6 +491,9 @@
       line-height: 1.5;
       letter-spacing: 0.015em;
       color: #eee8e1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .songs {
@@ -525,6 +514,9 @@
       transition: background 0.15s ease, color 0.15s ease;
       color: #d5cec7;
       letter-spacing: 0.01em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .song:last-child {
@@ -540,11 +532,6 @@
       background: #2b2e30;
       color: #f2ece5;
     }
-
-
-    /* =====================================================
-       FOOTER
-       ===================================================== */
 
     .site-footer {
       width: 100%;
@@ -582,9 +569,7 @@
       -webkit-user-select: none;
       -webkit-user-drag: none;
       pointer-events: auto;
-      transition:
-        opacity 0.25s ease,
-        transform 0.25s ease;
+      transition: opacity 0.25s ease, transform 0.25s ease;
     }
 
     .footer-logo:hover {
@@ -635,13 +620,7 @@
       letter-spacing: 0.02em;
     }
 
-
-    /* =====================================================
-       RESPONSIVE
-       ===================================================== */
-
     @media (max-width: 600px) {
-
       .container {
         padding-top: 30px;
       }
@@ -697,19 +676,14 @@
       }
 
       .footer-logos {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
         gap: 24px;
         min-height: 78px;
         margin-bottom: 40px;
-        padding: 0;
       }
 
       .footer-logo {
         height: 62px;
-        width: 100%;
         max-width: 100%;
-        object-fit: contain;
       }
 
       .footer-logo:hover {
@@ -727,15 +701,11 @@
 
       .footer-copyright {
         margin-top: 42px;
-        text-align: center;
         font-size: 9px;
       }
-
     }
 
-
     @media (max-width: 400px) {
-
       .footer-logos {
         gap: 18px;
       }
@@ -748,64 +718,23 @@
         width: 115px;
         height: 115px;
       }
-
     }
-
   </style>
 </head>
 
 <body>
 
-  <div
-    class="protected-image-background"
-    aria-hidden="true"
-  >
-    <img
-      id="lionBackground"
-      class="lion-background"
-      alt=""
-      draggable="false"
-    >
+  <div class="protected-image-background" aria-hidden="true">
+    <img id="lionBackground" class="lion-background" alt="" draggable="false">
   </div>
 
-  <script>
-
-    document.addEventListener("contextmenu", (event) => {
-      event.preventDefault();
-    });
-
-    document.addEventListener("dragstart", (event) => {
-      if (event.target.closest("img, .protected-image, .protected-image-background, .footer-image-protection")) {
-        event.preventDefault();
-      }
-    });
-
-    document.addEventListener("selectstart", (event) => {
-      if (event.target.closest("img, .protected-image, .protected-image-background, .footer-image-protection")) {
-        event.preventDefault();
-      }
-    });
-
-  </script>
-
   <div class="container">
-
     <h1>Lvpi</h1>
 
     <div class="album-selector">
+      <select id="albumSelect" class="album-select-native" aria-hidden="true" tabindex="-1"></select>
 
-      <select
-        id="albumSelect"
-        class="album-select-native"
-        aria-hidden="true"
-        tabindex="-1"
-      ></select>
-
-      <div
-        id="customAlbumSelect"
-        class="custom-select"
-      >
-
+      <div id="customAlbumSelect" class="custom-select">
         <button
           id="customAlbumSelectButton"
           class="custom-select-button"
@@ -816,36 +745,19 @@
           Seleccionar álbum
         </button>
 
-        <div
-          id="customAlbumSelectMenu"
-          class="custom-select-menu"
-          role="listbox"
-        ></div>
-
+        <div id="customAlbumSelectMenu" class="custom-select-menu" role="listbox"></div>
       </div>
-
     </div>
 
     <div class="cover-container">
       <div class="protected-image cover-protection">
-        <img
-          id="coverImage"
-          alt="Portada del álbum"
-          draggable="false"
-        >
+        <img id="coverImage" alt="Portada del álbum" draggable="false">
       </div>
     </div>
 
-    <audio
-      id="audioPlayer"
-      preload="metadata"
-    ></audio>
+    <audio id="audioPlayer" preload="metadata"></audio>
 
-    <div
-      class="custom-player"
-      aria-label="Reproductor de audio"
-    >
-
+    <div class="custom-player" aria-label="Reproductor de audio">
       <button
         id="previousSongButton"
         class="player-button player-previous"
@@ -882,12 +794,7 @@
       >
 
       <div class="player-volume-wrap">
-
-        <span
-          class="player-volume-icon"
-          aria-hidden="true"
-        >◖</span>
-
+        <span class="player-volume-icon" aria-hidden="true">◖</span>
         <input
           id="playerVolume"
           class="player-volume"
@@ -898,1437 +805,464 @@
           step="0.01"
           aria-label="Volumen"
         >
-
       </div>
 
-      <div
-        id="playerTime"
-        class="player-time"
-      >0:00 / 0:00</div>
-
+      <div id="playerTime" class="player-time">0:00 / 0:00</div>
     </div>
 
     <div class="now-playing">
-
-      <span class="now-playing-label">
-        Reproduciendo
-      </span>
-
-      <span id="songTitle">
-        Ninguna canción
-      </span>
-
+      <span class="now-playing-label">Reproduciendo</span>
+      <span id="songTitle">Ninguna canción</span>
     </div>
 
-    <div
-      id="songList"
-      class="songs"
-    ></div>
-
+    <div id="songList" class="songs"></div>
   </div>
 
-
   <footer class="site-footer">
-
     <div class="footer-content">
-
       <div class="footer-logos">
-
         <div class="footer-image-protection">
-          <img
-            id="lnsLogo"
-            class="footer-logo"
-            alt="Leones del Patio"
-            draggable="false"
-          >
+          <img id="lnsLogo" class="footer-logo" alt="Leones del Patio" loading="lazy" draggable="false">
         </div>
-
         <div class="footer-image-protection">
-          <img
-            id="baalLogo"
-            class="footer-logo"
-            alt="Baal"
-            draggable="false"
-          >
+          <img id="baalLogo" class="footer-logo" alt="Baal" loading="lazy" draggable="false">
         </div>
-
       </div>
 
-      <a
-        id="footerQrLink"
-        class="footer-qr-link"
-        href="https://linktr.ee/LvpiAKAJohnOPerdono"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
+      <a id="footerQrLink" class="footer-qr-link" href="https://linktr.ee/LvpiAKAJohnOPerdono" target="_blank" rel="noopener noreferrer">
         <span class="footer-image-protection">
-          <img
-            id="footerQr"
-            class="footer-qr"
-            alt="QR para redes sociales"
-            draggable="false"
-          >
+          <img id="footerQr" class="footer-qr" alt="QR para redes sociales" loading="lazy" draggable="false">
         </span>
       </a>
 
-      <a
-        id="footerSocialLink"
-        class="footer-social-link"
-        href="https://linktr.ee/LvpiAKAJohnOPerdono"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
+      <a id="footerSocialLink" class="footer-social-link" href="https://linktr.ee/LvpiAKAJohnOPerdono" target="_blank" rel="noopener noreferrer">
         Click para RRSS
       </a>
-
     </div>
 
     <div class="footer-copyright">
       © Todos los derechos reservados para Lvpi y Leones del Patio
     </div>
-
   </footer>
 
-
   <script>
-
     /* =====================================================
        CONFIGURACIÓN SUPABASE
        ===================================================== */
+    const SUPABASE_URL = "https://cavnifartuktwmchyrdl.supabase.co";
+    const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_WC_7KWhh6gq-pvL-97D3VA_78DyHmOM";
 
-    const SUPABASE_URL =
-      "https://cavnifartuktwmchyrdl.supabase.co";
+    const CATALOG_FUNCTION_URL = `${SUPABASE_URL}/functions/v1/get-catalog`;
+    const AUDIO_FUNCTION_URL = `${SUPABASE_URL}/functions/v1/get-audio-url`;
+    const REGISTER_PLAY_FUNCTION_URL = `${SUPABASE_URL}/functions/v1/register-play`;
+    const REGISTER_VISIT_FUNCTION_URL = `${SUPABASE_URL}/functions/v1/register-visit`;
+    const RRSS_FUNCTION_URL = `${SUPABASE_URL}/functions/v1/get-rrss`;
+    const FONDO_FUNCTION_URL = `${SUPABASE_URL}/functions/v1/get-fondo`;
 
-    const SUPABASE_PUBLISHABLE_KEY =
-      "sb_publishable_WC_7KWhh6gq-pvL-97D3VA_78DyHmOM";
-
-
-    const CATALOG_FUNCTION_URL =
-      `${SUPABASE_URL}/functions/v1/get-catalog`;
-
-    const AUDIO_FUNCTION_URL =
-      `${SUPABASE_URL}/functions/v1/get-audio-url`;
-
-    const REGISTER_PLAY_FUNCTION_URL =
-      `${SUPABASE_URL}/functions/v1/register-play`;
-
-    const REGISTER_VISIT_FUNCTION_URL =
-      `${SUPABASE_URL}/functions/v1/register-visit`;
-
-    const RRSS_FUNCTION_URL =
-      `${SUPABASE_URL}/functions/v1/get-rrss`;
-
-    const FONDO_FUNCTION_URL =
-      `${SUPABASE_URL}/functions/v1/get-fondo`;
-
+    const FETCH_HEADERS = {
+      "apikey": SUPABASE_PUBLISHABLE_KEY,
+      "Content-Type": "application/json"
+    };
 
     /* =====================================================
        ELEMENTOS HTML
        ===================================================== */
-
-    const albumSelect =
-      document.getElementById("albumSelect");
-
-    const customAlbumSelect =
-      document.getElementById("customAlbumSelect");
-
-    const customAlbumSelectButton =
-      document.getElementById("customAlbumSelectButton");
-
-    const customAlbumSelectMenu =
-      document.getElementById("customAlbumSelectMenu");
-
-    const coverImage =
-      document.getElementById("coverImage");
-
-    const audioPlayer =
-      document.getElementById("audioPlayer");
-
-    const previousSongButton =
-      document.getElementById("previousSongButton");
-
-    const nextSongButton =
-      document.getElementById("nextSongButton");
-
-    const playPauseButton =
-      document.getElementById("playPauseButton");
-
-    const playerProgress =
-      document.getElementById("playerProgress");
-
-    const playerVolume =
-      document.getElementById("playerVolume");
-
-    const playerTime =
-      document.getElementById("playerTime");
-
-    const lionBackground =
-      document.getElementById("lionBackground");
-
-    const songTitle =
-      document.getElementById("songTitle");
-
-    const songList =
-      document.getElementById("songList");
-
-    const lnsLogo =
-      document.getElementById("lnsLogo");
-
-    const baalLogo =
-      document.getElementById("baalLogo");
-
-    const footerQr =
-      document.getElementById("footerQr");
-
-    const footerQrLink =
-      document.getElementById("footerQrLink");
-
-    const footerSocialLink =
-      document.getElementById("footerSocialLink");
-
+    const albumSelect = document.getElementById("albumSelect");
+    const customAlbumSelect = document.getElementById("customAlbumSelect");
+    const customAlbumSelectButton = document.getElementById("customAlbumSelectButton");
+    const customAlbumSelectMenu = document.getElementById("customAlbumSelectMenu");
+    const coverImage = document.getElementById("coverImage");
+    const audioPlayer = document.getElementById("audioPlayer");
+    const previousSongButton = document.getElementById("previousSongButton");
+    const nextSongButton = document.getElementById("nextSongButton");
+    const playPauseButton = document.getElementById("playPauseButton");
+    const playerProgress = document.getElementById("playerProgress");
+    const playerVolume = document.getElementById("playerVolume");
+    const playerTime = document.getElementById("playerTime");
+    const lionBackground = document.getElementById("lionBackground");
+    const songTitle = document.getElementById("songTitle");
+    const songList = document.getElementById("songList");
+    const lnsLogo = document.getElementById("lnsLogo");
+    const baalLogo = document.getElementById("baalLogo");
+    const footerQr = document.getElementById("footerQr");
+    const footerQrLink = document.getElementById("footerQrLink");
+    const footerSocialLink = document.getElementById("footerSocialLink");
 
     /* =====================================================
-       VARIABLES
+       ESTADO
        ===================================================== */
-
     let albums = [];
-
     let currentAlbumIndex = 0;
-
     let currentSongIndex = 0;
 
+    /* =====================================================
+       PROTECCIÓN CONTRA COPIA/ARRASTRE
+       ===================================================== */
+    document.addEventListener("contextmenu", (event) => event.preventDefault());
+
+    document.addEventListener("dragstart", (event) => {
+      if (event.target.closest("img, .protected-image, .protected-image-background, .footer-image-protection")) {
+        event.preventDefault();
+      }
+    });
+
+    document.addEventListener("selectstart", (event) => {
+      if (event.target.closest("img, .protected-image, .protected-image-background, .footer-image-protection")) {
+        event.preventDefault();
+      }
+    });
 
     /* =====================================================
-       REGISTRAR VISITA
+       API / SUPABASE
        ===================================================== */
-
     async function registerVisit() {
-
       try {
-
-        const response =
-          await fetch(
-            REGISTER_VISIT_FUNCTION_URL,
-            {
-              method: "POST",
-
-              headers: {
-                "apikey":
-                  SUPABASE_PUBLISHABLE_KEY,
-
-                "Content-Type":
-                  "application/json"
-              },
-
-              body:
-                JSON.stringify({})
-            }
-          );
-
-
-        const result =
-          await response.json();
-
-
-        if (!response.ok) {
-
-          throw new Error(
-            result.error ||
-            "No se pudo registrar la visita."
-          );
-
-        }
-
-
-        console.log(
-          "Visita registrada."
-        );
-
-
+        await fetch(REGISTER_VISIT_FUNCTION_URL, {
+          method: "POST",
+          headers: FETCH_HEADERS,
+          body: JSON.stringify({})
+        });
       } catch (error) {
-
-        /*
-          Un fallo de estadísticas
-          nunca debe impedir que
-          la web continúe cargando.
-        */
-
-        console.error(
-          "Error registrando visita:",
-          error
-        );
-
+        console.error("Error registrando visita:", error);
       }
-
     }
 
-
-    /* =====================================================
-       OBTENER CATÁLOGO
-       ===================================================== */
+    async function registerPlay(album, song) {
+      try {
+        await fetch(REGISTER_PLAY_FUNCTION_URL, {
+          method: "POST",
+          headers: FETCH_HEADERS,
+          body: JSON.stringify({ album, song })
+        });
+      } catch (error) {
+        console.error("Error registrando reproducción:", error);
+      }
+    }
 
     async function loadCatalog() {
-
       try {
+        const response = await fetch(CATALOG_FUNCTION_URL, {
+          method: "POST",
+          headers: FETCH_HEADERS
+        });
+        const result = await response.json();
 
-        const response =
-          await fetch(
-            CATALOG_FUNCTION_URL,
-            {
-              method: "POST",
+        if (!response.ok) throw new Error(result.error || "No se pudo cargar el catálogo.");
 
-              headers: {
-                "apikey":
-                  SUPABASE_PUBLISHABLE_KEY,
-
-                "Content-Type":
-                  "application/json"
-              }
-            }
-          );
-
-
-        const result =
-          await response.json();
-
-
-        if (!response.ok) {
-
-          throw new Error(
-            result.error ||
-            "No se pudo cargar el catálogo."
-          );
-
-        }
-
-
-        albums =
-          result.albums || [];
-
-
-        if (albums.length === 0) {
-
-          throw new Error(
-            "No se encontraron álbumes."
-          );
-
-        }
-
+        albums = result.albums || [];
+        if (albums.length === 0) throw new Error("No se encontraron álbumes.");
 
         renderAlbumSelector();
-
-
-        /*
-          Seleccionamos automáticamente
-          el álbum más reciente.
-        */
-
         selectAlbum(0);
-
-
       } catch (error) {
-
-        console.error(
-          "Error cargando catálogo:",
-          error
-        );
-
+        console.error("Error cargando catálogo:", error);
       }
-
     }
 
+    async function loadCover(coverPath) {
+      if (!coverPath) {
+        coverImage.removeAttribute("src");
+        return;
+      }
+
+      try {
+        const response = await fetch(AUDIO_FUNCTION_URL, {
+          method: "POST",
+          headers: FETCH_HEADERS,
+          body: JSON.stringify({ path: coverPath })
+        });
+        const result = await response.json();
+
+        if (!response.ok || !result.signedUrl) {
+          throw new Error(result.error || "No se pudo obtener la portada.");
+        }
+
+        coverImage.src = result.signedUrl;
+      } catch (error) {
+        console.error("Error cargando portada:", error);
+        coverImage.removeAttribute("src");
+      }
+    }
+
+    async function loadRRSS() {
+      try {
+        const response = await fetch(RRSS_FUNCTION_URL, {
+          method: "GET",
+          headers: { "apikey": SUPABASE_PUBLISHABLE_KEY }
+        });
+        const result = await response.json();
+
+        if (!response.ok) throw new Error(result.error || "Error al obtener RRSS.");
+
+        if (result.lnsLogo) lnsLogo.src = result.lnsLogo;
+        if (result.baalLogo) baalLogo.src = result.baalLogo;
+        if (result.qr) footerQr.src = result.qr;
+
+        if (result.linktree) {
+          footerQrLink.href = result.linktree;
+          footerSocialLink.href = result.linktree;
+        }
+      } catch (error) {
+        console.error("Error cargando recursos de RRSS:", error);
+      }
+    }
+
+    async function loadFondo() {
+      try {
+        const response = await fetch(FONDO_FUNCTION_URL, {
+          method: "GET",
+          headers: { "apikey": SUPABASE_PUBLISHABLE_KEY }
+        });
+        const result = await response.json();
+
+        if (!response.ok || !result.fondo) throw new Error(result.error || "Error al obtener fondo.");
+
+        lionBackground.src = result.fondo;
+      } catch (error) {
+        console.error("Error cargando el fondo:", error);
+      }
+    }
 
     /* =====================================================
        SELECTOR DE ÁLBUMES
        ===================================================== */
-
     function renderAlbumSelector() {
-
       albumSelect.innerHTML = "";
       customAlbumSelectMenu.innerHTML = "";
 
+      albums.forEach((album, index) => {
+        const option = document.createElement("option");
+        option.value = index;
+        option.textContent = `${album.name} (${album.year})`;
+        albumSelect.appendChild(option);
 
-      albums.forEach(
-        (album, index) => {
+        const item = document.createElement("button");
+        item.type = "button";
+        item.className = "custom-select-option";
+        item.textContent = `${album.name} (${album.year})`;
+        item.dataset.index = index;
+        item.setAttribute("role", "option");
+        item.addEventListener("click", () => {
+          selectAlbum(index);
+          closeAlbumSelector();
+        });
 
-          const option =
-            document.createElement("option");
-
-          option.value =
-            index;
-
-          option.textContent =
-            `${album.name} (${album.year})`;
-
-          albumSelect.appendChild(
-            option
-          );
-
-
-          const item =
-            document.createElement("button");
-
-          item.type =
-            "button";
-
-          item.className =
-            "custom-select-option";
-
-          item.textContent =
-            `${album.name} (${album.year})`;
-
-          item.dataset.index =
-            index;
-
-          item.setAttribute(
-            "role",
-            "option"
-          );
-
-          item.addEventListener(
-            "click",
-            () => {
-
-              selectAlbum(index);
-              closeAlbumSelector();
-
-            }
-          );
-
-          customAlbumSelectMenu.appendChild(
-            item
-          );
-
-        }
-      );
-
+        customAlbumSelectMenu.appendChild(item);
+      });
 
       updateCustomAlbumSelector();
-
     }
 
-
     function updateCustomAlbumSelector() {
+      const album = albums[currentAlbumIndex];
+      if (!album) return;
 
-      const album =
-        albums[currentAlbumIndex];
-
-      if (!album) {
-        return;
-      }
-
-
-      customAlbumSelectButton.textContent =
-        `${album.name} (${album.year})`;
-
+      customAlbumSelectButton.textContent = `${album.name} (${album.year})`;
+      coverImage.alt = `Portada de ${album.name}`;
 
       customAlbumSelectMenu
         .querySelectorAll(".custom-select-option")
-        .forEach(
-          (item) => {
-
-            const active =
-              Number(item.dataset.index) ===
-              currentAlbumIndex;
-
-            item.classList.toggle(
-              "active",
-              active
-            );
-
-            item.setAttribute(
-              "aria-selected",
-              active ? "true" : "false"
-            );
-
-          }
-        );
-
+        .forEach((item) => {
+          const active = Number(item.dataset.index) === currentAlbumIndex;
+          item.classList.toggle("active", active);
+          item.setAttribute("aria-selected", active ? "true" : "false");
+        });
     }
-
 
     function openAlbumSelector() {
-
-      customAlbumSelect.classList.add(
-        "open"
-      );
-
-      customAlbumSelectButton.setAttribute(
-        "aria-expanded",
-        "true"
-      );
-
+      customAlbumSelect.classList.add("open");
+      customAlbumSelectButton.setAttribute("aria-expanded", "true");
     }
-
 
     function closeAlbumSelector() {
-
-      customAlbumSelect.classList.remove(
-        "open"
-      );
-
-      customAlbumSelectButton.setAttribute(
-        "aria-expanded",
-        "false"
-      );
-
+      customAlbumSelect.classList.remove("open");
+      customAlbumSelectButton.setAttribute("aria-expanded", "false");
     }
 
+    customAlbumSelectButton.addEventListener("click", (event) => {
+      event.stopPropagation();
+      customAlbumSelect.classList.contains("open") ? closeAlbumSelector() : openAlbumSelector();
+    });
 
-    customAlbumSelectButton.addEventListener(
-      "click",
-      (event) => {
-
-        event.stopPropagation();
-
-        if (
-          customAlbumSelect.classList.contains(
-            "open"
-          )
-        ) {
-
-          closeAlbumSelector();
-
-        } else {
-
-          openAlbumSelector();
-
-        }
-
+    document.addEventListener("click", (event) => {
+      if (!customAlbumSelect.contains(event.target)) {
+        closeAlbumSelector();
       }
-    );
+    });
 
-
-    document.addEventListener(
-      "click",
-      (event) => {
-
-        if (
-          !customAlbumSelect.contains(
-            event.target
-          )
-        ) {
-
-          closeAlbumSelector();
-
-        }
-
-      }
-    );
-
-
-
-    /* =====================================================
-       CAMBIAR DE ÁLBUM
-       ===================================================== */
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") closeAlbumSelector();
+    });
 
     function selectAlbum(index) {
-
-      currentAlbumIndex =
-        Number(index);
-
+      currentAlbumIndex = Number(index);
       currentSongIndex = 0;
 
-
-      albumSelect.value =
-        currentAlbumIndex;
-
+      albumSelect.value = currentAlbumIndex;
       updateCustomAlbumSelector();
 
-
-      const album =
-        albums[currentAlbumIndex];
-
-
+      const album = albums[currentAlbumIndex];
       renderSongList();
-
-
-      loadCover(
-        album.cover
-      );
-
-
-      /*
-        Al seleccionar un álbum,
-        comenzamos automáticamente
-        por la canción 01.
-      */
-
+      loadCover(album.cover);
       playSong(0);
-
     }
 
+    albumSelect.addEventListener("change", () => selectAlbum(albumSelect.value));
 
     /* =====================================================
-       CAMBIO MANUAL DESDE EL SELECT
+       LISTA DE CANCIONES Y REPRODUCCIÓN
        ===================================================== */
-
-    albumSelect.addEventListener(
-      "change",
-      () => {
-
-        selectAlbum(
-          Number(
-            albumSelect.value
-          )
-        );
-
-      }
-    );
-
-
-    /* =====================================================
-       MOSTRAR LISTA DE CANCIONES
-       ===================================================== */
-
     function renderSongList() {
-
       songList.innerHTML = "";
+      const album = albums[currentAlbumIndex];
 
+      album.songs.forEach((song, index) => {
+        const element = document.createElement("div");
+        element.className = "song";
+        if (index === currentSongIndex) element.classList.add("active");
+        element.textContent = song.name;
 
-      const album =
-        albums[currentAlbumIndex];
-
-
-      album.songs.forEach(
-        (song, index) => {
-
-          const element =
-            document.createElement("div");
-
-
-          element.className =
-            "song";
-
-
-          if (
-            index === currentSongIndex
-          ) {
-
-            element.classList.add(
-              "active"
-            );
-
-          }
-
-
-          element.textContent =
-            song.name;
-
-
-          element.addEventListener(
-            "click",
-            () => {
-
-              playSong(index);
-
-            }
-          );
-
-
-          songList.appendChild(
-            element
-          );
-
-        }
-      );
-
+        element.addEventListener("click", () => playSong(index));
+        songList.appendChild(element);
+      });
     }
 
+    async function playSong(index) {
+      const album = albums[currentAlbumIndex];
+      const song = album?.songs[index];
 
-    /* =====================================================
-       OBTENER PORTADA
-       ===================================================== */
+      if (!song) return;
 
-    async function loadCover(
-      coverPath
-    ) {
-
-      if (!coverPath) {
-
-        coverImage.removeAttribute(
-          "src"
-        );
-
-        return;
-
-      }
-
-
-      try {
-
-        const response =
-          await fetch(
-            AUDIO_FUNCTION_URL,
-            {
-              method: "POST",
-
-              headers: {
-                "apikey":
-                  SUPABASE_PUBLISHABLE_KEY,
-
-                "Content-Type":
-                  "application/json"
-              },
-
-              body:
-                JSON.stringify({
-                  path:
-                    coverPath
-                })
-            }
-          );
-
-
-        const result =
-          await response.json();
-
-
-        if (!response.ok) {
-
-          throw new Error(
-            result.error ||
-            "No se pudo obtener la portada."
-          );
-
-        }
-
-
-        if (!result.signedUrl) {
-
-          throw new Error(
-            "Supabase no devolvió una URL firmada para la portada."
-          );
-
-        }
-
-
-        coverImage.src =
-          result.signedUrl;
-
-
-      } catch (error) {
-
-        console.error(
-          "Error cargando portada:",
-          error
-        );
-
-
-        coverImage.removeAttribute(
-          "src"
-        );
-
-      }
-
-    }
-
-
-    /* =====================================================
-       REGISTRAR REPRODUCCIÓN
-       ===================================================== */
-
-    async function registerPlay(
-      album,
-      song
-    ) {
-
-      try {
-
-        const response =
-          await fetch(
-            REGISTER_PLAY_FUNCTION_URL,
-            {
-              method: "POST",
-
-              headers: {
-                "apikey":
-                  SUPABASE_PUBLISHABLE_KEY,
-
-                "Content-Type":
-                  "application/json"
-              },
-
-              body:
-                JSON.stringify({
-                  album:
-                    album,
-
-                  song:
-                    song
-                })
-            }
-          );
-
-
-        const result =
-          await response.json();
-
-
-        if (!response.ok) {
-
-          throw new Error(
-            result.error ||
-            "No se pudo registrar la reproducción."
-          );
-
-        }
-
-
-        console.log(
-          "Reproducción registrada:",
-          album,
-          song
-        );
-
-
-      } catch (error) {
-
-        /*
-          Un fallo de estadísticas
-          nunca debe detener la música.
-        */
-
-        console.error(
-          "Error registrando reproducción:",
-          error
-        );
-
-      }
-
-    }
-
-
-    /* =====================================================
-       REPRODUCIR CANCIÓN
-       ===================================================== */
-
-    async function playSong(
-      index
-    ) {
-
-      const album =
-        albums[currentAlbumIndex];
-
-
-      const song =
-        album.songs[index];
-
-
-      if (!song) {
-
-        return;
-
-      }
-
-
-      currentSongIndex =
-        index;
-
-
-      songTitle.textContent =
-        song.name;
-
-
+      currentSongIndex = index;
+      songTitle.textContent = song.name;
       renderSongList();
 
-
       try {
+        const response = await fetch(AUDIO_FUNCTION_URL, {
+          method: "POST",
+          headers: FETCH_HEADERS,
+          body: JSON.stringify({ path: song.path })
+        });
+        const result = await response.json();
 
-        /*
-          Obtener URL firmada
-          para el archivo de audio.
-        */
-
-        const response =
-          await fetch(
-            AUDIO_FUNCTION_URL,
-            {
-              method: "POST",
-
-              headers: {
-                "apikey":
-                  SUPABASE_PUBLISHABLE_KEY,
-
-                "Content-Type":
-                  "application/json"
-              },
-
-              body:
-                JSON.stringify({
-                  path:
-                    song.path
-                })
-            }
-          );
-
-
-        const result =
-          await response.json();
-
-
-        if (!response.ok) {
-
-          throw new Error(
-            result.error ||
-            "No se pudo obtener el audio."
-          );
-
+        if (!response.ok || !result.signedUrl) {
+          throw new Error(result.error || "No se pudo obtener la URL de audio.");
         }
 
-
-        if (!result.signedUrl) {
-
-          throw new Error(
-            "Supabase no devolvió una URL firmada."
-          );
-
-        }
-
-
-        /*
-          Cargar el audio.
-        */
-
-        audioPlayer.src =
-          result.signedUrl;
-
-
-        /*
-          Intentar comenzar la reproducción.
-        */
-
+        audioPlayer.src = result.signedUrl;
         await audioPlayer.play();
-
-
-        /*
-          MUY IMPORTANTE:
-          solo llegamos aquí si play()
-          se ha iniciado correctamente.
-
-          Por tanto, aquí registramos
-          la reproducción.
-        */
-
-        await registerPlay(
-          album.name,
-          song.name
-        );
-
-
+        registerPlay(album.name, song.name);
       } catch (error) {
-
-        console.error(
-          "Error reproduciendo canción:",
-          error
-        );
-
+        console.error("Error reproduciendo canción:", error);
       }
-
     }
-
 
     /* =====================================================
-       CONTROLES DEL REPRODUCTOR
+       CONTROLES Y TIEMPO
        ===================================================== */
-
     function formatPlayerTime(seconds) {
-
-      if (
-        !Number.isFinite(seconds) ||
-        seconds < 0
-      ) {
-
-        return "0:00";
-
-      }
-
-
-      const minutes =
-        Math.floor(seconds / 60);
-
-      const remainingSeconds =
-        Math.floor(seconds % 60)
-          .toString()
-          .padStart(2, "0");
-
+      if (!Number.isFinite(seconds) || seconds < 0) return "0:00";
+      const minutes = Math.floor(seconds / 60);
+      const remainingSeconds = Math.floor(seconds % 60).toString().padStart(2, "0");
       return `${minutes}:${remainingSeconds}`;
-
     }
-
 
     function updatePlayerTime() {
+      const current = audioPlayer.currentTime || 0;
+      const duration = Number.isFinite(audioPlayer.duration) ? audioPlayer.duration : 0;
 
-      const current =
-        audioPlayer.currentTime || 0;
-
-      const duration =
-        Number.isFinite(audioPlayer.duration)
-          ? audioPlayer.duration
-          : 0;
-
-
-      playerProgress.value =
-        duration
-          ? (current / duration) * 100
-          : 0;
-
-
-      playerTime.textContent =
-        `${formatPlayerTime(current)} / ${formatPlayerTime(duration)}`;
-
+      playerProgress.value = duration ? (current / duration) * 100 : 0;
+      playerTime.textContent = `${formatPlayerTime(current)} / ${formatPlayerTime(duration)}`;
     }
-
 
     function updatePlayPauseButton() {
-
-      const playing =
-        !audioPlayer.paused &&
-        !audioPlayer.ended;
-
-      playPauseButton.classList.toggle(
-        "is-playing",
-        playing
-      );
-
-      playPauseButton.textContent = "";
-
-      playPauseButton.setAttribute(
-        "aria-label",
-        playing ? "Pausar" : "Reproducir"
-      );
-
-      playPauseButton.setAttribute(
-        "title",
-        playing ? "Pausar" : "Reproducir"
-      );
-
+      const playing = !audioPlayer.paused && !audioPlayer.ended;
+      playPauseButton.classList.toggle("is-playing", playing);
+      playPauseButton.setAttribute("aria-label", playing ? "Pausar" : "Reproducir");
+      playPauseButton.setAttribute("title", playing ? "Pausar" : "Reproducir");
     }
 
-
-    playPauseButton.addEventListener(
-      "click",
-      async () => {
-
-        if (!audioPlayer.src) {
-          return;
-        }
-
-
-        try {
-
-          if (audioPlayer.paused) {
-
-            await audioPlayer.play();
-
-          } else {
-
-            audioPlayer.pause();
-
-          }
-
-        } catch (error) {
-
-          console.error(
-            "Error controlando la reproducción:",
-            error
-          );
-
-        }
-
+    playPauseButton.addEventListener("click", async () => {
+      if (!audioPlayer.src) return;
+      try {
+        audioPlayer.paused ? await audioPlayer.play() : audioPlayer.pause();
+      } catch (error) {
+        console.error("Error controlando reproducción:", error);
       }
-    );
+    });
 
-
-    playerProgress.addEventListener(
-      "input",
-      () => {
-
-        if (
-          Number.isFinite(
-            audioPlayer.duration
-          )
-        ) {
-
-          audioPlayer.currentTime =
-            (
-              Number(playerProgress.value) /
-              100
-            ) *
-            audioPlayer.duration;
-
-        }
-
+    playerProgress.addEventListener("input", () => {
+      if (Number.isFinite(audioPlayer.duration)) {
+        audioPlayer.currentTime = (Number(playerProgress.value) / 100) * audioPlayer.duration;
       }
-    );
+    });
 
+    playerVolume.addEventListener("input", () => {
+      audioPlayer.volume = Number(playerVolume.value);
+    });
 
-    playerVolume.addEventListener(
-      "input",
-      () => {
+    audioPlayer.addEventListener("timeupdate", updatePlayerTime);
+    audioPlayer.addEventListener("loadedmetadata", updatePlayerTime);
+    audioPlayer.addEventListener("play", updatePlayPauseButton);
+    audioPlayer.addEventListener("pause", updatePlayPauseButton);
+    audioPlayer.addEventListener("ended", () => playNextSong());
 
-        audioPlayer.volume =
-          Number(playerVolume.value);
+    /* =====================================================
+       NAVEGACIÓN DE CANCIONES
+       ===================================================== */
+    function playPreviousSong() {
+      if (!albums.length) return;
 
+      if (currentSongIndex > 0) {
+        playSong(currentSongIndex - 1);
+        return;
       }
-    );
 
+      currentAlbumIndex = currentAlbumIndex > 0 ? currentAlbumIndex - 1 : albums.length - 1;
+      const album = albums[currentAlbumIndex];
+      currentSongIndex = album.songs.length - 1;
 
-    audioPlayer.addEventListener(
-      "timeupdate",
-      updatePlayerTime
-    );
+      albumSelect.value = currentAlbumIndex;
+      renderSongList();
+      loadCover(album.cover);
+      playSong(currentSongIndex);
+    }
 
+    function playNextSong() {
+      if (!albums.length) return;
 
-    audioPlayer.addEventListener(
-      "loadedmetadata",
-      updatePlayerTime
-    );
+      const album = albums[currentAlbumIndex];
 
+      if (currentSongIndex < album.songs.length - 1) {
+        playSong(currentSongIndex + 1);
+        return;
+      }
 
-    audioPlayer.addEventListener(
-      "play",
-      updatePlayPauseButton
-    );
+      currentAlbumIndex = currentAlbumIndex < albums.length - 1 ? currentAlbumIndex + 1 : 0;
+      currentSongIndex = 0;
 
+      albumSelect.value = currentAlbumIndex;
+      const nextAlbum = albums[currentAlbumIndex];
 
-    audioPlayer.addEventListener(
-      "pause",
-      updatePlayPauseButton
-    );
+      renderSongList();
+      loadCover(nextAlbum.cover);
+      playSong(0);
+    }
 
+    previousSongButton.addEventListener("click", playPreviousSong);
+    nextSongButton.addEventListener("click", playNextSong);
 
-    audioPlayer.addEventListener(
-      "ended",
-      updatePlayPauseButton
-    );
-
-
-    audioPlayer.volume =
-      Number(playerVolume.value);
-
+    /* =====================================================
+       INICIALIZACIÓN PARALELA
+       ===================================================== */
+    audioPlayer.volume = Number(playerVolume.value);
     updatePlayerTime();
     updatePlayPauseButton();
 
-
-    /* =====================================================
-       NAVEGACIÓN ANTERIOR / SIGUIENTE
-       ===================================================== */
-
-    function playPreviousSong() {
-
-      if (!albums.length) {
-        return;
-      }
-
-      if (currentSongIndex > 0) {
-
-        playSong(
-          currentSongIndex - 1
-        );
-
-        return;
-
-      }
-
-      if (currentAlbumIndex > 0) {
-
-        currentAlbumIndex--;
-
-      } else {
-
-        currentAlbumIndex =
-          albums.length - 1;
-
-      }
-
-      const album =
-        albums[currentAlbumIndex];
-
-      currentSongIndex =
-        album.songs.length - 1;
-
-      albumSelect.value =
-        currentAlbumIndex;
-
-      renderSongList();
-
-      loadCover(
-        album.cover
-      );
-
-      playSong(
-        currentSongIndex
-      );
-
-    }
-
-
-    function playNextSong() {
-
-      if (!albums.length) {
-        return;
-      }
-
-      const album =
-        albums[currentAlbumIndex];
-
-      if (
-        currentSongIndex <
-        album.songs.length - 1
-      ) {
-
-        playSong(
-          currentSongIndex + 1
-        );
-
-        return;
-
-      }
-
-      if (currentAlbumIndex <
-          albums.length - 1) {
-
-        currentAlbumIndex++;
-
-      } else {
-
-        currentAlbumIndex = 0;
-
-      }
-
-      currentSongIndex = 0;
-
-      albumSelect.value =
-        currentAlbumIndex;
-
-      const nextAlbum =
-        albums[currentAlbumIndex];
-
-      renderSongList();
-
-      loadCover(
-        nextAlbum.cover
-      );
-
-      playSong(0);
-
-    }
-
-
-    previousSongButton.addEventListener(
-      "click",
-      playPreviousSong
-    );
-
-
-    nextSongButton.addEventListener(
-      "click",
-      playNextSong
-    );
-
-
-    /* =====================================================
-       CUANDO TERMINA UNA CANCIÓN
-       ===================================================== */
-
-    audioPlayer.addEventListener(
-      "ended",
-      () => {
-
-        const album =
-          albums[currentAlbumIndex];
-
-
-        playNextSong();
-
-      }
-    );
-
-
-    /* =====================================================
-       CARGAR RECURSOS RRSS
-       ===================================================== */
-
-    async function loadRRSS() {
-
-      try {
-
-        const response =
-          await fetch(
-            RRSS_FUNCTION_URL,
-            {
-              method: "GET",
-
-              headers: {
-                "apikey":
-                  SUPABASE_PUBLISHABLE_KEY
-              }
-            }
-          );
-
-
-        const result =
-          await response.json();
-
-
-        if (!response.ok) {
-
-          throw new Error(
-            result.error ||
-            "No se pudieron obtener los recursos de RRSS."
-          );
-
-        }
-
-
-        if (!result.lnsLogo) {
-
-          throw new Error(
-            "No se recibió la URL del logo LNS."
-          );
-
-        }
-
-
-        if (!result.baalLogo) {
-
-          throw new Error(
-            "No se recibió la URL del logo Baal."
-          );
-
-        }
-
-
-        if (!result.qr) {
-
-          throw new Error(
-            "No se recibió la URL del QR."
-          );
-
-        }
-
-
-        lnsLogo.src =
-          result.lnsLogo;
-
-
-        baalLogo.src =
-          result.baalLogo;
-
-
-        footerQr.src =
-          result.qr;
-
-
-        if (result.linktree) {
-
-          footerQrLink.href =
-            result.linktree;
-
-          footerSocialLink.href =
-            result.linktree;
-
-        }
-
-
-        console.log(
-          "Recursos de RRSS cargados."
-        );
-
-
-      } catch (error) {
-
-        console.error(
-          "Error cargando recursos de RRSS:",
-          error
-        );
-
-      }
-
-    }
-
-
-    /* =====================================================
-       CARGAR FONDO DE LOS LEONES
-       ===================================================== */
-
-    async function loadFondo() {
-
-      try {
-
-        const response =
-          await fetch(
-            FONDO_FUNCTION_URL,
-            {
-              method: "GET",
-
-              headers: {
-                "apikey":
-                  SUPABASE_PUBLISHABLE_KEY
-              }
-            }
-          );
-
-
-        const result =
-          await response.json();
-
-
-        if (!response.ok) {
-
-          throw new Error(
-            result.error ||
-            "No se pudo obtener el fondo."
-          );
-
-        }
-
-
-        if (!result.fondo) {
-
-          throw new Error(
-            "No se recibió la URL del fondo."
-          );
-
-        }
-
-
-        lionBackground.src =
-          result.fondo;
-
-
-        console.log(
-          "Fondo de los leones cargado."
-        );
-
-
-      } catch (error) {
-
-        console.error(
-          "Error cargando el fondo:",
-          error
-        );
-
-      }
-
-    }
-
-
-    /* =====================================================
-       INICIAR
-       ===================================================== */
-
     registerVisit();
-
     loadCatalog();
-
     loadRRSS();
-
     loadFondo();
-
-
   </script>
-
 </body>
 </html>
