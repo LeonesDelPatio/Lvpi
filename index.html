@@ -891,6 +891,53 @@
     /* =====================================================
        ESTADO
        ===================================================== */
+   /* =====================================================
+       FORMATEADORES AUTOMÁTICOS DE TÍTULOS Y ÁLBUMES
+       ===================================================== */
+    function formatSongTitle(pathOrName) {
+      if (!pathOrName) return "Canción sin título";
+
+      let fileName = pathOrName.split("/").pop();
+      fileName = fileName.replace(/\.mp3$/i, "");
+
+      if (fileName.includes(" - ")) {
+        fileName = fileName.split(" - ")[0];
+      }
+
+      const autoFixes = {
+        "gelida": "Gélida",
+        "ano": "Año",
+        "anos": "Años",
+        "cancion": "Canción",
+        "canciones": "Canciones",
+        "corazon": "Corazón",
+        "sueno": "Sueño",
+        "suenos": "Sueños",
+        "mas": "Más",
+        "tu": "Tú",
+        "el": "Él",
+        "manana": "Mañana"
+      };
+
+      return fileName.split(" ").map(word => {
+        const lower = word.toLowerCase();
+        if (autoFixes[lower]) return autoFixes[lower];
+        return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+      }).join(" ");
+    }
+
+    function formatAlbumInfo(albumName, albumYear) {
+      if (!albumName) return { name: "Álbum", year: albumYear || "" };
+
+      let cleanName = albumName.split(" - ")[0];
+      const yearMatch = albumName.match(/\((\d{4})\)/);
+      const year = albumYear || (yearMatch ? yearMatch[1] : "");
+
+      cleanName = cleanName.charAt(0).toUpperCase() + cleanName.slice(1);
+
+      return { name: cleanName, year: year };
+    }
+    
     let albums = [];
     let currentAlbumIndex = 0;
     let currentSongIndex = 0;
@@ -1026,20 +1073,23 @@
     /* =====================================================
        SELECTOR DE ÁLBUMES
        ===================================================== */
-    function renderAlbumSelector() {
+function renderAlbumSelector() {
       albumSelect.innerHTML = "";
       customAlbumSelectMenu.innerHTML = "";
 
       albums.forEach((album, index) => {
+        const info = formatAlbumInfo(album.name, album.year);
+        const labelText = info.year ? `${info.name} (${info.year})` : info.name;
+
         const option = document.createElement("option");
         option.value = index;
-        option.textContent = `${album.name} (${album.year})`;
+        option.textContent = labelText;
         albumSelect.appendChild(option);
 
         const item = document.createElement("button");
         item.type = "button";
         item.className = "custom-select-option";
-        item.textContent = `${album.name} (${album.year})`;
+        item.textContent = labelText;
         item.dataset.index = index;
         item.setAttribute("role", "option");
         item.addEventListener("click", () => {
@@ -1057,8 +1107,11 @@
       const album = albums[currentAlbumIndex];
       if (!album) return;
 
-      customAlbumSelectButton.textContent = `${album.name} (${album.year})`;
-      coverImage.alt = `Portada de ${album.name}`;
+      const info = formatAlbumInfo(album.name, album.year);
+      const labelText = info.year ? `${info.name} (${info.year})` : info.name;
+
+      customAlbumSelectButton.textContent = labelText;
+      coverImage.alt = `Portada de ${info.name}`;
 
       customAlbumSelectMenu
         .querySelectorAll(".custom-select-option")
@@ -1067,7 +1120,7 @@
           item.classList.toggle("active", active);
           item.setAttribute("aria-selected", active ? "true" : "false");
         });
-    }
+    }   
 
     function openAlbumSelector() {
       customAlbumSelect.classList.add("open");
@@ -1120,7 +1173,10 @@
         const element = document.createElement("div");
         element.className = "song";
         if (index === currentSongIndex) element.classList.add("active");
-        element.textContent = song.name;
+        
+        // Muestra el título limpio y formateado en la lista
+        const cleanTitle = formatSongTitle(song.name || song.path);
+        element.textContent = `${index + 1}. ${cleanTitle}`;
 
         element.addEventListener("click", () => playSong(index));
         songList.appendChild(element);
@@ -1134,7 +1190,9 @@
       if (!song) return;
 
       currentSongIndex = index;
-      songTitle.textContent = song.name;
+      
+      // Muestra el título limpio y formateado en el reproductor principal
+      songTitle.textContent = formatSongTitle(song.name || song.path);
       renderSongList();
 
       try {
