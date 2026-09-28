@@ -742,7 +742,7 @@
           aria-haspopup="listbox"
           aria-expanded="false"
         >
-          Cargando catálogo...
+          Seleccionar álbum
         </button>
 
         <div id="customAlbumSelectMenu" class="custom-select-menu" role="listbox"></div>
@@ -812,7 +812,7 @@
 
     <div class="now-playing">
       <span class="now-playing-label">Reproduciendo</span>
-      <span id="songTitle">Selecciona una canción</span>
+      <span id="songTitle">Ninguna canción</span>
     </div>
 
     <div id="songList" class="songs"></div>
@@ -896,49 +896,6 @@
     let currentSongIndex = 0;
 
     /* =====================================================
-       LIMPIEZA VISUAL SEGURA (PRESERVA PALABRAS COMPLETAS)
-       ===================================================== */
-    function cleanText(text) {
-      if (!text) return "";
-
-      let str = String(text);
-
-      // 1. Extraer nombre del archivo (quitar subcarpetas)
-      str = str.split("/").pop().split("\\").pop();
-
-      // 2. Eliminar extensiones (.mp3, .wav, etc.)
-      str = str.replace(/\.[^/.]+$/, "");
-
-      // 3. Eliminar sólo índices secuenciales finales ej: " (01)", " (1)", "(02)"
-      str = str.replace(/\s*\(\d{1,2}\)\s*$/, "");
-
-      // 4. Reemplazar guiones bajos por espacios
-      str = str.replace(/_/g, " ").trim();
-
-      // 5. Mapeo con límites de palabra exactos para evitar sustituciones parciales
-      const wordReplacements = [
-        [/\bgelida\b/gi, "Gélida"],
-        [/\bano\b/gi, "Año"],
-        [/\banos\b/gi, "Años"],
-        [/\bcancion\b/gi, "Canción"],
-        [/\bcanciones\b/gi, "Canciones"],
-        [/\bcorazon\b/gi, "Corazón"],
-        [/\bsueno\b/gi, "Sueño"],
-        [/\bsuenos\b/gi, "Sueños"],
-        [/\bmas\b/gi, "Más"],
-        [/\bmanana\b/gi, "Mañana"],
-        [/\brequiem\b/gi, "Réquiem"]
-      ];
-
-      wordReplacements.forEach(([pattern, replacement]) => {
-        str = str.replace(pattern, replacement);
-      });
-
-      // 6. Capitalizar palabras respetando estructura original
-      return str.replace(/\b[a-zñáéíóú]/gi, (char) => char.toUpperCase());
-    }
-
-    /* =====================================================
        PROTECCIÓN CONTRA COPIA/ARRASTRE
        ===================================================== */
     document.addEventListener("contextmenu", (event) => event.preventDefault());
@@ -996,10 +953,9 @@
         if (albums.length === 0) throw new Error("No se encontraron álbumes.");
 
         renderAlbumSelector();
-        selectAlbum(0, false); // No auto-reproducir inmediatamente al cargar
+        selectAlbum(0);
       } catch (error) {
         console.error("Error cargando catálogo:", error);
-        customAlbumSelectButton.textContent = "Error al cargar catálogo";
       }
     }
 
@@ -1070,34 +1026,24 @@
     /* =====================================================
        SELECTOR DE ÁLBUMES
        ===================================================== */
-    function getAlbumDisplayText(album) {
-      const cleanName = cleanText(album.name);
-      if (album.year && !cleanName.includes(`(${album.year})`)) {
-        return `${cleanName} (${album.year})`;
-      }
-      return cleanName;
-    }
-
     function renderAlbumSelector() {
       albumSelect.innerHTML = "";
       customAlbumSelectMenu.innerHTML = "";
 
       albums.forEach((album, index) => {
-        const labelText = getAlbumDisplayText(album);
-
         const option = document.createElement("option");
         option.value = index;
-        option.textContent = labelText;
+        option.textContent = `${album.name} (${album.year})`;
         albumSelect.appendChild(option);
 
         const item = document.createElement("button");
         item.type = "button";
         item.className = "custom-select-option";
-        item.textContent = labelText;
+        item.textContent = `${album.name} (${album.year})`;
         item.dataset.index = index;
         item.setAttribute("role", "option");
         item.addEventListener("click", () => {
-          selectAlbum(index, true);
+          selectAlbum(index);
           closeAlbumSelector();
         });
 
@@ -1111,10 +1057,8 @@
       const album = albums[currentAlbumIndex];
       if (!album) return;
 
-      const labelText = getAlbumDisplayText(album);
-
-      customAlbumSelectButton.textContent = labelText;
-      coverImage.alt = `Portada de ${cleanText(album.name)}`;
+      customAlbumSelectButton.textContent = `${album.name} (${album.year})`;
+      coverImage.alt = `Portada de ${album.name}`;
 
       customAlbumSelectMenu
         .querySelectorAll(".custom-select-option")
@@ -1150,7 +1094,7 @@
       if (event.key === "Escape") closeAlbumSelector();
     });
 
-    function selectAlbum(index, autoplay = true) {
+    function selectAlbum(index) {
       currentAlbumIndex = Number(index);
       currentSongIndex = 0;
 
@@ -1160,15 +1104,10 @@
       const album = albums[currentAlbumIndex];
       renderSongList();
       loadCover(album.cover);
-      
-      if (autoplay) {
-        playSong(0);
-      } else if (album.songs && album.songs.length > 0) {
-        songTitle.textContent = cleanText(album.songs[0].name || album.songs[0].path);
-      }
+      playSong(0);
     }
 
-    albumSelect.addEventListener("change", () => selectAlbum(albumSelect.value, true));
+    albumSelect.addEventListener("change", () => selectAlbum(albumSelect.value));
 
     /* =====================================================
        LISTA DE CANCIONES Y REPRODUCCIÓN
@@ -1176,15 +1115,12 @@
     function renderSongList() {
       songList.innerHTML = "";
       const album = albums[currentAlbumIndex];
-      if (!album || !album.songs) return;
 
       album.songs.forEach((song, index) => {
         const element = document.createElement("div");
         element.className = "song";
         if (index === currentSongIndex) element.classList.add("active");
-        
-        const cleanTitle = cleanText(song.name || song.path);
-        element.textContent = `${index + 1}. ${cleanTitle}`;
+        element.textContent = song.name;
 
         element.addEventListener("click", () => playSong(index));
         songList.appendChild(element);
@@ -1198,7 +1134,7 @@
       if (!song) return;
 
       currentSongIndex = index;
-      songTitle.textContent = cleanText(song.name || song.path);
+      songTitle.textContent = song.name;
       renderSongList();
 
       try {
@@ -1247,12 +1183,7 @@
     }
 
     playPauseButton.addEventListener("click", async () => {
-      if (!audioPlayer.src) {
-        if (albums.length > 0 && albums[currentAlbumIndex].songs.length > 0) {
-          playSong(0);
-        }
-        return;
-      }
+      if (!audioPlayer.src) return;
       try {
         audioPlayer.paused ? await audioPlayer.play() : audioPlayer.pause();
       } catch (error) {
@@ -1322,19 +1253,16 @@
     nextSongButton.addEventListener("click", playNextSong);
 
     /* =====================================================
-       INICIALIZACIÓN PARALELA (CARGA ACELERADA)
+       INICIALIZACIÓN PARALELA
        ===================================================== */
     audioPlayer.volume = Number(playerVolume.value);
     updatePlayerTime();
     updatePlayPauseButton();
 
-    // Cargar todo en paralelo usando Promise.all para máxima velocidad
-    Promise.all([
-      loadCatalog(),
-      loadFondo(),
-      loadRRSS(),
-      registerVisit()
-    ]).catch(err => console.error("Error en inicialización:", err));
+    registerVisit();
+    loadCatalog();
+    loadRRSS();
+    loadFondo();
   </script>
 </body>
 </html>
