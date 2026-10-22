@@ -3,7 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lvpi</title>
+  
+  <!-- =====================================================
+       SEO Y METADATOS
+       ===================================================== -->
+  <link rel="canonical" href="https://baalstudiocrea.github.io/Lvpi/">
+  <meta name="description" content="Portfolio musical oficial de Lvpi. Reproducción de álbumes, canciones y catálogo musical.">
+  <title>Lvpi — Música</title>
 
   <style>
     * {
@@ -620,6 +626,68 @@
       letter-spacing: 0.02em;
     }
 
+    /* Enlace de Avisos Legales en el Footer */
+    .footer-avisos {
+      display: inline-block;
+      margin-top: 7px;
+      color: rgba(238, 234, 229, 0.45);
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.06em;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .footer-avisos:hover {
+      color: #eee8e1;
+    }
+
+    /* Widget flotante de Compartir */
+    .baal-share-selector {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 99999;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .baal-share-selector,
+    .baal-share-selector * {
+      box-sizing: border-box;
+    }
+
+    .baal-share-btn-current {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-width: 130px;
+      padding: 10px 16px;
+      background: rgba(27, 29, 31, 0.92);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 3px;
+      color: #eeeae5;
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+      transition: background 0.2s ease, border-color 0.2s ease;
+      text-decoration: none;
+    }
+
+    .baal-share-btn-current:hover {
+      border-color: rgba(255, 255, 255, 0.4);
+      background: rgba(35, 38, 40, 0.98);
+      color: #ffffff;
+    }
+
+    .baal-share-btn-current svg {
+      flex-shrink: 0;
+      color: rgba(238, 234, 229, 0.7);
+    }
+
     @media (max-width: 600px) {
       .container {
         padding-top: 30px;
@@ -686,10 +754,6 @@
         max-width: 100%;
       }
 
-      .footer-logo:hover {
-        transform: scale(1.025);
-      }
-
       .footer-qr {
         width: 125px;
         height: 125px;
@@ -724,13 +788,20 @@
 
 <body>
 
+  <!-- =====================================================
+       FONDO PROTEGIDO
+       ===================================================== -->
   <div class="protected-image-background" aria-hidden="true">
     <img id="lionBackground" class="lion-background" alt="" draggable="false">
   </div>
 
+  <!-- =====================================================
+       CONTENEDOR PRINCIPAL
+       ===================================================== -->
   <div class="container">
     <h1>Lvpi</h1>
 
+    <!-- Selector de Álbumes -->
     <div class="album-selector">
       <select id="albumSelect" class="album-select-native" aria-hidden="true" tabindex="-1"></select>
 
@@ -749,6 +820,7 @@
       </div>
     </div>
 
+    <!-- Portada del Álbum -->
     <div class="cover-container">
       <div class="protected-image cover-protection">
         <img id="coverImage" alt="Portada del álbum" draggable="false">
@@ -757,6 +829,7 @@
 
     <audio id="audioPlayer" preload="metadata"></audio>
 
+    <!-- Reproductor de Audio -->
     <div class="custom-player" aria-label="Reproductor de audio">
       <button
         id="previousSongButton"
@@ -810,14 +883,19 @@
       <div id="playerTime" class="player-time">0:00 / 0:00</div>
     </div>
 
+    <!-- Información de reproducción actual -->
     <div class="now-playing">
       <span class="now-playing-label">Reproduciendo</span>
       <span id="songTitle">Ninguna canción</span>
     </div>
 
+    <!-- Lista de Canciones -->
     <div id="songList" class="songs"></div>
   </div>
 
+  <!-- =====================================================
+       PIE DE PÁGINA (FOOTER)
+       ===================================================== -->
   <footer class="site-footer">
     <div class="footer-content">
       <div class="footer-logos">
@@ -841,14 +919,34 @@
     </div>
 
     <div class="footer-copyright">
-      © Todos los derechos reservados para Lvpi y Leones del Patio
+      © Todos los derechos reservados para Lvpi y Leones del Patio<br>
+      <a href="./avisos.html" class="footer-avisos">Avisos</a>
     </div>
   </footer>
 
+  <!-- =====================================================
+       WIDGET FLOTANTE DE COMPARTIR
+       ===================================================== -->
+  <div class="baal-share-selector">
+    <button type="button" class="baal-share-btn-current" onclick="
+      const album = albums[currentAlbumIndex];
+      const song = album?.songs[currentSongIndex];
+      const shareText = song ? `Escuchando ${song.name} de ${album.name} — Lvpi` : document.title;
+      if (navigator.share) {
+        navigator.share({ title: document.title, text: shareText, url: window.location.href }).catch(() => {});
+      } else {
+        navigator.clipboard.writeText(window.location.href).then(() => alert('¡Enlace copiado al portapapeles!')).catch(() => prompt('Copia este enlace:', window.location.href));
+      }
+    ">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+      Compartir
+    </button>
+  </div>
+
+  <!-- =====================================================
+       SCRIPTS Y LÓGICA DE SUPABASE / REPRODUCTOR
+       ===================================================== -->
   <script>
-    /* =====================================================
-       CONFIGURACIÓN SUPABASE
-       ===================================================== */
     const SUPABASE_URL = "https://cavnifartuktwmchyrdl.supabase.co";
     const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_WC_7KWhh6gq-pvL-97D3VA_78DyHmOM";
 
@@ -864,9 +962,6 @@
       "Content-Type": "application/json"
     };
 
-    /* =====================================================
-       ELEMENTOS HTML
-       ===================================================== */
     const albumSelect = document.getElementById("albumSelect");
     const customAlbumSelect = document.getElementById("customAlbumSelect");
     const customAlbumSelectButton = document.getElementById("customAlbumSelectButton");
@@ -888,16 +983,10 @@
     const footerQrLink = document.getElementById("footerQrLink");
     const footerSocialLink = document.getElementById("footerSocialLink");
 
-    /* =====================================================
-       ESTADO
-       ===================================================== */
     let albums = [];
     let currentAlbumIndex = 0;
     let currentSongIndex = 0;
 
-    /* =====================================================
-       PROTECCIÓN CONTRA COPIA/ARRASTRE
-       ===================================================== */
     document.addEventListener("contextmenu", (event) => event.preventDefault());
 
     document.addEventListener("dragstart", (event) => {
@@ -912,9 +1001,6 @@
       }
     });
 
-    /* =====================================================
-       API / SUPABASE
-       ===================================================== */
     async function registerVisit() {
       try {
         await fetch(REGISTER_VISIT_FUNCTION_URL, {
@@ -1023,9 +1109,6 @@
       }
     }
 
-    /* =====================================================
-       SELECTOR DE ÁLBUMES
-       ===================================================== */
     function renderAlbumSelector() {
       albumSelect.innerHTML = "";
       customAlbumSelectMenu.innerHTML = "";
@@ -1109,9 +1192,6 @@
 
     albumSelect.addEventListener("change", () => selectAlbum(albumSelect.value));
 
-    /* =====================================================
-       LISTA DE CANCIONES Y REPRODUCCIÓN
-       ===================================================== */
     function renderSongList() {
       songList.innerHTML = "";
       const album = albums[currentAlbumIndex];
@@ -1157,9 +1237,6 @@
       }
     }
 
-    /* =====================================================
-       CONTROLES Y TIEMPO
-       ===================================================== */
     function formatPlayerTime(seconds) {
       if (!Number.isFinite(seconds) || seconds < 0) return "0:00";
       const minutes = Math.floor(seconds / 60);
@@ -1207,9 +1284,6 @@
     audioPlayer.addEventListener("pause", updatePlayPauseButton);
     audioPlayer.addEventListener("ended", () => playNextSong());
 
-    /* =====================================================
-       NAVEGACIÓN DE CANCIONES
-       ===================================================== */
     function playPreviousSong() {
       if (!albums.length) return;
 
@@ -1252,9 +1326,6 @@
     previousSongButton.addEventListener("click", playPreviousSong);
     nextSongButton.addEventListener("click", playNextSong);
 
-    /* =====================================================
-       INICIALIZACIÓN PARALELA
-       ===================================================== */
     audioPlayer.volume = Number(playerVolume.value);
     updatePlayerTime();
     updatePlayPauseButton();
