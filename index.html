@@ -925,14 +925,14 @@
   </footer>
 
   <!-- =====================================================
-       WIDGET FLOTANTE DE COMPARTIR (CON ENLACE DIRECTO A CANCIÓN/ÁLBUM)
+       WIDGET FLOTANTE DE COMPARTIR
        ===================================================== -->
   <div class="baal-share-selector">
     <button type="button" class="baal-share-btn-current" onclick="
       const album = albums[currentAlbumIndex];
       const song = album?.songs[currentSongIndex];
       const shareUrl = `${window.location.origin}${window.location.pathname}#album=${currentAlbumIndex}&song=${currentSongIndex}`;
-      const shareText = song ? `Escuchando ${song.name} de ${album.name} — Lvpi` : document.title;
+      const shareText = song ? `Escuchando ${formatTitle(song.name)} de ${formatTitle(album.name)} — Lvpi` : document.title;
       if (navigator.share) {
         navigator.share({ title: document.title, text: shareText, url: shareUrl }).catch(() => {});
       } else {
@@ -987,6 +987,79 @@
     let albums = [];
     let currentAlbumIndex = 0;
     let currentSongIndex = 0;
+
+    /* =====================================================
+       DICCIONARIO DE CORRECCIÓN ORTOGRÁFICA (ORDEN ALFABÉTICO)
+       ===================================================== */
+    const spellingCorrections = {
+      "a mi": "a mí",
+      "Angeles": "Ángeles",
+      "angeles": "ángeles",
+      "autentico": "auténtico",
+      "Colonizacion": "Colonización",
+      "colonizacion": "colonización",
+      "con que": "con qué",
+      "corazon": "corazón",
+      "Cronicas": "Crónicas",
+      "cronicas": "crónicas",
+      "DEDALOS": "DÉDALOS",
+      "Dedalos": "Dédalos",
+      "dedalos": "Dédalos",
+      "dias": "días",
+      "Espana": "España",
+      "espana": "España",
+      "Espiritu": "Espíritu",
+      "espiritu": "espíritu",
+      "Galactico": "Galáctico",
+      "galactico": "galáctico",
+      "gelida": "gélida",
+      "Gelida": "gélida",
+      "GEMINIS": "GÉMINIS",
+      "Geminis": "Géminis",
+      "geminis": "Géminis",
+      "Lagrimas": "Lágrimas",
+      "lagrimas": "lágrimas",
+      "Llego": "Llegó",
+      "llego": "llegó",
+      "Mas": "Más",
+      "mas": "más",
+      "Musica": "Música",
+      "musica": "música",
+      "orbita": "órbita",
+      "Orbita": "Órbita",
+      "Orion": "Orión",
+      "orion": "Orión",
+      "Rape": "Rapé",
+      "rape": "rapé",
+      "Rebeldia": "Rebeldía",
+      "rebeldia": "rebeldía",
+      "sistematica": "sistemática",
+      "Sistematica": "Sistemática",
+      "Solia": "Solía",
+      "solia": "solía",
+      "Suenos": "Sueños",
+      "suenos": "sueños",
+      "TAIPAN": "TAIPÁN",
+      "Taipan": "Taipán",
+      "taipan": "taipán"
+    };
+
+    function formatTitle(text) {
+      if (!text) return "";
+      
+      // Si la frase exacta o palabra completa está en el diccionario
+      if (spellingCorrections[text]) {
+        return spellingCorrections[text];
+      }
+
+      // Si no, comprobamos palabra por palabra
+      let words = text.split(" ");
+      let correctedWords = words.map(word => {
+        return spellingCorrections[word] || word;
+      });
+
+      return correctedWords.join(" ");
+    }
 
     document.addEventListener("contextmenu", (event) => event.preventDefault());
 
@@ -1129,15 +1202,16 @@
       customAlbumSelectMenu.innerHTML = "";
 
       albums.forEach((album, index) => {
+        const formattedAlbumName = formatTitle(album.name);
         const option = document.createElement("option");
         option.value = index;
-        option.textContent = `${album.name} (${album.year})`;
+        option.textContent = `${formattedAlbumName} (${album.year})`;
         albumSelect.appendChild(option);
 
         const item = document.createElement("button");
         item.type = "button";
         item.className = "custom-select-option";
-        item.textContent = `${album.name} (${album.year})`;
+        item.textContent = `${formattedAlbumName} (${album.year})`;
         item.dataset.index = index;
         item.setAttribute("role", "option");
         item.addEventListener("click", () => {
@@ -1155,8 +1229,9 @@
       const album = albums[currentAlbumIndex];
       if (!album) return;
 
-      customAlbumSelectButton.textContent = `${album.name} (${album.year})`;
-      coverImage.alt = `Portada de ${album.name}`;
+      const formattedAlbumName = formatTitle(album.name);
+      customAlbumSelectButton.textContent = `${formattedAlbumName} (${album.year})`;
+      coverImage.alt = `Portada de ${formattedAlbumName}`;
 
       customAlbumSelectMenu
         .querySelectorAll(".custom-select-option")
@@ -1213,7 +1288,7 @@
         const element = document.createElement("div");
         element.className = "song";
         if (index === currentSongIndex) element.classList.add("active");
-        element.textContent = song.name;
+        element.textContent = formatTitle(song.name);
 
         element.addEventListener("click", () => playSong(index));
         songList.appendChild(element);
@@ -1227,7 +1302,7 @@
       if (!song) return;
 
       currentSongIndex = index;
-      songTitle.textContent = song.name;
+      songTitle.textContent = formatTitle(song.name);
       renderSongList();
 
       // Actualizar el hash de la URL para que el enlace compartido mantenga la pista actual
