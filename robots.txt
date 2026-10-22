@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://baalstudiocrea.github.io/Lvpi/sitemap.xml
