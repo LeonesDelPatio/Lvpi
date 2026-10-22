@@ -925,17 +925,18 @@
   </footer>
 
   <!-- =====================================================
-       WIDGET FLOTANTE DE COMPARTIR
+       WIDGET FLOTANTE DE COMPARTIR (CON ENLACE DIRECTO A CANCIÓN/ÁLBUM)
        ===================================================== -->
   <div class="baal-share-selector">
     <button type="button" class="baal-share-btn-current" onclick="
       const album = albums[currentAlbumIndex];
       const song = album?.songs[currentSongIndex];
+      const shareUrl = `${window.location.origin}${window.location.pathname}#album=${currentAlbumIndex}&song=${currentSongIndex}`;
       const shareText = song ? `Escuchando ${song.name} de ${album.name} — Lvpi` : document.title;
       if (navigator.share) {
-        navigator.share({ title: document.title, text: shareText, url: window.location.href }).catch(() => {});
+        navigator.share({ title: document.title, text: shareText, url: shareUrl }).catch(() => {});
       } else {
-        navigator.clipboard.writeText(window.location.href).then(() => alert('¡Enlace copiado al portapapeles!')).catch(() => prompt('Copia este enlace:', window.location.href));
+        navigator.clipboard.writeText(shareUrl).then(() => alert('¡Enlace directo a la canción copiado al portapapeles!')).catch(() => prompt('Copia este enlace:', shareUrl));
       }
     ">
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
@@ -1039,7 +1040,21 @@
         if (albums.length === 0) throw new Error("No se encontraron álbumes.");
 
         renderAlbumSelector();
-        selectAlbum(0);
+
+        // Verificar si la URL trae parámetros compartidos (ej. #album=0&song=1)
+        const hash = window.location.hash;
+        let targetAlbum = 0;
+        let targetSong = 0;
+
+        if (hash) {
+          const params = new URLSearchParams(hash.replace("#", ""));
+          const a = Number(params.get("album"));
+          const s = Number(params.get("song"));
+          if (!isNaN(a) && albums[a]) targetAlbum = a;
+          if (!isNaN(s) && albums[targetAlbum]?.songs[s]) targetSong = s;
+        }
+
+        selectAlbum(targetAlbum, targetSong);
       } catch (error) {
         console.error("Error cargando catálogo:", error);
       }
@@ -1126,7 +1141,7 @@
         item.dataset.index = index;
         item.setAttribute("role", "option");
         item.addEventListener("click", () => {
-          selectAlbum(index);
+          selectAlbum(index, 0);
           closeAlbumSelector();
         });
 
@@ -1177,20 +1192,18 @@
       if (event.key === "Escape") closeAlbumSelector();
     });
 
-    function selectAlbum(index) {
+    function selectAlbum(index, songIndex = 0) {
       currentAlbumIndex = Number(index);
-      currentSongIndex = 0;
-
       albumSelect.value = currentAlbumIndex;
       updateCustomAlbumSelector();
 
       const album = albums[currentAlbumIndex];
       renderSongList();
       loadCover(album.cover);
-      playSong(0);
+      playSong(songIndex);
     }
 
-    albumSelect.addEventListener("change", () => selectAlbum(albumSelect.value));
+    albumSelect.addEventListener("change", () => selectAlbum(albumSelect.value, 0));
 
     function renderSongList() {
       songList.innerHTML = "";
@@ -1216,6 +1229,11 @@
       currentSongIndex = index;
       songTitle.textContent = song.name;
       renderSongList();
+
+      // Actualizar el hash de la URL para que el enlace compartido mantenga la pista actual
+      if (history.replaceState) {
+        history.replaceState(null, null, `#album=${currentAlbumIndex}&song=${currentSongIndex}`);
+      }
 
       try {
         const response = await fetch(AUDIO_FUNCTION_URL, {
