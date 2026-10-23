@@ -642,7 +642,9 @@
       color: #eee8e1;
     }
 
-    /* Widget flotante de Compartir */
+    /* =====================================================
+       WIDGET FLOTANTE Y MENÚ DESPLEGABLE DE COMPARTIR
+       ===================================================== */
     .baal-share-selector {
       position: fixed;
       bottom: 24px;
@@ -686,6 +688,48 @@
     .baal-share-btn-current svg {
       flex-shrink: 0;
       color: rgba(238, 234, 229, 0.7);
+    }
+
+    .baal-share-dropdown {
+      position: absolute;
+      bottom: calc(100% + 8px);
+      right: 0;
+      min-width: 170px;
+      background: #1b1d1f;
+      border: 1px solid #393b3d;
+      border-radius: 5px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      padding: 5px;
+      display: none;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .baal-share-selector.open .baal-share-dropdown {
+      display: flex;
+    }
+
+    .baal-share-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      padding: 9px 12px;
+      background: transparent;
+      border: 0;
+      border-radius: 4px;
+      color: #d8d2cc;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-align: left;
+      cursor: pointer;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+
+    .baal-share-option:hover {
+      background: #292c2e;
+      color: #ffffff;
     }
 
     @media (max-width: 600px) {
@@ -925,20 +969,21 @@
   </footer>
 
   <!-- =====================================================
-       WIDGET FLOTANTE DE COMPARTIR
+       WIDGET FLOTANTE DE COMPARTIR (CON MENÚ DESPLEGABLE)
        ===================================================== -->
-  <div class="baal-share-selector">
-    <button type="button" class="baal-share-btn-current" onclick="
-      const album = albums[currentAlbumIndex];
-      const song = album?.songs[currentSongIndex];
-      const shareUrl = `${window.location.origin}${window.location.pathname}#album=${currentAlbumIndex}&song=${currentSongIndex}`;
-      const shareText = song ? `Escuchando ${formatTitle(song.name)} de ${formatTitle(album.name)} — Lvpi` : document.title;
-      if (navigator.share) {
-        navigator.share({ title: document.title, text: shareText, url: shareUrl }).catch(() => {});
-      } else {
-        navigator.clipboard.writeText(shareUrl).then(() => alert('¡Enlace directo a la canción copiado al portapapeles!')).catch(() => prompt('Copia este enlace:', shareUrl));
-      }
-    ">
+  <div class="baal-share-selector" id="shareSelector">
+    <div class="baal-share-dropdown">
+      <button type="button" class="baal-share-option" onclick="shareCurrentMedia('song')">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+        Canción
+      </button>
+      <button type="button" class="baal-share-option" onclick="shareCurrentMedia('album')">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
+        Álbum entero
+      </button>
+    </div>
+
+    <button type="button" class="baal-share-btn-current" onclick="toggleShareMenu(event)">
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
       Compartir
     </button>
@@ -983,6 +1028,7 @@
     const footerQr = document.getElementById("footerQr");
     const footerQrLink = document.getElementById("footerQrLink");
     const footerSocialLink = document.getElementById("footerSocialLink");
+    const shareSelector = document.getElementById("shareSelector");
 
     let albums = [];
     let currentAlbumIndex = 0;
@@ -994,14 +1040,14 @@
     const spellingCorrections = {
       "a mi": "a mí",
       "Angeles": "Ángeles",
-      "angeles": "ángeles",
+      "angeles": "Ángeles",
       "autentico": "auténtico",
       "Colonizacion": "Colonización",
-      "colonizacion": "colonización",
+      "colonizacion": "Colonización",
       "con que": "con qué",
       "corazon": "corazón",
       "Cronicas": "Crónicas",
-      "cronicas": "crónicas",
+      "cronicas": "Crónicas",
       "DEDALOS": "DÉDALOS",
       "Dedalos": "Dédalos",
       "dedalos": "Dédalos",
@@ -1009,36 +1055,36 @@
       "Espana": "España",
       "espana": "España",
       "Espiritu": "Espíritu",
-      "espiritu": "espíritu",
+      "espiritu": "Espíritu",
       "Galactico": "Galáctico",
-      "galactico": "galáctico",
+      "galactico": "Galáctico",
       "gelida": "gélida",
-      "Gelida": "gélida",
+      "Gelida": "Gélida",
       "GEMINIS": "GÉMINIS",
       "Geminis": "Géminis",
       "geminis": "Géminis",
       "Lagrimas": "Lágrimas",
-      "lagrimas": "lágrimas",
+      "lagrimas": "Lágrimas",
       "Llego": "Llegó",
-      "llego": "llegó",
+      "llego": "Llegó",
       "Mas": "Más",
-      "mas": "más",
+      "mas": "Más",
       "Musica": "Música",
-      "musica": "música",
+      "musica": "Música",
       "orbita": "órbita",
       "Orbita": "Órbita",
       "Orion": "Orión",
       "orion": "Orión",
       "Rape": "Rapé",
-      "rape": "rapé",
+      "rape": "Rapé",
       "Rebeldia": "Rebeldía",
-      "rebeldia": "rebeldía",
+      "rebeldia": "Rebeldía",
       "sistematica": "sistemática",
       "Sistematica": "Sistemática",
       "Solia": "Solía",
-      "solia": "solía",
+      "solia": "Solía",
       "Suenos": "Sueños",
-      "suenos": "sueños",
+      "suenos": "Sueños",
       "TAIPAN": "TAIPÁN",
       "Taipan": "Taipán",
       "taipan": "taipán"
@@ -1047,18 +1093,58 @@
     function formatTitle(text) {
       if (!text) return "";
       
-      // Si la frase exacta o palabra completa está en el diccionario
       if (spellingCorrections[text]) {
         return spellingCorrections[text];
       }
 
-      // Si no, comprobamos palabra por palabra
       let words = text.split(" ");
       let correctedWords = words.map(word => {
         return spellingCorrections[word] || word;
       });
 
       return correctedWords.join(" ");
+    }
+
+    /* =====================================================
+       LÓGICA DE MENÚ COMPARTIR (CANCIÓN VS ÁLBUM)
+       ===================================================== */
+    function toggleShareMenu(event) {
+      event.stopPropagation();
+      shareSelector.classList.toggle("open");
+    }
+
+    document.addEventListener("click", (event) => {
+      if (!shareSelector.contains(event.target)) {
+        shareSelector.classList.remove("open");
+      }
+    });
+
+    function shareCurrentMedia(type) {
+      shareSelector.classList.remove("open");
+      const album = albums[currentAlbumIndex];
+      const song = album?.songs[currentSongIndex];
+
+      if (!album) return;
+
+      let shareUrl = "";
+      let shareText = "";
+
+      if (type === "song" && song) {
+        shareUrl = `${window.location.origin}${window.location.pathname}#album=${currentAlbumIndex}&song=${currentSongIndex}`;
+        shareText = `Escuchando ${formatTitle(song.name)} de ${formatTitle(album.name)} — Lvpi`;
+      } else {
+        // Álbum completo
+        shareUrl = `${window.location.origin}${window.location.pathname}#album=${currentAlbumIndex}&song=0`;
+        shareText = `Escuchando el álbum ${formatTitle(album.name)} — Lvpi`;
+      }
+
+      if (navigator.share) {
+        navigator.share({ title: document.title, text: shareText, url: shareUrl }).catch(() => {});
+      } else {
+        navigator.clipboard.writeText(shareUrl).then(() => {
+          alert(type === "song" ? "¡Enlace a la canción copiado al portapapeles!" : "¡Enlace al álbum entero copiado al portapapeles!");
+        }).catch(() => prompt("Copia este enlace:", shareUrl));
+      }
     }
 
     document.addEventListener("contextmenu", (event) => event.preventDefault());
@@ -1114,7 +1200,6 @@
 
         renderAlbumSelector();
 
-        // Verificar si la URL trae parámetros compartidos (ej. #album=0&song=1)
         const hash = window.location.hash;
         let targetAlbum = 0;
         let targetSong = 0;
@@ -1305,7 +1390,6 @@
       songTitle.textContent = formatTitle(song.name);
       renderSongList();
 
-      // Actualizar el hash de la URL para que el enlace compartido mantenga la pista actual
       if (history.replaceState) {
         history.replaceState(null, null, `#album=${currentAlbumIndex}&song=${currentSongIndex}`);
       }
